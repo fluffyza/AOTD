@@ -21,6 +21,7 @@ public partial class BlockTargetting : Node
 	public Vector3I LookedAtCell { get; private set; }
 
 	public Node3D HitItem { get; private set; }
+	public Node LookedAtNode { get; private set; }
 
 	public override void _Ready()
 	{
@@ -52,6 +53,9 @@ public partial class BlockTargetting : Node
 
 		HitPosition = (Vector3)result["position"];
 		HitNormal = (Vector3)result["normal"];
+
+		if (result.ContainsKey("collider") && result["collider"].Obj is Node node)
+			LookedAtNode = node;
 
 		TargetCell = GridUtils.WorldToCell(HitPosition + HitNormal * 0.01f);
 		HasValidPlacementTarget = true;
@@ -85,5 +89,6 @@ public partial class BlockTargetting : Node
 		LookedAtCell = Vector3I.Zero;
 
 		HitItem = null;
+		LookedAtNode = null;
 	}
 }

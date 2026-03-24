@@ -4,7 +4,9 @@ using System.Collections.Generic;
 public partial class WorldManager : Node
 {
 	[Export] public NodePath BlockManagerPath;
-
+	[Export] public PackedScene TreeScene;
+	[Export] public float TreeSpawnChance = 0.12f;
+	
 	private BlockManager _blockManager;
 
 	private readonly Dictionary<Vector3I, Node3D> _placedItems = new();
@@ -110,11 +112,14 @@ public partial class WorldManager : Node
 				if (_placedItems.ContainsKey(cell))
 					continue;
 
-				var block = _blockManager.CreateSurfaceBlock(GridUtils.CellToWorld(cell));
+				Vector3 worldPos = GridUtils.CellToWorld(cell);
+
+				var block = _blockManager.CreateSurfaceBlock(worldPos);
 				if (block == null)
 					continue;
 
 				AddPlacedNode(cell, block);
+				TrySpawnTree(worldPos, x, z);
 			}
 		}
 	}
@@ -146,5 +151,19 @@ public partial class WorldManager : Node
 		droppedItemId = _blockManager.GetDroppedItemId(item);
 		item.QueueFree();
 		return true;
+	}
+	
+	private void TrySpawnTree(Vector3 worldPosition, int x, int z)
+	{
+		if (TreeScene == null)
+			return;
+
+		if (GD.Randf() > TreeSpawnChance)
+			return;
+
+		var tree = TreeScene.Instantiate<Node3D>();
+		AddChild(tree);
+
+		tree.GlobalPosition = worldPosition + new Vector3(0, 1.0f, 0);
 	}
 }

@@ -54,6 +54,24 @@ public partial class BlockManager : Node
 			IsBlock = true,
 			BlockColor = new Color(0.45f, 0.28f, 0.14f)
 		};
+		
+		_itemDefs["wood"] = new ItemDef
+		{
+			Id = "wood",
+			DisplayName = "Wood",
+			Scene = BlockScene,
+			IsBlock = true,
+			BlockColor = new Color(0.45f, 0.28f, 0.14f)
+		};
+		
+		_itemDefs["acorn"] = new ItemDef
+		{
+			Id = "acorn",
+			DisplayName = "Acorn",
+			Scene = BlockScene,
+			IsBlock = false,
+			BlockColor = new Color(0.45f, 0.28f, 0.14f)
+		};
 	}
 
 	public bool TryGetItemDef(string itemId, out ItemDef def)

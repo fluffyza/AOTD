@@ -115,6 +115,12 @@ public partial class Player : CharacterBody3D
 			GD.Print("Cell occupied or item could not be placed.");
 			return;
 		}
+		
+		if (selectedSlot.Item.ItemId == "acorn")
+		{
+			GD.Print("You can't place the acorn yet.");
+			return;
+		}
 
 		_inventory.ConsumeSelectedItem(1);
 
@@ -125,6 +131,17 @@ public partial class Player : CharacterBody3D
 
 	private void TryRemoveItem()
 	{
+		var lookedAtNode = _targetting.LookedAtNode;
+		if (lookedAtNode != null)
+		{
+			var tree = FindTreeResource(lookedAtNode);
+			if (tree != null)
+			{
+				tree.Mine(this);
+				return;
+			}
+		}
+
 		if (!_targetting.IsLookingAtPlacedItem)
 			return;
 
@@ -149,4 +166,18 @@ public partial class Player : CharacterBody3D
 		_inventory.CycleSelection(direction);
 		GD.Print($"Selected slot {_inventory.SelectedIndex + 1}: {_inventory.GetSelectedSlotLabel()}");
 	}
+	
+	private TreeResource FindTreeResource(Node node)
+	{
+		while (node != null)
+		{
+			if (node is TreeResource tree)
+				return tree;
+
+			node = node.GetParent();
+		}
+
+		return null;
+	}
+	
 }
