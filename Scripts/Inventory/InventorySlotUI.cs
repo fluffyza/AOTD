@@ -47,6 +47,7 @@ public partial class InventorySlotUI : Button
 
 		Text = "";
 		Modulate = highlighted ? new Color(1f, 1f, 0.7f) : Colors.White;
+		
 	}
 
 	private void OnButtonDown()
