@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cjp7ys7ujh0kp"]
+
+[ext_resource type="Script" uid="uid://da64g0wg3qxrb" path="res://Scripts/Block/BlockOutline.cs" id="1_rq31l"]
+
+[node name="BlockOutline" type="Node3D" unique_id=690668208]
+script = ExtResource("1_rq31l")

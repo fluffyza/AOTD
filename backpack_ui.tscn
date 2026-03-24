@@ -1,0 +1,160 @@
+[gd_scene format=3 uid="uid://bjmvlf4s8kve1"]
+
+[ext_resource type="Script" uid="uid://d3dv1ada0acii" path="res://Scripts/Inventory/BackpackUI.cs" id="1_nao8u"]
+[ext_resource type="PackedScene" uid="uid://bp1ojfia5c1jm" path="res://inventory_slot.tscn" id="3_dy8yp"]
+
+[node name="BackpackUI (Control)" type="Control" unique_id=490715253]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nao8u")
+BackpackGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid")
+HotbarRowPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow")
+DraggedItemLabelPath = NodePath("DraggedItemLabel")
+
+[node name="Dimmer (ColorRect)" type="ColorRect" parent="." unique_id=1800962817]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.873)
+
+[node name="Panel" type="Panel" parent="." unique_id=80468977]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel" unique_id=629054693]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -168.0
+offset_top = -79.5
+offset_right = 168.0
+offset_bottom = 79.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/CenterContainer" unique_id=1538862166]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/CenterContainer/MarginContainer" unique_id=367967689]
+layout_mode = 2
+
+[node name="Backpack" type="Label" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1463355829]
+layout_mode = 2
+
+[node name="BackpackGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=210088242]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 9
+
+[node name="InventorySlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=614508990 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=193734920 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=2128262113 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1313401536 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot5" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=334081910 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot6" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1307712553 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot7" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=663967474 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot8" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=69836041 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot9" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=561716732 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot10" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1449383352 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot11" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1299036354 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot12" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=824114970 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot13" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1317940656 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot14" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=329950129 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot15" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1491601606 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot16" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1509851332 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot17" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=199779498 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlot18" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=2145043117 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1172851162]
+layout_mode = 2
+
+[node name="HotbarRow" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=592258711]
+layout_mode = 2
+
+[node name="InventorySlotHotbar" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=378846215 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlotHotbar2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1020401342 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlotHotbar3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=135482903 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlotHotbar4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=592462469 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlotHotbar5" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1962283544 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlotHotbar6" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=716243491 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlotHotbar7" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1504897976 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlotHotbar8" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1814080913 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="InventorySlotHotbar9" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1192974276 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+
+[node name="DraggedItemLabel" type="Label" parent="." unique_id=1658139821]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

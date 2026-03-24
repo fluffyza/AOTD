@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bp1ojfia5c1jm"]
+
+[ext_resource type="Script" uid="uid://hv3k4ryj2c0w" path="res://Scripts/Inventory/InventorySlotUI.cs" id="1_42eed"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jy1q7"]
+
+[node name="InventorySlot" type="Button" unique_id=2127815516]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 64.0
+offset_bottom = 64.0
+script = ExtResource("1_42eed")
+ItemLabelPath = NodePath("Label")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2135633415]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("PlaceholderTexture2D_jy1q7")
+
+[node name="Label" type="Label" parent="." unique_id=1548855438]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "64"
+horizontal_alignment = 2

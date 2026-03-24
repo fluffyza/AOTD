@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://mgp02mkor0at"]
+
+[ext_resource type="Script" uid="uid://dfvkkylpy5if8" path="res://Scripts/Player/Player.cs" id="1_a202f"]
+[ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="2_a0tk4"]
+[ext_resource type="PackedScene" uid="uid://cf02bt86p5je3" path="res://torch.tscn" id="2_noarx"]
+[ext_resource type="PackedScene" uid="uid://da3pqlaros3by" path="res://placement_preview.tscn" id="3_r3fl7"]
+[ext_resource type="PackedScene" uid="uid://cjp7ys7ujh0kp" path="res://block_outline.tscn" id="5_jka67"]
+[ext_resource type="Script" uid="uid://b5jttrlga2ibb" path="res://Scripts/Inventory/Inventory.cs" id="6_i5arm"]
+[ext_resource type="Script" uid="uid://bkas5ww12s3nd" path="res://Scripts/Block/BlockManager.cs" id="7_4arys"]
+[ext_resource type="Script" uid="uid://b4sq5p6hwiygg" path="res://Scripts/Hotbar/HotbarUI.cs" id="7_jsk3o"]
+[ext_resource type="PackedScene" uid="uid://dwv2kxm5c43yh" path="res://HotbarSlot.tscn" id="8_4arys"]
+[ext_resource type="Script" uid="uid://bsj5mjx3w2wiw" path="res://Scripts/Player/PlayerMovement.cs" id="8_6iypd"]
+[ext_resource type="Script" uid="uid://c7yt1pd1lhkd0" path="res://Scripts/World/MineManager.cs" id="8_tereu"]
+[ext_resource type="Script" uid="uid://d3a3n2yq781ne" path="res://Scripts/World/WorldManager.cs" id="9_cdqbm"]
+[ext_resource type="Script" uid="uid://djyy0w26nrngh" path="res://Scripts/Player/PlayerLook.cs" id="9_tereu"]
+[ext_resource type="Script" uid="uid://bufpng8nrm7st" path="res://Scripts/Block/BlockTargetting.cs" id="10_cdqbm"]
+[ext_resource type="Script" uid="uid://6gtlgg53ypwb" path="res://Scripts/World/GameBootstrap.cs" id="12_3v7ru"]
+[ext_resource type="PackedScene" uid="uid://bjmvlf4s8kve1" path="res://backpack_ui.tscn" id="16_tcnuu"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_noarx"]
+radius = 0.4
+height = 1.9
+
+[sub_resource type="Environment" id="Environment_a202f"]
+background_mode = 1
+background_color = Color(0.0035191667, 0.0035191681, 0.0035191672, 1)
+background_energy_multiplier = 0.0
+ambient_light_source = 2
+ambient_light_color = Color(0.017732391, 0.017732391, 0.01773239, 1)
+ambient_light_energy = 0.0
+fog_enabled = true
+fog_light_energy = 0.05
+fog_density = 0.0615
+
+[node name="Node3D" type="Node3D" unique_id=1253849847]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1325688476]
+visible = false
+light_energy = 0.208
+
+[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="." unique_id=931686024]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023540735, 0)
+script = ExtResource("1_a202f")
+PlacementPreviewScene = ExtResource("3_r3fl7")
+BlockOutlineScene = ExtResource("5_jka67")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player (CharacterBody3D)" unique_id=691915729]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_noarx")
+
+[node name="Head" type="Node3D" parent="Player (CharacterBody3D)" unique_id=319576049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player (CharacterBody3D)/Head" unique_id=1284740424]
+
+[node name="Inventory" type="Node3D" parent="Player (CharacterBody3D)" unique_id=1389988037]
+script = ExtResource("6_i5arm")
+
+[node name="BlockManager" type="Node" parent="Player (CharacterBody3D)" unique_id=1367533013]
+script = ExtResource("7_4arys")
+BlockScene = ExtResource("2_a0tk4")
+TorchScene = ExtResource("2_noarx")
+
+[node name="MineManager" type="Node" parent="Player (CharacterBody3D)" unique_id=677754771]
+script = ExtResource("8_tereu")
+WorldManagerPath = NodePath("../WorldManager")
+BlockManagerPath = NodePath("../BlockManager")
+
+[node name="WorldManager" type="Node" parent="Player (CharacterBody3D)" unique_id=2082777558]
+script = ExtResource("9_cdqbm")
+BlockManagerPath = NodePath("../BlockManager")
+
+[node name="PlayerMovement" type="Node" parent="Player (CharacterBody3D)" unique_id=1539078673]
+script = ExtResource("8_6iypd")
+
+[node name="PlayerLook" type="Node" parent="Player (CharacterBody3D)" unique_id=1699113708]
+script = ExtResource("9_tereu")
+HeadPath = NodePath("../Head")
+
+[node name="GameBootstrap" type="Node" parent="Player (CharacterBody3D)" unique_id=667494911]
+script = ExtResource("12_3v7ru")
+
+[node name="BlockTargetting" type="Node" parent="Player (CharacterBody3D)" unique_id=346760064]
+script = ExtResource("10_cdqbm")
+CameraPath = NodePath("../Head/Camera3D")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1498523069]
+environment = SubResource("Environment_a202f")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=354118164]
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer" unique_id=378603771]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="+" type="Label" parent="CanvasLayer/CenterContainer" unique_id=1196079008]
+layout_mode = 2
+text = "+"
+
+[node name="Hotbar" type="Control" parent="CanvasLayer" unique_id=1204465899]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7_jsk3o")
+HotbarSlotScene = ExtResource("8_4arys")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Hotbar" unique_id=1405763518]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Hotbar/MarginContainer" unique_id=1613706853]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BackpackUI (Control)" parent="CanvasLayer" unique_id=490715253 instance=ExtResource("16_tcnuu")]

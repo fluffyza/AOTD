@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://da3pqlaros3by"]
+
+[ext_resource type="Script" uid="uid://b48mnpyk3lays" path="res://Scripts/Block/PlacementPreview.cs" id="1_l5tig"]
+
+[node name="PlacementPreview" type="Node3D" unique_id=1481427828]
+script = ExtResource("1_l5tig")
