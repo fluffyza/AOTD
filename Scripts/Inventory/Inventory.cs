@@ -63,6 +63,36 @@ public partial class Inventory : Node
 
 		return $"{slot.Item.DisplayName} x{slot.Count}";
 	}
+	
+	public bool AddItem(ItemDefinition item, int count)
+	{
+		if (item == null || count <= 0)
+			return false;
+
+		for (int i = 0; i < _slots.Count; i++)
+		{
+			if (!_slots[i].IsEmpty &&
+				_slots[i].Item != null &&
+				_slots[i].Item.ItemId == item.ItemId)
+			{
+				_slots[i].Count += count;
+				EmitSignal(SignalName.InventoryChanged);
+				return true;
+			}
+		}
+
+		for (int i = 0; i < _slots.Count; i++)
+		{
+			if (_slots[i].IsEmpty)
+			{
+				_slots[i].SetItem(item, count);
+				EmitSignal(SignalName.InventoryChanged);
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public bool AddItem(string itemId, int count)
 	{

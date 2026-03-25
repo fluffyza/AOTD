@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://dcgbdpntcbor3" path="res://tree_resource.tscn" id="10_tuemg"]
 [ext_resource type="Script" uid="uid://6gtlgg53ypwb" path="res://Scripts/World/GameBootstrap.cs" id="12_3v7ru"]
 [ext_resource type="PackedScene" uid="uid://bjmvlf4s8kve1" path="res://backpack_ui.tscn" id="16_tcnuu"]
+[ext_resource type="Script" uid="uid://bw3asi1r0raq2" path="res://Scripts/Models/Crafting/CraftingContainer.cs" id="18_i0g27"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_noarx"]
 radius = 0.4
@@ -132,3 +133,9 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="BackpackUI (Control)" parent="CanvasLayer" unique_id=490715253 instance=ExtResource("16_tcnuu")]
+CraftingGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/HBoxContainer/CraftingGrid")
+CraftingOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/HBoxContainer/CraftingOutput/CraftOutputSlot")
+CraftingContainerPath = NodePath("CraftingContainer")
+
+[node name="CraftingContainer" type="Node" parent="CanvasLayer/BackpackUI (Control)" unique_id=998710843]
+script = ExtResource("18_i0g27")

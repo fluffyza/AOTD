@@ -8,14 +8,16 @@
 [node name="TreeResource" type="Node3D" unique_id=158651267]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07981944, 0)
 script = ExtResource("1_d8fsw")
+SpritePath = NodePath("Sprite3D")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1245546973]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7535436, 0)
-billboard = 1
+billboard = 2
+shaded = true
 texture = ExtResource("1_d63o3")
 
-[node name="Area3D" type="StaticBody3D" parent="." unique_id=1828329579]
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1828329579]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=338822011]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=338822011]
 transform = Transform3D(1, 0, 0, 0, 3, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CylinderShape3D_d63o3")

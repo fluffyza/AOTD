@@ -19,4 +19,25 @@ public partial class InventorySlot : RefCounted
 		Count = 0;
 	}
 
+	public int RemoveAmount(int amount)
+	{
+		if (IsEmpty || amount <= 0)
+			return 0;
+
+		int removed = Mathf.Min(amount, Count);
+		Count -= removed;
+
+		if (Count <= 0)
+			Clear();
+
+		return removed;
+	}
+
+	public bool CanStackWith(ItemDefinition other)
+	{
+		return !IsEmpty &&
+			   Item != null &&
+			   other != null &&
+			   Item.ItemId == other.ItemId;
+	}
 }

@@ -2,16 +2,25 @@ using Godot;
 
 public partial class InventorySlotUI : Button
 {
-	[Signal]
-	public delegate void SlotPressedEventHandler(int slotIndex);
+	public enum SlotRole
+	{
+		Inventory,
+		CraftingInput,
+		CraftingOutput
+	}
 
 	[Signal]
-	public delegate void SlotHoveredEventHandler(int slotIndex);
+	public delegate void SlotPressedEventHandler(InventorySlotUI slotUi);
 
 	[Signal]
-	public delegate void SlotUnhoveredEventHandler(int slotIndex);
+	public delegate void SlotHoveredEventHandler(InventorySlotUI slotUi);
+
+	[Signal]
+	public delegate void SlotUnhoveredEventHandler(InventorySlotUI slotUi);
 
 	[Export] public NodePath ItemLabelPath;
+	[Export] public SlotRole Role = SlotRole.Inventory;
+	[Export] public int CraftingSlotIndex = -1;
 
 	private Label _itemLabel;
 
@@ -32,6 +41,12 @@ public partial class InventorySlotUI : Button
 		MouseEntered += OnMouseEnteredSlot;
 		MouseExited += OnMouseExitedSlot;
 	}
+	
+	public InventorySlotUI GetSelf()
+	{
+		return this;
+	}
+
 
 	public void Setup(int slotIndex, InventorySlot slot, bool highlighted = false)
 	{
@@ -47,21 +62,20 @@ public partial class InventorySlotUI : Button
 
 		Text = "";
 		Modulate = highlighted ? new Color(1f, 1f, 0.7f) : Colors.White;
-		
 	}
 
 	private void OnButtonDown()
 	{
-		EmitSignal(SignalName.SlotPressed, SlotIndex);
+		EmitSignal(SignalName.SlotPressed, this);
 	}
 
 	private void OnMouseEnteredSlot()
 	{
-		EmitSignal(SignalName.SlotHovered, SlotIndex);
+		EmitSignal(SignalName.SlotHovered, this);
 	}
 
 	private void OnMouseExitedSlot()
 	{
-		EmitSignal(SignalName.SlotUnhovered, SlotIndex);
+		EmitSignal(SignalName.SlotUnhovered, this);
 	}
 }

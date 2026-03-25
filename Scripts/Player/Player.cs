@@ -4,6 +4,7 @@ public partial class Player : CharacterBody3D
 {
 	private Inventory _inventory;
 	private WorldManager _worldManager;
+	private TreeResource _highlightedTree;
 	
 	private PlayerMovement _movement;
 	private PlayerLook _look;
@@ -82,13 +83,22 @@ public partial class Player : CharacterBody3D
 	public override void _PhysicsProcess(double delta)
 	{
 		if (_backpackUi != null && _backpackUi.IsOpen)
+		{
+			if (_highlightedTree != null && IsInstanceValid(_highlightedTree))
+			{
+				_highlightedTree.SetHighlighted(false);
+				_highlightedTree = null;
+			}
 			return;
+		}
 
 		if (_movement == null || _targetting == null)
 			return;
 
 		_movement.HandlePhysics(this, delta);
 		_targetting.UpdateTarget();
+		
+		UpdateTreeHighlight();
 
 		if (_placementPreview != null)
 			_placementPreview.UpdateFromTarget(_targetting);
@@ -178,6 +188,27 @@ public partial class Player : CharacterBody3D
 		}
 
 		return null;
+	}
+	
+	private void UpdateTreeHighlight()
+	{
+		TreeResource newTree = null;
+
+		if (_targetting != null && _targetting.LookedAtNode != null)
+		{
+			newTree = FindTreeResource(_targetting.LookedAtNode);
+		}
+
+		if (_highlightedTree != newTree)
+		{
+			if (_highlightedTree != null && IsInstanceValid(_highlightedTree))
+				_highlightedTree.SetHighlighted(false);
+
+			_highlightedTree = newTree;
+
+			if (_highlightedTree != null)
+				_highlightedTree.SetHighlighted(true);
+		}
 	}
 	
 }

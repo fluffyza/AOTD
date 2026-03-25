@@ -3,7 +3,7 @@ using Godot;
 public partial class BlockTargetting : Node
 {
 	[Export] public NodePath CameraPath;
-	[Export] public float ReachDistance = 8.0f;
+	[Export] public float ReachDistance = 3.0f;
 
 	private Camera3D _camera;
 	private CharacterBody3D _playerBody;
