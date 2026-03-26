@@ -4,57 +4,63 @@ using System.Linq;
 
 public partial class CraftingManager : Node
 {
+	private ItemDatabase _itemDatabase;
 	private readonly List<CraftingRecipe> _recipes = new();
-
+	private int _lastShapeOffsetX = 0;
+	private int _lastShapeOffsetY = 0;
+	
 	public override void _Ready()
 	{
+		_itemDatabase = GetNodeOrNull<ItemDatabase>("/root/ItemDatabase");
+
+		if (_itemDatabase == null)
+		{
+			GD.PrintErr("CraftingManager: ItemDatabase autoload not found.");
+			return;
+		}
+
 		BuildStarterRecipes();
 	}
 
 	private void BuildStarterRecipes()
 	{
-		var woodToStick = new CraftingRecipe
+		_recipes.Clear();
+
+		_recipes.Add(new CraftingRecipe
 		{
 			RecipeId = "wood_to_sticks",
 			StationType = "Backpack",
 			IsShapeless = true,
-			OutputItem = new ItemDefinition("stick", "Stick"),
+			OutputItemId = "stick",
 			OutputAmount = 4,
-			Inputs = new Godot.Collections.Array<RecipeIngredient>
+			Ingredients = new Godot.Collections.Array<RecipeIngredient>
 			{
 				new RecipeIngredient
 				{
-					Item = new ItemDefinition("wood", "Wood"),
+					ItemId = "wood",
 					Amount = 1
 				}
 			}
-		};
+		});
 
-		_recipes.Add(woodToStick);
-		
-		var torchRecipe = new CraftingRecipe
+		_recipes.Add(new CraftingRecipe
 		{
 			RecipeId = "coal_stick_to_torch",
 			StationType = "Backpack",
 			IsShapeless = false,
-			OutputItem = new ItemDefinition("torch", "Torch"),
+			OutputItemId = "torch",
 			OutputAmount = 4,
-			Inputs = new Godot.Collections.Array<RecipeIngredient>
+			PatternRows = new Godot.Collections.Array<string>
 			{
-				new RecipeIngredient
-				{
-					Item = new ItemDefinition("coal", "Coal"),
-					Amount = 1
-				},
-				new RecipeIngredient
-				{
-					Item = new ItemDefinition("stick", "Stick"),
-					Amount = 1
-				}
+				"C",
+				"S"
+			},
+			PatternKey = new Godot.Collections.Dictionary<string, string>
+			{
+				{ "C", "coal" },
+				{ "S", "stick" }
 			}
-		};
-
-		_recipes.Add(torchRecipe);
+		});
 	}
 
 	public bool TryGetCraftingResult(
@@ -73,129 +79,34 @@ public partial class CraftingManager : Node
 		if (inputSlots == null || inputSlots.Length == 0)
 			return false;
 
-		var nonEmptySlots = inputSlots
-			.Where(slot => slot != null && !slot.IsEmpty)
-			.ToList();
-
-		if (nonEmptySlots.Count == 0)
-			return false;
-
 		foreach (var candidate in _recipes)
 		{
-			if (candidate.StationType != stationType)
+			if (candidate == null || candidate.StationType != stationType)
 				continue;
 
-			bool matched = false;
-			int matchedCraftCount = 0;
+			int matchedCraftCount;
+			bool matched = candidate.IsShapeless
+				? TryMatchShapelessRecipe(candidate, inputSlots, out matchedCraftCount)
+				: TryMatchShapedRecipe(candidate, inputSlots, out matchedCraftCount);
 
-			if (candidate.IsShapeless)
-				matched = TryMatchShapelessRecipe(candidate, nonEmptySlots, out matchedCraftCount);
-			else
-				matched = TryMatchShapedRecipe(candidate, inputSlots, out matchedCraftCount);
+			if (!matched)
+				continue;
 
-			if (matched)
+			var resultItem = _itemDatabase.GetItem(candidate.OutputItemId);
+			if (resultItem == null)
 			{
-				recipe = candidate;
-				craftCount = matchedCraftCount;
-				outputItem = candidate.OutputItem;
-				outputAmount = candidate.OutputAmount * matchedCraftCount;
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private bool TryMatchShapelessRecipe(
-		CraftingRecipe recipe,
-		List<InventorySlot> nonEmptySlots,
-		out int craftCount)
-	{
-		craftCount = 0;
-
-		if (recipe.Inputs == null || recipe.Inputs.Count != 1)
-			return false;
-
-		var required = recipe.Inputs[0];
-		if (required == null || required.Item == null || required.Amount <= 0)
-			return false;
-
-		// Wood -> sticks only works from one occupied slot / one stack
-		if (nonEmptySlots.Count != 1)
-			return false;
-
-		var slot = nonEmptySlots[0];
-
-		if (slot == null || slot.IsEmpty || slot.Item == null)
-			return false;
-
-		if (slot.Item.ItemId != required.Item.ItemId)
-			return false;
-
-		if (slot.Count < required.Amount)
-			return false;
-
-		craftCount = slot.Count / required.Amount;
-		return craftCount > 0;
-	}
-	
-	private bool TryConsumeShapedRecipeInputs(
-		CraftingRecipe recipe,
-		int craftCount,
-		InventorySlot[] inputSlots)
-	{
-		if (recipe == null || inputSlots == null || inputSlots.Length < 4)
-			return false;
-
-		switch (recipe.RecipeId)
-		{
-			case "coal_stick_to_torch":
-				return TryConsumeTorchRecipeInputs(craftCount, inputSlots);
-		}
-
-		return false;
-	}
-	
-	private bool TryConsumeShapelessRecipeInputs(
-		CraftingRecipe recipe,
-		int craftCount,
-		InventorySlot[] inputSlots)
-	{
-		if (recipe.Inputs == null || recipe.Inputs.Count != 1)
-			return false;
-
-		var required = recipe.Inputs[0];
-		if (required == null || required.Item == null || required.Amount <= 0)
-			return false;
-
-		int amountToConsume = required.Amount * craftCount;
-
-		int totalAvailable = inputSlots
-			.Where(slot =>
-				slot != null &&
-				!slot.IsEmpty &&
-				slot.Item != null &&
-				slot.Item.ItemId == required.Item.ItemId)
-			.Sum(slot => slot.Count);
-
-		if (totalAvailable < amountToConsume)
-			return false;
-
-		for (int i = 0; i < inputSlots.Length && amountToConsume > 0; i++)
-		{
-			var slot = inputSlots[i];
-			if (slot == null || slot.IsEmpty || slot.Item == null || slot.Item.ItemId != required.Item.ItemId)
+				GD.PrintErr($"CraftingManager: Output item '{candidate.OutputItemId}' not found.");
 				continue;
+			}
 
-			int taken = Mathf.Min(slot.Count, amountToConsume);
-			slot.RemoveAmount(taken);
-			amountToConsume -= taken;
-
-			if (slot.IsEmpty)
-				inputSlots[i] = new InventorySlot();
+			recipe = candidate;
+			craftCount = matchedCraftCount;
+			outputItem = resultItem;
+			outputAmount = candidate.OutputAmount * matchedCraftCount;
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	public bool TryConsumeRecipeInputs(
@@ -206,12 +117,100 @@ public partial class CraftingManager : Node
 		if (recipe == null || inputSlots == null || craftCount <= 0)
 			return false;
 
-		if (recipe.IsShapeless)
-			return TryConsumeShapelessRecipeInputs(recipe, craftCount, inputSlots);
-
-		return TryConsumeShapedRecipeInputs(recipe, craftCount, inputSlots);
+		return recipe.IsShapeless
+			? TryConsumeShapelessRecipeInputs(recipe, craftCount, inputSlots)
+			: TryConsumeShapedRecipeInputs(recipe, craftCount, inputSlots);
 	}
-	
+
+	private bool TryMatchShapelessRecipe(
+		CraftingRecipe recipe,
+		InventorySlot[] inputSlots,
+		out int craftCount)
+	{
+		craftCount = 0;
+
+		if (recipe.Ingredients == null || recipe.Ingredients.Count == 0)
+			return false;
+
+		var nonEmptySlots = inputSlots
+			.Where(slot => slot != null && !slot.IsEmpty && slot.Item != null)
+			.ToList();
+
+		if (nonEmptySlots.Count == 0)
+			return false;
+
+		// Total counts by item id
+		var totals = new Dictionary<string, int>();
+		foreach (var slot in nonEmptySlots)
+		{
+			if (!totals.ContainsKey(slot.Item.ItemId))
+				totals[slot.Item.ItemId] = 0;
+
+			totals[slot.Item.ItemId] += slot.Count;
+		}
+
+		// Reject extra unrelated items
+		if (totals.Keys.Count != recipe.Ingredients.Count)
+			return false;
+
+		foreach (var ingredient in recipe.Ingredients)
+		{
+			if (ingredient == null || string.IsNullOrEmpty(ingredient.ItemId) || ingredient.Amount <= 0)
+				return false;
+
+			if (!totals.ContainsKey(ingredient.ItemId))
+				return false;
+		}
+
+		int maxCrafts = int.MaxValue;
+
+		foreach (var ingredient in recipe.Ingredients)
+		{
+			int available = totals[ingredient.ItemId];
+			int possible = available / ingredient.Amount;
+			maxCrafts = Mathf.Min(maxCrafts, possible);
+		}
+
+		craftCount = maxCrafts;
+		return craftCount > 0;
+	}
+
+	private bool TryConsumeShapelessRecipeInputs(
+		CraftingRecipe recipe,
+		int craftCount,
+		InventorySlot[] inputSlots)
+	{
+		if (recipe.Ingredients == null || recipe.Ingredients.Count == 0)
+			return false;
+
+		foreach (var ingredient in recipe.Ingredients)
+		{
+			int amountToConsume = ingredient.Amount * craftCount;
+
+			for (int i = 0; i < inputSlots.Length && amountToConsume > 0; i++)
+			{
+				var slot = inputSlots[i];
+				if (slot == null || slot.IsEmpty || slot.Item == null)
+					continue;
+
+				if (slot.Item.ItemId != ingredient.ItemId)
+					continue;
+
+				int taken = Mathf.Min(slot.Count, amountToConsume);
+				slot.RemoveAmount(taken);
+				amountToConsume -= taken;
+
+				if (slot.IsEmpty)
+					inputSlots[i] = new InventorySlot();
+			}
+
+			if (amountToConsume > 0)
+				return false;
+		}
+
+		return true;
+	}
+
 	private bool TryMatchShapedRecipe(
 		CraftingRecipe recipe,
 		InventorySlot[] inputSlots,
@@ -219,60 +218,146 @@ public partial class CraftingManager : Node
 	{
 		craftCount = 0;
 
-		if (recipe == null || inputSlots == null || inputSlots.Length < 4)
+		if (recipe.PatternRows == null || recipe.PatternRows.Count == 0)
 			return false;
 
-		switch (recipe.RecipeId)
+		int gridWidth = 2;
+		int gridHeight = 2;
+
+		if (inputSlots.Length < gridWidth * gridHeight)
+			return false;
+
+		int recipeWidth = recipe.PatternRows[0].Length;
+		int recipeHeight = recipe.PatternRows.Count;
+
+		if (recipeWidth > gridWidth || recipeHeight > gridHeight)
+			return false;
+
+		for (int offsetY = 0; offsetY <= gridHeight - recipeHeight; offsetY++)
 		{
-			case "coal_stick_to_torch":
-				return TryMatchTorchRecipe(inputSlots, out craftCount);
+			for (int offsetX = 0; offsetX <= gridWidth - recipeWidth; offsetX++)
+			{
+				if (TryMatchPatternAtOffset(
+					recipe,
+					inputSlots,
+					gridWidth,
+					gridHeight,
+					offsetX,
+					offsetY,
+					out craftCount))
+				{
+					_lastShapeOffsetX = offsetX;
+					_lastShapeOffsetY = offsetY;
+					return true;
+				}
+			}
 		}
 
-		return false;
-	}
-	
-	private bool TryMatchTorchRecipe(InventorySlot[] inputSlots, out int craftCount)
-	{
 		craftCount = 0;
-
-		if (inputSlots == null || inputSlots.Length < 4)
-			return false;
-
-		var topLeft = inputSlots[0];
-		var topRight = inputSlots[1];
-		var bottomLeft = inputSlots[2];
-		var bottomRight = inputSlots[3];
-
-		bool leftColumnMatch =
-			IsItem(topLeft, "coal") &&
-			IsItem(bottomLeft, "stick") &&
-			IsEmpty(topRight) &&
-			IsEmpty(bottomRight);
-
-		bool rightColumnMatch =
-			IsItem(topRight, "coal") &&
-			IsItem(bottomRight, "stick") &&
-			IsEmpty(topLeft) &&
-			IsEmpty(bottomLeft);
-
-		if (!leftColumnMatch && !rightColumnMatch)
-			return false;
-
-		if (leftColumnMatch)
-		{
-			craftCount = Mathf.Min(topLeft.Count, bottomLeft.Count);
-			return craftCount > 0;
-		}
-
-		if (rightColumnMatch)
-		{
-			craftCount = Mathf.Min(topRight.Count, bottomRight.Count);
-			return craftCount > 0;
-		}
-
 		return false;
 	}
-	
+
+	private bool TryMatchPatternAtOffset(
+		CraftingRecipe recipe,
+		InventorySlot[] inputSlots,
+		int gridWidth,
+		int gridHeight,
+		int offsetX,
+		int offsetY,
+		out int craftCount)
+	{
+		craftCount = int.MaxValue;
+
+		int recipeWidth = recipe.PatternRows[0].Length;
+		int recipeHeight = recipe.PatternRows.Count;
+
+		for (int y = 0; y < gridHeight; y++)
+		{
+			for (int x = 0; x < gridWidth; x++)
+			{
+				var slot = inputSlots[(y * gridWidth) + x];
+
+				bool insidePattern =
+					x >= offsetX &&
+					x < offsetX + recipeWidth &&
+					y >= offsetY &&
+					y < offsetY + recipeHeight;
+
+				if (!insidePattern)
+				{
+					if (!IsEmpty(slot))
+						return false;
+
+					continue;
+				}
+
+				char symbol = recipe.PatternRows[y - offsetY][x - offsetX];
+
+				if (symbol == '.')
+				{
+					if (!IsEmpty(slot))
+						return false;
+
+					continue;
+				}
+
+				string key = symbol.ToString();
+				if (!recipe.PatternKey.ContainsKey(key))
+					return false;
+
+				string expectedItemId = recipe.PatternKey[key].ToString();
+
+				if (!IsItem(slot, expectedItemId))
+					return false;
+
+				craftCount = Mathf.Min(craftCount, slot.Count);
+			}
+		}
+
+		if (craftCount == int.MaxValue)
+			craftCount = 0;
+
+		return craftCount > 0;
+	}
+
+	private bool TryConsumeShapedRecipeInputs(
+		CraftingRecipe recipe,
+		int craftCount,
+		InventorySlot[] inputSlots)
+	{
+		if (recipe.PatternRows == null || recipe.PatternRows.Count == 0)
+			return false;
+
+		int gridWidth = 2;
+
+		for (int y = 0; y < recipe.PatternRows.Count; y++)
+		{
+			string row = recipe.PatternRows[y];
+
+			for (int x = 0; x < row.Length; x++)
+			{
+				char symbol = row[x];
+				if (symbol == '.')
+					continue;
+
+				int gridX = _lastShapeOffsetX + x;
+				int gridY = _lastShapeOffsetY + y;
+				int index = (gridY * gridWidth) + gridX;
+
+				var slot = inputSlots[index];
+				if (slot == null || slot.IsEmpty)
+					return false;
+
+				slot.RemoveAmount(craftCount);
+
+				if (slot.IsEmpty)
+					inputSlots[index] = new InventorySlot();
+			}
+		}
+
+		return true;
+	}
+
 	private bool IsEmpty(InventorySlot slot)
 	{
 		return slot == null || slot.IsEmpty || slot.Item == null;
@@ -285,49 +370,4 @@ public partial class CraftingManager : Node
 			   slot.Item != null &&
 			   slot.Item.ItemId == itemId;
 	}
-	
-	private bool TryConsumeTorchRecipeInputs(int craftCount, InventorySlot[] inputSlots)
-	{
-		var topLeft = inputSlots[0];
-		var topRight = inputSlots[1];
-		var bottomLeft = inputSlots[2];
-		var bottomRight = inputSlots[3];
-
-		bool leftColumnMatch =
-			IsItem(topLeft, "coal") &&
-			IsItem(bottomLeft, "stick") &&
-			IsEmpty(topRight) &&
-			IsEmpty(bottomRight);
-
-		bool rightColumnMatch =
-			IsItem(topRight, "coal") &&
-			IsItem(bottomRight, "stick") &&
-			IsEmpty(topLeft) &&
-			IsEmpty(bottomLeft);
-
-		if (leftColumnMatch)
-		{
-			topLeft.RemoveAmount(craftCount);
-			bottomLeft.RemoveAmount(craftCount);
-
-			if (topLeft.IsEmpty) inputSlots[0] = new InventorySlot();
-			if (bottomLeft.IsEmpty) inputSlots[2] = new InventorySlot();
-
-			return true;
-		}
-
-		if (rightColumnMatch)
-		{
-			topRight.RemoveAmount(craftCount);
-			bottomRight.RemoveAmount(craftCount);
-
-			if (topRight.IsEmpty) inputSlots[1] = new InventorySlot();
-			if (bottomRight.IsEmpty) inputSlots[3] = new InventorySlot();
-
-			return true;
-		}
-
-		return false;
-	}
-	
 }

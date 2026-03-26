@@ -11,7 +11,7 @@ public partial class Inventory : Node
 	public const int BackpackRows = 2;
 	public const int BackpackSize = BackpackColumns * BackpackRows;
 	public const int TotalSize = HotbarSize + BackpackSize;
-
+	private ItemDatabase _itemDatabase;
 	private readonly List<InventorySlot> _slots = new();
 
 	public int SelectedIndex { get; private set; } = 0;
@@ -20,6 +20,11 @@ public partial class Inventory : Node
 	{
 		for (int i = 0; i < TotalSize; i++)
 			_slots.Add(new InventorySlot());
+
+		_itemDatabase = GetNodeOrNull<ItemDatabase>("/root/ItemDatabase");
+
+		if (_itemDatabase == null)
+			GD.PrintErr("Inventory: ItemDatabase autoload not found.");
 	}
 
 	public InventorySlot GetSlot(int index)
@@ -101,29 +106,14 @@ public partial class Inventory : Node
 		if (string.IsNullOrEmpty(itemId) || count <= 0)
 			return false;
 
-		for (int i = 0; i < _slots.Count; i++)
+		var item = _itemDatabase?.GetItem(itemId);
+		if (item == null)
 		{
-			if (!_slots[i].IsEmpty &&
-				_slots[i].Item != null &&
-				NormalizeItemId(_slots[i].Item.ItemId) == itemId)
-			{
-				_slots[i].Count += count;
-				EmitSignal(SignalName.InventoryChanged);
-				return true;
-			}
+			GD.PrintErr($"Inventory: Could not add item '{itemId}' because it was not found in ItemDatabase.");
+			return false;
 		}
 
-		for (int i = 0; i < _slots.Count; i++)
-		{
-			if (_slots[i].IsEmpty)
-			{
-				_slots[i].SetItem(new ItemDefinition(itemId, itemId), count);
-				EmitSignal(SignalName.InventoryChanged);
-				return true;
-			}
-		}
-
-		return false;
+		return AddItem(item, count);
 	}
 
 	public bool ConsumeSelectedItem(int amount)

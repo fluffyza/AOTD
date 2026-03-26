@@ -7,6 +7,7 @@ public partial class WorldManager : Node
 	[Export] public PackedScene TreeScene;
 	[Export] public float TreeSpawnChance = 0.12f;
 	
+	private WorldCraftingManager _worldCraftingManager;
 	private BlockManager _blockManager;
 
 	private readonly Dictionary<Vector3I, Node3D> _placedItems = new();
@@ -14,6 +15,7 @@ public partial class WorldManager : Node
 	public override void _Ready()
 	{
 		_blockManager = GetNode<BlockManager>(BlockManagerPath);
+		_worldCraftingManager = GetNode<WorldCraftingManager>("../WorldCraftingManager");
 	}
 
 	public bool HasBlock(Vector3I cell)
@@ -133,6 +135,18 @@ public partial class WorldManager : Node
 		if (item == null)
 			return false;
 
+		// Register crafting piece data if this placed object supports it.
+		if (item is WorldPlacedPiece placedPiece)
+		{
+			placedPiece.ItemId = itemId;
+			placedPiece.GridCell = cell;
+			GD.Print($"Registered world piece: {placedPiece.ItemId} at {placedPiece.GridCell}");
+		}
+		else
+		{
+			GD.Print($"Placed item is NOT a WorldPlacedPiece: {item.Name}");
+		}
+
 		AddPlacedNode(cell, item);
 		return true;
 	}
@@ -166,4 +180,90 @@ public partial class WorldManager : Node
 
 		tree.GlobalPosition = worldPosition + new Vector3(0, 1.0f, 0);
 	}
+	
+	public Dictionary<Vector3I, WorldPlacedPiece> GetPlacedCraftingPieces()
+	{
+		var result = new Dictionary<Vector3I, WorldPlacedPiece>();
+
+		foreach (var kvp in _placedItems)
+		{
+			if (kvp.Value is WorldPlacedPiece placedPiece)
+				result[kvp.Key] = placedPiece;
+		}
+
+		return result;
+	}
+	
+	private static readonly Vector3I[] CraftAnchorOffsets =
+	{
+		new Vector3I(0, 0, 0),
+		new Vector3I(-1, 0, 0),
+		new Vector3I(0, 0, -1),
+		new Vector3I(-1, 0, -1),
+		new Vector3I(0, -1, 0),
+		new Vector3I(-1, -1, 0),
+		new Vector3I(0, -1, -1),
+		new Vector3I(-1, -1, -1)
+	};
+
+	public bool TryCraftWorldStructureFromCell(Vector3I lookedCell)
+	{
+		if (_worldCraftingManager == null)
+			return false;
+
+		var craftingPieces = GetPlacedCraftingPieces();
+
+		foreach (var offset in CraftAnchorOffsets)
+		{
+			var anchorCell = lookedCell + offset;
+
+			if (_worldCraftingManager.TryCraftAtAnchor(
+				anchorCell,
+				craftingPieces,
+				out WorldStructureRecipe matchedRecipe,
+				out Basis spawnBasis,
+				out var matchedPieces))
+			{
+				return CompleteWorldCraft(anchorCell, matchedRecipe, spawnBasis, matchedPieces);
+			}
+		}
+
+		return false;
+	}
+
+
+	private bool CompleteWorldCraft(
+		Vector3I anchorCell,
+		WorldStructureRecipe recipe,
+		Basis spawnBasis,
+		List<WorldPlacedPiece> matchedPieces)
+	{
+		foreach (var piece in matchedPieces)
+		{
+			_placedItems.Remove(piece.GridCell);
+			piece.QueueFree();
+		}
+
+		if (recipe == null || recipe.OutputScene == null)
+		{
+			GD.PrintErr("WorldManager: Recipe or OutputScene missing.");
+			return false;
+		}
+
+		var instance = recipe.OutputScene.Instantiate<Node3D>();
+		if (instance == null)
+		{
+			GD.PrintErr("WorldManager: Failed to instantiate output scene.");
+			return false;
+		}
+
+		instance.Position = GridUtils.CellToWorld(anchorCell);
+		instance.Basis = spawnBasis;
+
+		AddPlacedNode(anchorCell, instance);
+		GD.Print($"World crafted: {recipe.RecipeId}");
+		return true;
+	}
+
+
 }

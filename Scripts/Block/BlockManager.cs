@@ -5,78 +5,21 @@ public partial class BlockManager : Node
 {
 	[Export] public PackedScene BlockScene;
 	[Export] public PackedScene TorchScene;
-
-	public class ItemDef
-	{
-		public string Id;
-		public string DisplayName;
-		public PackedScene Scene;
-		public bool IsBlock;
-		public Color? BlockColor;
-	}
-
-	private readonly Dictionary<string, ItemDef> _itemDefs = new();
-
+	
+	private ItemDatabase _itemDatabase;
+	
 	public override void _Ready()
 	{
-		_itemDefs["torch"] = new ItemDef
-		{
-			Id = "torch",
-			DisplayName = "Torch",
-			Scene = TorchScene,
-			IsBlock = false,
-			BlockColor = null
-		};
+		_itemDatabase = GetNodeOrNull<ItemDatabase>("/root/ItemDatabase");
 
-		_itemDefs["stone"] = new ItemDef
-		{
-			Id = "stone",
-			DisplayName = "Stone",
-			Scene = BlockScene,
-			IsBlock = true,
-			BlockColor = new Color(0.85f, 0.85f, 0.85f)
-		};
-
-		_itemDefs["coal"] = new ItemDef
-		{
-			Id = "coal",
-			DisplayName = "Coal",
-			Scene = BlockScene,
-			IsBlock = true,
-			BlockColor = new Color(0.1f, 0.1f, 0.1f)
-		};
-
-		_itemDefs["dirt"] = new ItemDef
-		{
-			Id = "dirt",
-			DisplayName = "Dirt",
-			Scene = BlockScene,
-			IsBlock = true,
-			BlockColor = new Color(0.45f, 0.28f, 0.14f)
-		};
-		
-		_itemDefs["wood"] = new ItemDef
-		{
-			Id = "wood",
-			DisplayName = "Wood",
-			Scene = BlockScene,
-			IsBlock = true,
-			BlockColor = new Color(0.45f, 0.28f, 0.14f)
-		};
-		
-		_itemDefs["acorn"] = new ItemDef
-		{
-			Id = "acorn",
-			DisplayName = "Acorn",
-			Scene = BlockScene,
-			IsBlock = false,
-			BlockColor = new Color(0.45f, 0.28f, 0.14f)
-		};
+		if (_itemDatabase == null)
+			GD.PrintErr("BlockManager: ItemDatabase autoload not found.");
 	}
 
-	public bool TryGetItemDef(string itemId, out ItemDef def)
+	public bool TryGetItemDef(string itemId, out ItemDefinition def)
 	{
-		return _itemDefs.TryGetValue(itemId, out def);
+		def = _itemDatabase?.GetItem(itemId);
+		return def != null;
 	}
 
 	public string GetRandomMineBlockId()
@@ -93,18 +36,19 @@ public partial class BlockManager : Node
 
 	public Node3D CreatePlacedItem(string itemId, Vector3 worldPosition)
 	{
-		if (!_itemDefs.TryGetValue(itemId, out var def) || def.Scene == null)
+		var def = _itemDatabase?.GetItem(itemId);
+		if (def == null || def.WorldScene == null)
 		{
-			GD.PrintErr($"BlockManager: no item definition for '{itemId}'");
+			GD.PrintErr($"BlockManager: no item definition or world scene for '{itemId}'");
 			return null;
 		}
 
-		var item = def.Scene.Instantiate<Node3D>();
-		item.Position  = worldPosition;
+		var item = def.WorldScene.Instantiate<Node3D>();
+		item.Position = worldPosition;
 		item.SetMeta("item_id", itemId);
 
-		if (def.IsBlock && def.BlockColor.HasValue)
-			ApplyOpaqueColorToBlock(item, def.BlockColor.Value);
+		if (def.IsBlock && def.HasBlockColor)
+			ApplyOpaqueColorToBlock(item, def.BlockColor);
 
 		return item;
 	}
@@ -118,11 +62,13 @@ public partial class BlockManager : Node
 		}
 
 		var block = BlockScene.Instantiate<Node3D>();
-		block.Position  = worldPosition;
+		block.Position = worldPosition;
 
 		if (unbreakable)
 		{
 			block.SetMeta("unbreakable", true);
+
+			// Hardcoded color for unbreakable blocks
 			ApplyOpaqueColorToBlock(block, new Color(0.35f, 0.35f, 0.35f));
 		}
 		else
@@ -130,8 +76,9 @@ public partial class BlockManager : Node
 			string itemId = GetRandomMineBlockId();
 			block.SetMeta("item_id", itemId);
 
-			if (_itemDefs.TryGetValue(itemId, out var def) && def.BlockColor.HasValue)
-				ApplyOpaqueColorToBlock(block, def.BlockColor.Value);
+			var def = _itemDatabase?.GetItem(itemId);
+			if (def != null && def.HasBlockColor)
+				ApplyOpaqueColorToBlock(block, def.BlockColor);
 		}
 
 		return block;

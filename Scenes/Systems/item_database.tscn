@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://ccrchclhmdn63"]
+
+[ext_resource type="Script" uid="uid://c81nwod7lxkyl" path="res://Scripts/Items/ItemDatabase.cs" id="1_08nis"]
+[ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="2_ryqhq"]
+[ext_resource type="PackedScene" uid="uid://cf02bt86p5je3" path="res://torch.tscn" id="3_3hlrr"]
+
+[node name="ItemDatabase" type="Node" unique_id=410087564]
+script = ExtResource("1_08nis")
+BlockScene = ExtResource("2_ryqhq")
+TorchScene = ExtResource("3_3hlrr")

@@ -78,6 +78,9 @@ public partial class Player : CharacterBody3D
 
 		if (@event.IsActionPressed("remove_item"))
 			TryRemoveItem();
+			
+		if (@event.IsActionPressed("craft_world_structure"))
+			TryCraftWorldStructure();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -209,6 +212,17 @@ public partial class Player : CharacterBody3D
 			if (_highlightedTree != null)
 				_highlightedTree.SetHighlighted(true);
 		}
+	}
+	
+	private void TryCraftWorldStructure()
+	{
+		if (!_targetting.IsLookingAtPlacedItem)
+			return;
+
+		bool crafted = _worldManager.TryCraftWorldStructureFromCell(_targetting.LookedAtCell);
+
+		if (!crafted)
+			GD.Print("No valid world crafting recipe found.");
 	}
 	
 }

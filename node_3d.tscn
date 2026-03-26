@@ -16,8 +16,9 @@
 [ext_resource type="Script" uid="uid://bufpng8nrm7st" path="res://Scripts/Block/BlockTargetting.cs" id="10_cdqbm"]
 [ext_resource type="PackedScene" uid="uid://dcgbdpntcbor3" path="res://tree_resource.tscn" id="10_tuemg"]
 [ext_resource type="Script" uid="uid://6gtlgg53ypwb" path="res://Scripts/World/GameBootstrap.cs" id="12_3v7ru"]
+[ext_resource type="Script" uid="uid://dv4djcgmu2vor" path="res://Scripts/Crafting/WorldCraftingManager.cs" id="15_ealrb"]
 [ext_resource type="PackedScene" uid="uid://bjmvlf4s8kve1" path="res://backpack_ui.tscn" id="16_tcnuu"]
-[ext_resource type="Script" uid="uid://bw3asi1r0raq2" path="res://Scripts/Models/Crafting/CraftingContainer.cs" id="18_i0g27"]
+[ext_resource type="Script" uid="uid://bw3asi1r0raq2" path="res://Scripts/Crafting/CraftingContainer.cs" id="18_i0g27"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_noarx"]
 radius = 0.4
@@ -86,6 +87,9 @@ script = ExtResource("12_3v7ru")
 [node name="BlockTargetting" type="Node" parent="Player (CharacterBody3D)" unique_id=346760064]
 script = ExtResource("10_cdqbm")
 CameraPath = NodePath("../Head/Camera3D")
+
+[node name="WorldCraftingManager" type="Node" parent="Player (CharacterBody3D)" unique_id=1520499744]
+script = ExtResource("15_ealrb")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1498523069]
 environment = SubResource("Environment_a202f")
