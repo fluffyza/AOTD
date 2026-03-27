@@ -1,8 +1,18 @@
 [gd_scene format=3 uid="uid://bl0jjkypocqcj"]
 
+[ext_resource type="Script" uid="uid://dwgldbe2kfn82" path="res://Scripts/Crafting/Workbench/Workbench.cs" id="1_v12dd"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_itogv"]
+
 [sub_resource type="BoxMesh" id="BoxMesh_n0nxb"]
 
-[node name="Node3D" type="Node3D" unique_id=125727541]
+[node name="Workbench" type="Node3D" unique_id=125727541]
+script = ExtResource("1_v12dd")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=473219722]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1921322994]
+shape = SubResource("BoxShape3D_itogv")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1384547809]
 mesh = SubResource("BoxMesh_n0nxb")

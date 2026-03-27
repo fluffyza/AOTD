@@ -42,11 +42,47 @@ public partial class CraftingManager : Node
 				}
 			}
 		});
+		
+		_recipes.Add(new CraftingRecipe
+		{
+			RecipeId = "wood_to_stick_workbench",
+			StationType = "Workbench",
+			IsShapeless = false,
+			OutputItemId = "stick",
+			OutputAmount = 4,
+			PatternRows = new Godot.Collections.Array<string>
+			{
+				"W"
+			},
+			PatternKey = new Godot.Collections.Dictionary<string, string>
+			{
+				{ "W", "wood" }
+			}
+		});
 
 		_recipes.Add(new CraftingRecipe
 		{
 			RecipeId = "coal_stick_to_torch",
 			StationType = "Backpack",
+			IsShapeless = false,
+			OutputItemId = "torch",
+			OutputAmount = 4,
+			PatternRows = new Godot.Collections.Array<string>
+			{
+				"C",
+				"S"
+			},
+			PatternKey = new Godot.Collections.Dictionary<string, string>
+			{
+				{ "C", "coal" },
+				{ "S", "stick" }
+			}
+		});
+		
+		_recipes.Add(new CraftingRecipe
+		{
+			RecipeId = "coal_stick_to_torch_workbench",
+			StationType = "Workbench",
 			IsShapeless = false,
 			OutputItemId = "torch",
 			OutputAmount = 4,
@@ -221,10 +257,7 @@ public partial class CraftingManager : Node
 		if (recipe.PatternRows == null || recipe.PatternRows.Count == 0)
 			return false;
 
-		int gridWidth = 2;
-		int gridHeight = 2;
-
-		if (inputSlots.Length < gridWidth * gridHeight)
+		if (!TryGetGridSize(inputSlots, out int gridWidth, out int gridHeight))
 			return false;
 
 		int recipeWidth = recipe.PatternRows[0].Length;
@@ -328,7 +361,8 @@ public partial class CraftingManager : Node
 		if (recipe.PatternRows == null || recipe.PatternRows.Count == 0)
 			return false;
 
-		int gridWidth = 2;
+		if (!TryGetGridSize(inputSlots, out int gridWidth, out int gridHeight))
+			return false;
 
 		for (int y = 0; y < recipe.PatternRows.Count; y++)
 		{
@@ -370,4 +404,32 @@ public partial class CraftingManager : Node
 			   slot.Item != null &&
 			   slot.Item.ItemId == itemId;
 	}
+	
+	private bool TryGetGridSize(InventorySlot[] inputSlots, out int gridWidth, out int gridHeight)
+	{
+		gridWidth = 0;
+		gridHeight = 0;
+
+		if (inputSlots == null)
+			return false;
+
+		if (inputSlots.Length == 4)
+		{
+			gridWidth = 2;
+			gridHeight = 2;
+			return true;
+		}
+
+		if (inputSlots.Length == 9)
+		{
+			gridWidth = 3;
+			gridHeight = 3;
+			return true;
+		}
+
+		GD.PrintErr($"CraftingManager: Unsupported crafting grid size: {inputSlots.Length}");
+		return false;
+	}
+
+
 }

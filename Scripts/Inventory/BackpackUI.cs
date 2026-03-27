@@ -8,14 +8,31 @@ public partial class BackpackUI : Control
 	private int _heldSourceCraftIndex = -1;
 	private const int CraftOutputSourceMarker = -999;
 	
-	[Export] public NodePath CraftingGridPath;
-	[Export] public NodePath CraftingOutputSlotPath;
-	[Export] public NodePath CraftingContainerPath;
+	[Export] public NodePath BackpackCraftingPanelPath;
+	[Export] public NodePath BackpackCraftingGridPath;
+	[Export] public NodePath BackpackCraftingOutputSlotPath;
+	[Export] public NodePath BackpackCraftingContainerPath;
+
+	[Export] public NodePath WorkbenchCraftingPanelPath;
+	[Export] public NodePath WorkbenchCraftingGridPath;
+	[Export] public NodePath WorkbenchCraftingOutputSlotPath;
+	[Export] public NodePath WorkbenchCraftingContainerPath;
+	
+	private Control _backpackCraftingPanel;
+	private GridContainer _backpackCraftingGrid;
+	private InventorySlotUI _backpackCraftOutputSlotUi;
+	private readonly List<InventorySlotUI> _backpackCraftingSlotUis = new();
+	private CraftingContainer _backpackCraftingContainer;
+
+	private Control _workbenchCraftingPanel;
+	private GridContainer _workbenchCraftingGrid;
+	private InventorySlotUI _workbenchCraftOutputSlotUi;
+	private readonly List<InventorySlotUI> _workbenchCraftingSlotUis = new();
+	private CraftingContainer _workbenchCraftingContainer;
 
 	private GridContainer _craftingGrid;
 	private InventorySlotUI _craftOutputSlotUi;
 	private readonly List<InventorySlotUI> _craftingSlotUis = new();
-
 	private CraftingContainer _craftingContainer;
 
 	private InventorySlotUI _hoveredSlotUi = null;
@@ -64,17 +81,28 @@ public partial class BackpackUI : Control
 		_hotbarRow = GetNode<HBoxContainer>(HotbarRowPath);
 		_draggedItemLabel = GetNode<Label>(DraggedItemLabelPath);
 
-		_craftingGrid = GetNode<GridContainer>(CraftingGridPath);
-		_craftOutputSlotUi = GetNode<InventorySlotUI>(CraftingOutputSlotPath);
-		_craftingContainer = GetNode<CraftingContainer>(CraftingContainerPath);
+		_backpackCraftingPanel = GetNode<Control>(BackpackCraftingPanelPath);
+		_backpackCraftingGrid = GetNode<GridContainer>(BackpackCraftingGridPath);
+		_backpackCraftOutputSlotUi = GetNode<InventorySlotUI>(BackpackCraftingOutputSlotPath);
+		_backpackCraftingContainer = GetNode<CraftingContainer>(BackpackCraftingContainerPath);
+
+		_workbenchCraftingPanel = GetNode<Control>(WorkbenchCraftingPanelPath);
+		_workbenchCraftingGrid = GetNode<GridContainer>(WorkbenchCraftingGridPath);
+		_workbenchCraftOutputSlotUi = GetNode<InventorySlotUI>(WorkbenchCraftingOutputSlotPath);
+		_workbenchCraftingContainer = GetNode<CraftingContainer>(WorkbenchCraftingContainerPath);
 
 		CacheSlotReferences();
+
+		OpenBackpackCraftingMode();
 
 		Visible = false;
 		_draggedItemLabel.Visible = false;
 
-		if (_craftingContainer != null)
-			_craftingContainer.CraftingChanged += Refresh;
+		if (_backpackCraftingContainer != null)
+			_backpackCraftingContainer.CraftingChanged += Refresh;
+
+		if (_workbenchCraftingContainer != null)
+			_workbenchCraftingContainer.CraftingChanged += Refresh;
 	}
 
 	public void Initialize(Inventory inventory)
@@ -139,7 +167,54 @@ public partial class BackpackUI : Control
 		if (Visible)
 			Close();
 		else
-			Open();
+			OpenBackpack();
+	}
+
+	public void OpenBackpackCraftingMode()
+	{
+		_backpackCraftingPanel.Visible = true;
+		_workbenchCraftingPanel.Visible = false;
+
+		_craftingGrid = _backpackCraftingGrid;
+		_craftOutputSlotUi = _backpackCraftOutputSlotUi;
+		_craftingContainer = _backpackCraftingContainer;
+
+		_craftingSlotUis.Clear();
+		_craftingSlotUis.AddRange(_backpackCraftingSlotUis);
+		Refresh();
+	}
+	
+	public void OpenBackpack()
+	{
+		OpenUI();
+		OpenBackpackCraftingMode();
+	}
+	
+	public void OpenUI()
+	{
+		Visible = true;
+		Input.MouseMode = Input.MouseModeEnum.Visible;
+	}
+
+	public void OpenWorkbench()
+	{
+		OpenUI();
+		OpenWorkbenchCraftingMode();
+	}
+
+	public void OpenWorkbenchCraftingMode()
+	{
+		_backpackCraftingPanel.Visible = false;
+		_workbenchCraftingPanel.Visible = true;
+
+		_craftingGrid = _workbenchCraftingGrid;
+		_craftOutputSlotUi = _workbenchCraftOutputSlotUi;
+		_craftingContainer = _workbenchCraftingContainer;
+
+		_craftingSlotUis.Clear();
+		_craftingSlotUis.AddRange(_workbenchCraftingSlotUis);
+		
+		Refresh();
 	}
 
 	public void Open()
@@ -162,7 +237,7 @@ public partial class BackpackUI : Control
 		if (_craftingContainer == null || _inventory == null)
 			return;
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < _craftingContainer.InputSlots.Length; i++)
 		{
 			var slot = _craftingContainer.GetInputSlot(i);
 			if (slot == null || slot.IsEmpty || slot.Item == null)
@@ -179,6 +254,8 @@ public partial class BackpackUI : Control
 	{
 		_backpackSlotUis.Clear();
 		_hotbarSlotUis.Clear();
+		_backpackCraftingSlotUis.Clear();
+		_workbenchCraftingSlotUis.Clear();
 		_craftingSlotUis.Clear();
 
 		foreach (Node child in _backpackGrid.GetChildren())
@@ -203,22 +280,41 @@ public partial class BackpackUI : Control
 			}
 		}
 
-		foreach (Node child in _craftingGrid.GetChildren())
+		foreach (Node child in _backpackCraftingGrid.GetChildren())
 		{
 			if (child is InventorySlotUI slotUi)
 			{
 				slotUi.SlotPressed += OnSlotPressed;
 				slotUi.SlotHovered += OnSlotHovered;
 				slotUi.SlotUnhovered += OnSlotUnhovered;
-				_craftingSlotUis.Add(slotUi);
+				_backpackCraftingSlotUis.Add(slotUi);
 			}
 		}
 
-		if (_craftOutputSlotUi != null)
+		foreach (Node child in _workbenchCraftingGrid.GetChildren())
 		{
-			_craftOutputSlotUi.SlotPressed += OnSlotPressed;
-			_craftOutputSlotUi.SlotHovered += OnSlotHovered;
-			_craftOutputSlotUi.SlotUnhovered += OnSlotUnhovered;
+			if (child is InventorySlotUI slotUi)
+			{
+				slotUi.SlotPressed += OnSlotPressed;
+				slotUi.SlotHovered += OnSlotHovered;
+				slotUi.SlotUnhovered += OnSlotUnhovered;
+				_workbenchCraftingSlotUis.Add(slotUi);
+			}
+		}
+		
+
+		if (_backpackCraftOutputSlotUi != null)
+		{
+			_backpackCraftOutputSlotUi.SlotPressed += OnSlotPressed;
+			_backpackCraftOutputSlotUi.SlotHovered += OnSlotHovered;
+			_backpackCraftOutputSlotUi.SlotUnhovered += OnSlotUnhovered;
+		}
+
+		if (_workbenchCraftOutputSlotUi != null)
+		{
+			_workbenchCraftOutputSlotUi.SlotPressed += OnSlotPressed;
+			_workbenchCraftOutputSlotUi.SlotHovered += OnSlotHovered;
+			_workbenchCraftOutputSlotUi.SlotUnhovered += OnSlotUnhovered;
 		}
 	}
 
@@ -260,7 +356,8 @@ public partial class BackpackUI : Control
 			for (int i = 0; i < _craftingSlotUis.Count; i++)
 			{
 				var ui = _craftingSlotUis[i];
-				var slot = _craftingContainer.GetInputSlot(i);
+				var slot = _craftingContainer.GetInputSlot(ui.CraftingSlotIndex);
+				GD.Print($"REFRESH {ui.Name} craftIndex={ui.CraftingSlotIndex} slotNull={slot == null}");
 
 				bool highlighted =
 					_hoveredSlotUi == ui ||
@@ -722,7 +819,7 @@ public partial class BackpackUI : Control
 	private bool IsHeldFromCraftingInput()
 	{
 		return _heldSourceSlotIndex >= 0 &&
-			   _heldSourceSlotIndex < 4 &&
+			   _heldSourceSlotIndex < _craftingContainer.InputSlots.Length &&
 			   _pressedSlotUi != null &&
 			   _pressedSlotUi.Role == InventorySlotUI.SlotRole.CraftingInput;
 	}

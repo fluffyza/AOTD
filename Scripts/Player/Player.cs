@@ -49,6 +49,12 @@ public partial class Player : CharacterBody3D
 			return;
 		}
 
+		if (@event.IsActionPressed("Interact"))
+		{
+			TryInteract();
+			return;
+		}
+
 		if (_backpackUi != null && _backpackUi.IsOpen)
 			return;
 
@@ -81,6 +87,29 @@ public partial class Player : CharacterBody3D
 			
 		if (@event.IsActionPressed("craft_world_structure"))
 			TryCraftWorldStructure();
+	}
+
+	private void TryInteract()
+	{
+		if (_backpackUi == null || _targetting == null)
+			return;
+
+		if (!_targetting.IsLookingAtPlacedItem || _targetting.HitItem == null)
+			return;
+
+		Node current = _targetting.HitItem;
+
+		while (current != null)
+		{
+			if (current is Workbench)
+			{
+				_backpackUi.OpenWorkbench();
+				Input.MouseMode = Input.MouseModeEnum.Visible;
+				return;
+			}
+
+			current = current.GetParent();
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)

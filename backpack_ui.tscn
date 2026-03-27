@@ -58,44 +58,110 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/CenterContainer/MarginContainer" unique_id=367967689]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1816742573]
+[node name="WorkbenchCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=954892367]
 layout_mode = 2
 alignment = 2
 
-[node name="CraftingGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=78725719]
+[node name="WorkbenchCraftingGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel" unique_id=1079088277]
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+columns = 3
+
+[node name="WorkbenchCraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=2127815516 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 1
+CraftingSlotIndex = 0
+
+[node name="WorkbenchCraftSlot2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=264897823 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 1
+CraftingSlotIndex = 1
+
+[node name="WorkbenchCraftSlot3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1739826117 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 1
+CraftingSlotIndex = 2
+
+[node name="WorkbenchCraftSlot4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1727387480 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 1
+CraftingSlotIndex = 3
+
+[node name="WorkbenchCraftSlot5" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=984155823 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 1
+CraftingSlotIndex = 4
+
+[node name="WorkbenchCraftSlot6" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1158272170 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 1
+CraftingSlotIndex = 5
+
+[node name="WorkbenchCraftSlot7" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1447941387 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 1
+CraftingSlotIndex = 6
+
+[node name="WorkbenchCraftSlot8" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=71177021 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 1
+CraftingSlotIndex = 7
+
+[node name="WorkbenchCraftSlot9" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1097936511 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 1
+CraftingSlotIndex = 8
+
+[node name="WorkbenchCraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel" unique_id=1607713152]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 2
+
+[node name="WorkbenchCraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingOutput" unique_id=29914131 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 2
+
+[node name="BackpackCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1816742573]
+layout_mode = 2
+alignment = 2
+
+[node name="CraftingGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel" unique_id=78725719]
 layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 columns = 2
 
-[node name="CraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HBoxContainer/CraftingGrid" unique_id=2127815516 instance=ExtResource("3_dy8yp")]
+[node name="CraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1821207642 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 1
 CraftingSlotIndex = 0
 
-[node name="CraftSlot2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HBoxContainer/CraftingGrid" unique_id=61395279 instance=ExtResource("3_dy8yp")]
+[node name="CraftSlot2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=61395279 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 1
 CraftingSlotIndex = 1
 
-[node name="CraftSlot3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HBoxContainer/CraftingGrid" unique_id=1512803032 instance=ExtResource("3_dy8yp")]
+[node name="CraftSlot3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1512803032 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 1
 CraftingSlotIndex = 2
 
-[node name="CraftSlot4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HBoxContainer/CraftingGrid" unique_id=1882599769 instance=ExtResource("3_dy8yp")]
+[node name="CraftSlot4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1882599769 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 1
 CraftingSlotIndex = 3
 
-[node name="CraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=220296968]
+[node name="CraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel" unique_id=220296968]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 2
 
-[node name="CraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HBoxContainer/CraftingOutput" unique_id=451841635 instance=ExtResource("3_dy8yp")]
+[node name="CraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingOutput" unique_id=451841635 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 
