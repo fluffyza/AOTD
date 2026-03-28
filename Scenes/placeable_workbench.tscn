@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bl0jjkypocqcj"]
 
 [ext_resource type="Script" uid="uid://dwgldbe2kfn82" path="res://Scripts/Crafting/Workbench/Workbench.cs" id="1_v12dd"]
+[ext_resource type="PackedScene" uid="uid://dw4qqqyuvambv" path="res://Scripts/Models/medieval+forge+workbench+3d+model/tripo_convert_2c2a76b3-078d-49f2-8a8f-3c5876ad52ca.fbx" id="2_itogv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_itogv"]
 
@@ -14,5 +15,19 @@ script = ExtResource("1_v12dd")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1921322994]
 shape = SubResource("BoxShape3D_itogv")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1384547809]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=422208595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.012364)
+visible = false
 mesh = SubResource("BoxMesh_n0nxb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D2" unique_id=879387462]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0193198, 0, -0.013822079)
+visible = false
+mesh = SubResource("BoxMesh_n0nxb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1384547809]
+visible = false
+mesh = SubResource("BoxMesh_n0nxb")
+
+[node name="tripo_convert_2c2a76b3-078d-49f2-8a8f-3c5876ad52ca" parent="." unique_id=86221333 instance=ExtResource("2_itogv")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.842, 0, 0.493)
