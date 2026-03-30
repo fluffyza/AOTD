@@ -13,17 +13,33 @@ public partial class Player : CharacterBody3D
 	private BlockOutline _blockOutline;
 	private BackpackUI _backpackUi;
 	
+	private BlockManager _blockManager;
+	private string _lastHeldBlockItemId = "";
+
+	
+	private Vector3 _currentHeldItemRotation = Vector3.Zero;
+	
+	[Export] public Control _handRoot;
+
 	[Export] public TextureRect _handsLeftUi;
 	[Export] public TextureRect _handsRightUi;
 	[Export] public TextureRect _pickaxeHandUi;
+
+	[Export] public Node3D _heldItemRoot;
+	[Export] public Node3D _heldTorchRoot;
+	[Export] public Node3D _heldBlockRoot;
+	[Export] public OmniLight3D _heldTorchLight;
+
+	private Vector2 _handRootBasePosition;
+	private Vector3 _heldItemRootBasePosition;
 	
-	private Vector2 _handsLeftBasePosition;
-	private Vector2 _handsRightBasePosition;
-	private Vector2 _pickaxeHandBasePosition;
+
 	
 	private float _bobTime = 0f;
 	private Vector2 _lookSway = Vector2.Zero;
 	private Vector2 _currentHandsOffset = Vector2.Zero;
+	private Vector3 _currentHeldItemOffset = Vector3.Zero;
+	
 
 	[Export] public float HandsBobSpeed = 10f;
 	[Export] public float HandsBobAmountX = 8f;
@@ -38,6 +54,8 @@ public partial class Player : CharacterBody3D
 	{
 		_inventory = GetNode<Inventory>("Inventory");
 		_worldManager = GetNode<WorldManager>("WorldManager");
+		
+		_blockManager = GetNode<BlockManager>("BlockManager");
 
 		_movement = GetNode<PlayerMovement>("PlayerMovement");
 		_look = GetNode<PlayerLook>("PlayerLook");
@@ -57,16 +75,35 @@ public partial class Player : CharacterBody3D
 		_inventory.AddItem("stone", 32);
 		_inventory.AddItem("torch", 16);
 		
-		if (_handsLeftUi != null)
-			_handsLeftBasePosition = _handsLeftUi.Position;
+		if (_handRoot != null)
+			_handRootBasePosition = _handRoot.Position;
 
-		if (_handsRightUi != null)
-			_handsRightBasePosition = _handsRightUi.Position;
-			
-		if (_pickaxeHandUi != null)
-			_pickaxeHandBasePosition = _pickaxeHandUi.Position;
+		if (_heldItemRoot != null)
+			_heldItemRootBasePosition = _heldItemRoot.Position;
+
+		if (_heldTorchRoot != null)
+			_heldTorchRoot.Visible = false;
+
+		if (_heldBlockRoot != null)
+			_heldBlockRoot.Visible = false;
+
+		if (_heldTorchLight != null)
+			_heldTorchLight.Visible = false;
 		
 		UpdateHeldVisual();
+	}
+	
+	private void UpdateHeldBlockVisual(ItemDefinition item)
+	{
+		if (_heldBlockRoot == null || item == null || !item.IsBlock || _blockManager == null)
+			return;
+
+		Node targetNode = _heldBlockRoot;
+
+		if (_heldBlockRoot.GetChildCount() > 0)
+			targetNode = _heldBlockRoot.GetChild(0);
+
+		_blockManager.ApplyHeldBlockAppearance(targetNode, item);
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -124,16 +161,20 @@ public partial class Player : CharacterBody3D
 	
 	private void UpdateHandsViewmodel(double delta)
 	{
-		if (_handsLeftUi == null || _handsRightUi == null)
+		bool any2DVisible =
+			(_handsLeftUi != null && _handsLeftUi.Visible) ||
+			(_handsRightUi != null && _handsRightUi.Visible) ||
+			(_pickaxeHandUi != null && _pickaxeHandUi.Visible);
+
+		bool any3DVisible =
+			(_heldTorchRoot != null && _heldTorchRoot.Visible) ||
+			(_heldBlockRoot != null && _heldBlockRoot.Visible);
+
+		if (!any2DVisible && !any3DVisible)
 			return;
 
-		bool normalHandsVisible = _handsLeftUi.Visible || _handsRightUi.Visible;
-		bool pickaxeVisible = _pickaxeHandUi != null && _pickaxeHandUi.Visible;
-
-		if (!normalHandsVisible && !pickaxeVisible)
-			return;
-
-		Vector2 targetOffset = Vector2.Zero;
+		Vector2 targetOffset2D = Vector2.Zero;
+		Vector3 targetOffset3D = Vector3.Zero;
 
 		Vector3 horizontalVelocity = Velocity;
 		horizontalVelocity.Y = 0f;
@@ -146,26 +187,47 @@ public partial class Player : CharacterBody3D
 			float bobX = Mathf.Sin(_bobTime) * HandsBobAmountX;
 			float bobY = Mathf.Abs(Mathf.Cos(_bobTime)) * HandsBobAmountY;
 
-			targetOffset += new Vector2(bobX, bobY);
+			targetOffset2D += new Vector2(bobX, bobY);
+
+			targetOffset3D += new Vector3(
+				bobX * 0.02f,
+				-bobY * 0.02f,
+				0f
+			);
 		}
 		else
 		{
 			_bobTime = 0f;
 		}
 
-		targetOffset += _lookSway * HandsLookSwayAmount;
+		targetOffset2D += _lookSway * HandsLookSwayAmount;
 
-		_currentHandsOffset = _currentHandsOffset.Lerp(targetOffset, (float)delta * HandsSwayLerpSpeed);
+		targetOffset3D += new Vector3(
+			-_lookSway.X * 0.05f,
+			_lookSway.Y * 0.05f,
+			0f
+		);
+
+		_currentHandsOffset = _currentHandsOffset.Lerp(targetOffset2D, (float)delta * HandsSwayLerpSpeed);
+		_currentHeldItemOffset = _currentHeldItemOffset.Lerp(targetOffset3D, (float)delta * HandsSwayLerpSpeed);
 		_lookSway = _lookSway.Lerp(Vector2.Zero, (float)delta * 8f);
 
-		if (_handsLeftUi != null)
-			_handsLeftUi.Position = _handsLeftBasePosition + _currentHandsOffset;
+		Vector3 targetRotation = new Vector3(
+			-_lookSway.Y * 0.08f,
+			-_lookSway.X * 0.12f,
+			-_lookSway.X * 0.05f
+		);
 
-		if (_handsRightUi != null)
-			_handsRightUi.Position = _handsRightBasePosition + _currentHandsOffset;
+		_currentHeldItemRotation = _currentHeldItemRotation.Lerp(targetRotation, (float)delta * HandsSwayLerpSpeed);
 
-		if (_pickaxeHandUi != null)
-			_pickaxeHandUi.Position = _pickaxeHandBasePosition + _currentHandsOffset;
+		if (_handRoot != null)
+			_handRoot.Position = _handRootBasePosition + _currentHandsOffset;
+
+		if (_heldItemRoot != null)
+		{
+			_heldItemRoot.Position = _heldItemRootBasePosition + _currentHeldItemOffset;
+			_heldItemRoot.Rotation = _currentHeldItemRotation;
+		}
 	}
 
 	private void TryInteract()
@@ -201,11 +263,14 @@ public partial class Player : CharacterBody3D
 				_highlightedTree = null;
 			}
 			
-			if (_handsLeftUi != null)
-				_handsLeftUi.Position = _handsLeftBasePosition;
-
-			if (_handsRightUi != null)
-				_handsRightUi.Position = _handsRightBasePosition;
+			if (_heldItemRoot != null)
+			{
+				_heldItemRoot.Position = _heldItemRootBasePosition;
+				_heldItemRoot.Rotation = Vector3.Zero;
+			}
+			
+			if (_handRoot != null)
+				_handRoot.Position = _handRootBasePosition;
 			
 			return;
 		}
@@ -345,25 +410,80 @@ public partial class Player : CharacterBody3D
 			GD.Print("No valid world crafting recipe found.");
 	}
 	
+	private void HideAllHeldVisuals()
+	{
+		if (_handsLeftUi != null)
+			_handsLeftUi.Visible = false;
+
+		if (_handsRightUi != null)
+			_handsRightUi.Visible = false;
+
+		if (_pickaxeHandUi != null)
+			_pickaxeHandUi.Visible = false;
+
+		if (_heldTorchRoot != null)
+			_heldTorchRoot.Visible = false;
+
+		if (_heldBlockRoot != null)
+			_heldBlockRoot.Visible = false;
+
+		if (_heldTorchLight != null)
+			_heldTorchLight.Visible = false;
+	}
+	
 	private void UpdateHeldVisual()
 	{
 		if (_inventory == null)
 			return;
 
+		HideAllHeldVisuals();
+		_lastHeldBlockItemId = "";
 		var selectedSlot = _inventory.GetSelectedSlot();
-		bool empty = selectedSlot == null || selectedSlot.IsEmpty;
-		bool holdingPickaxe = !empty &&
-							  selectedSlot.Item != null &&
-							  selectedSlot.Item.ItemId == "pickaxe";
+		if (selectedSlot == null || selectedSlot.IsEmpty || selectedSlot.Item == null)
+		{
+			if (_handsLeftUi != null)
+				_handsLeftUi.Visible = true;
 
-		if (_handsLeftUi != null)
-			_handsLeftUi.Visible = empty;
+			if (_handsRightUi != null)
+				_handsRightUi.Visible = true;
 
-		if (_handsRightUi != null)
-			_handsRightUi.Visible = empty;
+			return;
+		}
 
-		if (_pickaxeHandUi != null)
-			_pickaxeHandUi.Visible = holdingPickaxe;
+		string itemId = selectedSlot.Item.ItemId;
+
+		if (itemId == "pickaxe")
+		{
+			if (_pickaxeHandUi != null)
+				_pickaxeHandUi.Visible = true;
+
+			return;
+		}
+
+		if (itemId == "torch")
+		{
+			if (_heldTorchRoot != null)
+				_heldTorchRoot.Visible = true;
+
+			if (_heldTorchLight != null)
+				_heldTorchLight.Visible = true;
+
+			return;
+		}
+
+		if (selectedSlot.Item.IsBlock)
+		{
+			if (_heldBlockRoot != null)
+				_heldBlockRoot.Visible = true;
+
+			if (_lastHeldBlockItemId != selectedSlot.Item.ItemId)
+			{
+				UpdateHeldBlockVisual(selectedSlot.Item);
+				_lastHeldBlockItemId = selectedSlot.Item.ItemId;
+			}
+
+			return;
+		}
 	}
 
 	

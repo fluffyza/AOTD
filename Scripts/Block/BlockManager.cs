@@ -362,4 +362,11 @@ public partial class BlockManager : Node
 		foreach (Node child in node.GetChildren())
 			ApplyOpaqueColorToBlock(child, color);
 	}
+	
+	public void ApplyHeldBlockAppearance(Node node, ItemDefinition def)
+	{
+		ApplyBlockAppearance(node, def);
+	}
+
+
 }

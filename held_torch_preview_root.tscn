@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cumae5qda5q61"]
+
+[ext_resource type="PackedScene" uid="uid://cf02bt86p5je3" path="res://torch.tscn" id="1_rdp1f"]
+
+[node name="HeldTorchPreviewRoot" type="Node3D" unique_id=1167486596]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1198586122]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28770816, 0.2711281, -0.2780242)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=615530904]
+
+[node name="PreviewRoot" type="Node3D" parent="." unique_id=1783893338]
+
+[node name="Torch" parent="PreviewRoot" unique_id=522898448 instance=ExtResource("1_rdp1f")]
+transform = Transform3D(0.47855875, -0.14485003, 0, 0.14318451, 0.47305617, 0.075604536, -0.02190264, -0.07236242, 0.4942509, 0.2746464, 0.034691125, -0.4197147)

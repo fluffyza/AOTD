@@ -44,12 +44,17 @@ fog_density = 0.0615
 visible = false
 light_energy = 0.208
 
-[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="." unique_id=931686024 node_paths=PackedStringArray("_handsLeftUi", "_handsRightUi", "_pickaxeHandUi")]
+[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="." unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023540735, 0)
 script = ExtResource("1_a202f")
+_handRoot = NodePath("../CanvasLayer/HandRoot")
 _handsLeftUi = NodePath("../CanvasLayer/HandRoot/LeftHand")
 _handsRightUi = NodePath("../CanvasLayer/HandRoot/RightHand")
 _pickaxeHandUi = NodePath("../CanvasLayer/HandRoot/PickaxeHand")
+_heldItemRoot = NodePath("Head/Camera3D/HeldItemRoot")
+_heldTorchRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldTorchRoot")
+_heldBlockRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldBlockRoot")
+_heldTorchLight = NodePath("Head/Camera3D/HeldTorchLight")
 PlacementPreviewScene = ExtResource("3_r3fl7")
 BlockOutlineScene = ExtResource("5_jka67")
 
@@ -61,6 +66,20 @@ shape = SubResource("CapsuleShape3D_noarx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Player (CharacterBody3D)/Head" unique_id=1284740424]
+
+[node name="HeldItemRoot" type="Node3D" parent="Player (CharacterBody3D)/Head/Camera3D" unique_id=1937382226]
+
+[node name="HeldBlockRoot" type="Node3D" parent="Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot" unique_id=898209147]
+
+[node name="PlaceableBlock" parent="Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot/HeldBlockRoot" unique_id=1789745689 instance=ExtResource("2_a0tk4")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.6916306, -0.6489279, -0.94659936)
+
+[node name="HeldTorchRoot" type="Node3D" parent="Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot" unique_id=1986077642]
+
+[node name="Torch" parent="Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot/HeldTorchRoot" unique_id=522898448 instance=ExtResource("2_noarx")]
+transform = Transform3D(0.47281608, -0.15569067, -0.046961315, 0.16261904, 0.45267183, 0.13654038, 0, -0.14439058, 0.47869757, 0.4365815, -0.13335991, -0.6622163)
+
+[node name="HeldTorchLight" type="OmniLight3D" parent="Player (CharacterBody3D)/Head/Camera3D" unique_id=267396881]
 
 [node name="Inventory" type="Node3D" parent="Player (CharacterBody3D)" unique_id=1389988037]
 script = ExtResource("6_i5arm")
