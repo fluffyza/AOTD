@@ -13,6 +13,23 @@ public partial class Player : CharacterBody3D
 	private BlockOutline _blockOutline;
 	private BackpackUI _backpackUi;
 	
+	[Export] public TextureRect _handsLeftUi;
+	[Export] public TextureRect _handsRightUi;
+	[Export] public TextureRect _pickaxeHandUi;
+	
+	private Vector2 _handsLeftBasePosition;
+	private Vector2 _handsRightBasePosition;
+	private Vector2 _pickaxeHandBasePosition;
+	
+	private float _bobTime = 0f;
+	private Vector2 _lookSway = Vector2.Zero;
+	private Vector2 _currentHandsOffset = Vector2.Zero;
+
+	[Export] public float HandsBobSpeed = 10f;
+	[Export] public float HandsBobAmountX = 8f;
+	[Export] public float HandsBobAmountY = 10f;
+	[Export] public float HandsLookSwayAmount = 6f;
+	[Export] public float HandsSwayLerpSpeed = 10f;
 	
 	[Export] public PackedScene PlacementPreviewScene;
 	[Export] public PackedScene BlockOutlineScene;
@@ -39,6 +56,17 @@ public partial class Player : CharacterBody3D
 
 		_inventory.AddItem("stone", 32);
 		_inventory.AddItem("torch", 16);
+		
+		if (_handsLeftUi != null)
+			_handsLeftBasePosition = _handsLeftUi.Position;
+
+		if (_handsRightUi != null)
+			_handsRightBasePosition = _handsRightUi.Position;
+			
+		if (_pickaxeHandUi != null)
+			_pickaxeHandBasePosition = _pickaxeHandUi.Position;
+		
+		UpdateHeldVisual();
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -47,6 +75,11 @@ public partial class Player : CharacterBody3D
 		{
 			_backpackUi.Toggle();
 			return;
+		}
+		
+		if (@event is InputEventMouseMotion mouseMotion)
+		{
+			_lookSway = new Vector2(-mouseMotion.Relative.X, -mouseMotion.Relative.Y) * 0.02f;
 		}
 
 		if (@event.IsActionPressed("Interact"))
@@ -88,6 +121,52 @@ public partial class Player : CharacterBody3D
 		if (@event.IsActionPressed("craft_world_structure"))
 			TryCraftWorldStructure();
 	}
+	
+	private void UpdateHandsViewmodel(double delta)
+	{
+		if (_handsLeftUi == null || _handsRightUi == null)
+			return;
+
+		bool normalHandsVisible = _handsLeftUi.Visible || _handsRightUi.Visible;
+		bool pickaxeVisible = _pickaxeHandUi != null && _pickaxeHandUi.Visible;
+
+		if (!normalHandsVisible && !pickaxeVisible)
+			return;
+
+		Vector2 targetOffset = Vector2.Zero;
+
+		Vector3 horizontalVelocity = Velocity;
+		horizontalVelocity.Y = 0f;
+		bool isMoving = horizontalVelocity.Length() > 0.1f && IsOnFloor();
+
+		if (isMoving)
+		{
+			_bobTime += (float)delta * HandsBobSpeed;
+
+			float bobX = Mathf.Sin(_bobTime) * HandsBobAmountX;
+			float bobY = Mathf.Abs(Mathf.Cos(_bobTime)) * HandsBobAmountY;
+
+			targetOffset += new Vector2(bobX, bobY);
+		}
+		else
+		{
+			_bobTime = 0f;
+		}
+
+		targetOffset += _lookSway * HandsLookSwayAmount;
+
+		_currentHandsOffset = _currentHandsOffset.Lerp(targetOffset, (float)delta * HandsSwayLerpSpeed);
+		_lookSway = _lookSway.Lerp(Vector2.Zero, (float)delta * 8f);
+
+		if (_handsLeftUi != null)
+			_handsLeftUi.Position = _handsLeftBasePosition + _currentHandsOffset;
+
+		if (_handsRightUi != null)
+			_handsRightUi.Position = _handsRightBasePosition + _currentHandsOffset;
+
+		if (_pickaxeHandUi != null)
+			_pickaxeHandUi.Position = _pickaxeHandBasePosition + _currentHandsOffset;
+	}
 
 	private void TryInteract()
 	{
@@ -121,6 +200,13 @@ public partial class Player : CharacterBody3D
 				_highlightedTree.SetHighlighted(false);
 				_highlightedTree = null;
 			}
+			
+			if (_handsLeftUi != null)
+				_handsLeftUi.Position = _handsLeftBasePosition;
+
+			if (_handsRightUi != null)
+				_handsRightUi.Position = _handsRightBasePosition;
+			
 			return;
 		}
 
@@ -137,6 +223,8 @@ public partial class Player : CharacterBody3D
 
 		if (_blockOutline != null)
 			_blockOutline.UpdateFromTarget(_targetting);
+			
+		UpdateHandsViewmodel(delta);
 	}
 
 	private void TryPlaceItem()
@@ -165,6 +253,7 @@ public partial class Player : CharacterBody3D
 		}
 
 		_inventory.ConsumeSelectedItem(1);
+		UpdateHeldVisual();
 
 		var slot = _inventory.GetSelectedSlot();
 		string label = slot.IsEmpty ? "Empty" : $"{slot.Item.ItemId} x{slot.Count}";
@@ -200,12 +289,14 @@ public partial class Player : CharacterBody3D
 	private void SelectHotbarSlot(int index)
 	{
 		_inventory.SelectSlot(index);
+		UpdateHeldVisual();
 		GD.Print($"Selected slot {index + 1}: {_inventory.GetSelectedSlotLabel()}");
 	}
 
 	private void CycleHotbar(int direction)
 	{
 		_inventory.CycleSelection(direction);
+		UpdateHeldVisual();
 		GD.Print($"Selected slot {_inventory.SelectedIndex + 1}: {_inventory.GetSelectedSlotLabel()}");
 	}
 	
@@ -253,5 +344,27 @@ public partial class Player : CharacterBody3D
 		if (!crafted)
 			GD.Print("No valid world crafting recipe found.");
 	}
+	
+	private void UpdateHeldVisual()
+	{
+		if (_inventory == null)
+			return;
+
+		var selectedSlot = _inventory.GetSelectedSlot();
+		bool empty = selectedSlot == null || selectedSlot.IsEmpty;
+		bool holdingPickaxe = !empty &&
+							  selectedSlot.Item != null &&
+							  selectedSlot.Item.ItemId == "pickaxe";
+
+		if (_handsLeftUi != null)
+			_handsLeftUi.Visible = empty;
+
+		if (_handsRightUi != null)
+			_handsRightUi.Visible = empty;
+
+		if (_pickaxeHandUi != null)
+			_pickaxeHandUi.Visible = holdingPickaxe;
+	}
+
 	
 }

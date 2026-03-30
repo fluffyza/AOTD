@@ -97,6 +97,28 @@ public partial class CraftingManager : Node
 				{ "S", "stick" }
 			}
 		});
+		
+		_recipes.Add(new CraftingRecipe
+		{
+			RecipeId = "stone_pickaxe",
+			StationType = "Workbench",
+			IsShapeless = false,
+			OutputItemId = "pickaxe",
+			OutputAmount = 1,
+			PatternRows = new Godot.Collections.Array<string>
+			{
+				"SSS",
+				".T.",
+				".T."
+			},
+			PatternKey = new Godot.Collections.Dictionary<string, string>
+			{
+				{ "S", "stone" },
+				{ "T", "stick" }
+			}
+		});
+
+
 	}
 
 	public bool TryGetCraftingResult(

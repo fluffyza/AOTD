@@ -8,6 +8,15 @@ public partial class BackpackUI : Control
 	private int _heldSourceCraftIndex = -1;
 	private const int CraftOutputSourceMarker = -999;
 	
+	[Export] public NodePath DraggedItemPreviewPath;
+	[Export] public NodePath DraggedItemIconPath;
+	[Export] public NodePath DraggedItemCountLabelPath;
+	
+	private Control _draggedItemPreview;
+	private TextureRect _draggedItemIcon;
+	private Label _draggedItemCountLabel;
+
+
 	[Export] public NodePath BackpackCraftingPanelPath;
 	[Export] public NodePath BackpackCraftingGridPath;
 	[Export] public NodePath BackpackCraftingOutputSlotPath;
@@ -49,6 +58,9 @@ public partial class BackpackUI : Control
 		HalfStack,
 		SingleItem
 	}
+	
+	
+	private readonly Dictionary<string, Texture2D> _itemIcons = new();
 
 	private GridContainer _backpackGrid;
 	private HBoxContainer _hotbarRow;
@@ -77,6 +89,8 @@ public partial class BackpackUI : Control
 
 	public override void _Ready()
 	{
+		LoadItemIcons();
+
 		_backpackGrid = GetNode<GridContainer>(BackpackGridPath);
 		_hotbarRow = GetNode<HBoxContainer>(HotbarRowPath);
 		_draggedItemLabel = GetNode<Label>(DraggedItemLabelPath);
@@ -91,8 +105,19 @@ public partial class BackpackUI : Control
 		_workbenchCraftOutputSlotUi = GetNode<InventorySlotUI>(WorkbenchCraftingOutputSlotPath);
 		_workbenchCraftingContainer = GetNode<CraftingContainer>(WorkbenchCraftingContainerPath);
 
-		CacheSlotReferences();
+		_draggedItemPreview = GetNode<Control>(DraggedItemPreviewPath);
+		_draggedItemIcon = GetNode<TextureRect>(DraggedItemIconPath);
+		_draggedItemCountLabel = GetNode<Label>(DraggedItemCountLabelPath);
 
+		_draggedItemPreview.Visible = false;
+		_draggedItemLabel.Visible = false;
+
+		_draggedItemIcon.MouseFilter = MouseFilterEnum.Ignore;
+		_draggedItemCountLabel.MouseFilter = MouseFilterEnum.Ignore;
+		_draggedItemLabel.MouseFilter = MouseFilterEnum.Ignore;
+		_draggedItemPreview.MouseFilter = MouseFilterEnum.Ignore;
+
+		CacheSlotReferences();
 		OpenBackpackCraftingMode();
 
 		Visible = false;
@@ -115,6 +140,32 @@ public partial class BackpackUI : Control
 		Refresh();
 	}
 
+	private void SetupSlotVisual(InventorySlotUI ui, int slotIndex, InventorySlot slot, bool highlighted)
+	{
+		if (ui == null)
+			return;
+
+		ui.SetSlotIndex(slotIndex);
+
+		string itemId = "";
+		int count = 0;
+		Texture2D icon = null;
+
+		if (slot != null && !slot.IsEmpty && slot.Item != null)
+		{
+			itemId = slot.Item.ItemId;
+			count = slot.Count;
+			icon = GetItemIcon(itemId);
+		}
+
+		ui.SetItemVisual(itemId, count, icon);
+		
+		if (!string.IsNullOrEmpty(itemId))
+			GD.Print($"slot={slotIndex}, item={itemId}, iconFound={icon != null}, uiName={ui.Name}");
+		// Keep your highlight/selection visuals
+		ui.ButtonPressed = highlighted;
+	}
+
 	public override void _Process(double delta)
 	{
 		if (!Visible)
@@ -129,6 +180,15 @@ public partial class BackpackUI : Control
 
 		if (_draggedItemLabel.Visible)
 			_draggedItemLabel.Position = GetGlobalMousePosition() + new Vector2(16, 16);
+			
+		Vector2 dragPos = GetGlobalMousePosition() + new Vector2(16, 16);
+
+		if (_draggedItemLabel.Visible)
+			_draggedItemLabel.Position = dragPos;
+
+		if (_draggedItemPreview.Visible)
+			_draggedItemPreview.Position = dragPos;
+	
 	}
 
 	public override void _Input(InputEvent @event)
@@ -334,7 +394,7 @@ public partial class BackpackUI : Control
 				 _heldSourceRole == InventorySlotUI.SlotRole.Inventory &&
 				 _heldSourceSlotIndex == ui.SlotIndex);
 
-			ui.Setup(inventoryIndex, _inventory.GetSlot(inventoryIndex), highlighted);
+			SetupSlotVisual(ui, inventoryIndex, _inventory.GetSlot(inventoryIndex), highlighted);
 		}
 
 		for (int i = 0; i < _hotbarSlotUis.Count; i++)
@@ -348,7 +408,7 @@ public partial class BackpackUI : Control
 				 _heldSourceRole == InventorySlotUI.SlotRole.Inventory &&
 				 _heldSourceSlotIndex == ui.SlotIndex);
 
-			ui.Setup(i, _inventory.GetSlot(i), selected || highlighted);
+			SetupSlotVisual(ui, i, _inventory.GetSlot(i), selected || highlighted);
 		}
 
 		if (_craftingContainer != null)
@@ -357,7 +417,6 @@ public partial class BackpackUI : Control
 			{
 				var ui = _craftingSlotUis[i];
 				var slot = _craftingContainer.GetInputSlot(ui.CraftingSlotIndex);
-				GD.Print($"REFRESH {ui.Name} craftIndex={ui.CraftingSlotIndex} slotNull={slot == null}");
 
 				bool highlighted =
 					_hoveredSlotUi == ui ||
@@ -365,13 +424,13 @@ public partial class BackpackUI : Control
 					 _heldSourceRole == InventorySlotUI.SlotRole.CraftingInput &&
 					 _heldSourceCraftIndex == ui.CraftingSlotIndex);
 
-				ui.Setup(ui.CraftingSlotIndex, slot, highlighted);
+				SetupSlotVisual(ui, ui.CraftingSlotIndex, slot, highlighted);
 			}
 
 			if (_craftOutputSlotUi != null)
 			{
 				bool outputHighlighted = _hoveredSlotUi == _craftOutputSlotUi;
-				_craftOutputSlotUi.Setup(-1, _craftingContainer.OutputPreviewSlot, outputHighlighted);
+				SetupSlotVisual(_craftOutputSlotUi, -1, _craftingContainer.OutputPreviewSlot, outputHighlighted);
 			}
 		}
 
@@ -606,10 +665,20 @@ public partial class BackpackUI : Control
 
 		if (target.CanStackWith(_heldItem))
 		{
-			target.Count += _heldCount;
-			_heldCount = 0;
+			int maxStack = target.Item.MaxStackSize;
+			int spaceLeft = maxStack - target.Count;
+			int toMove = Mathf.Min(spaceLeft, _heldCount);
+
+			if (toMove > 0)
+			{
+				target.Count += toMove;
+				_heldCount -= toMove;
+			}
+
 			_craftingContainer.RefreshOutput();
-			return;
+
+			if (_heldCount <= 0)
+				return;
 		}
 
 		if (_dragMode == DragMode.FullStack)
@@ -727,18 +796,37 @@ public partial class BackpackUI : Control
 
 	private void UpdateDraggedLabel()
 	{
-		if (_draggedItemLabel == null)
+		if (_draggedItemLabel == null || _draggedItemPreview == null || _draggedItemIcon == null || _draggedItemCountLabel == null)
 			return;
 
 		if (!HasHeldStack())
 		{
+			_draggedItemPreview.Visible = false;
 			_draggedItemLabel.Visible = false;
+
 			_draggedItemLabel.Text = "";
+			_draggedItemIcon.Texture = null;
+			_draggedItemCountLabel.Text = "";
 			return;
 		}
 
-		_draggedItemLabel.Visible = true;
-		_draggedItemLabel.Text = $"{_heldItem.DisplayName} x{_heldCount}";
+		Texture2D icon = GetItemIcon(_heldItem.ItemId);
+		bool hasIcon = icon != null;
+
+		if (hasIcon)
+		{
+			_draggedItemPreview.Visible = true;
+			_draggedItemLabel.Visible = false;
+
+			_draggedItemIcon.Texture = icon;
+			_draggedItemCountLabel.Text = _heldCount > 1 ? $"x{_heldCount}" : "";
+		}
+		else
+		{
+			_draggedItemPreview.Visible = false;
+			_draggedItemLabel.Visible = true;
+			_draggedItemLabel.Text = $"{_heldItem.DisplayName} x{_heldCount}";
+		}
 	}
 	
 	private void TryPlaceHeldIntoInventorySlot(int slotIndex)
@@ -783,9 +871,18 @@ public partial class BackpackUI : Control
 
 		if (target.CanStackWith(_heldItem))
 		{
-			target.Count += _heldCount;
-			_heldCount = 0;
-			return;
+			int maxStack = target.Item.MaxStackSize;
+			int spaceLeft = maxStack - target.Count;
+			int toMove = Mathf.Min(spaceLeft, _heldCount);
+
+			if (toMove > 0)
+			{
+				target.Count += toMove;
+				_heldCount -= toMove;
+			}
+
+			if (_heldCount <= 0)
+				return;
 		}
 
 		if (_dragMode == DragMode.FullStack)
@@ -822,6 +919,24 @@ public partial class BackpackUI : Control
 			   _heldSourceSlotIndex < _craftingContainer.InputSlots.Length &&
 			   _pressedSlotUi != null &&
 			   _pressedSlotUi.Role == InventorySlotUI.SlotRole.CraftingInput;
+	}
+	
+
+	private void LoadItemIcons()
+	{
+		_itemIcons["acorn"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-ACORN.png");
+		_itemIcons["coal"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-BLOCK-COAL.png");
+		_itemIcons["dirt"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-BLOCK-DIRT.png");
+		_itemIcons["iron"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-BLOCK-IRON.png");
+		_itemIcons["stone"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-BLOCK-STONE.png");
+		_itemIcons["wood"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-BLOCK-WOOD.png");
+		_itemIcons["torch"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-TORCH.png");
+		_itemIcons["pickaxe"] = GD.Load<Texture2D>("res://Materials/Backpack/Equip/ICON-PICKAXE.png");
+	}
+
+	private Texture2D GetItemIcon(string itemId)
+	{
+		return _itemIcons.TryGetValue(itemId, out var icon) ? icon : null;
 	}
 
 }

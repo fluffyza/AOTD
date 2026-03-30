@@ -3,8 +3,12 @@
 [ext_resource type="Script" uid="uid://c81nwod7lxkyl" path="res://Scripts/Items/ItemDatabase.cs" id="1_08nis"]
 [ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="2_ryqhq"]
 [ext_resource type="PackedScene" uid="uid://cf02bt86p5je3" path="res://torch.tscn" id="3_3hlrr"]
+[ext_resource type="Texture2D" uid="uid://xghwjkj06uql" path="res://Materials/Mineable/Blocks/DIRT-BLOCK-TEXTURE.png" id="4_q0tca"]
 
 [node name="ItemDatabase" type="Node" unique_id=410087564]
 script = ExtResource("1_08nis")
 BlockScene = ExtResource("2_ryqhq")
 TorchScene = ExtResource("3_3hlrr")
+DirtTopTexture = ExtResource("4_q0tca")
+DirtSideTexture = ExtResource("4_q0tca")
+DirtBottomTexture = ExtResource("4_q0tca")

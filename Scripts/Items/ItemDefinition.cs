@@ -10,8 +10,16 @@ public partial class ItemDefinition : Resource
 
 	[Export] public PackedScene WorldScene;
 	[Export] public bool IsBlock = false;
+
 	[Export] public bool HasBlockColor = false;
 	[Export] public Color BlockColor = Colors.White;
+
+	[Export] public Texture2D TopTexture;
+	[Export] public Texture2D SideTexture;
+	[Export] public Texture2D BottomTexture;
+
+	public bool HasBlockTextures =>
+		TopTexture != null || SideTexture != null || BottomTexture != null;
 
 	public ItemDefinition() { }
 
@@ -23,7 +31,10 @@ public partial class ItemDefinition : Resource
 		PackedScene worldScene = null,
 		bool isBlock = false,
 		bool hasBlockColor = false,
-		Color? blockColor = null)
+		Color? blockColor = null,
+		Texture2D topTexture = null,
+		Texture2D sideTexture = null,
+		Texture2D bottomTexture = null)
 	{
 		ItemId = itemId;
 		DisplayName = displayName;
@@ -33,5 +44,9 @@ public partial class ItemDefinition : Resource
 		IsBlock = isBlock;
 		HasBlockColor = hasBlockColor;
 		BlockColor = blockColor ?? Colors.White;
+
+		TopTexture = topTexture;
+		SideTexture = sideTexture;
+		BottomTexture = bottomTexture;
 	}
 }

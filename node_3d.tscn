@@ -19,6 +19,9 @@
 [ext_resource type="Script" uid="uid://dv4djcgmu2vor" path="res://Scripts/Crafting/WorldCraftingManager.cs" id="15_ealrb"]
 [ext_resource type="PackedScene" uid="uid://bjmvlf4s8kve1" path="res://backpack_ui.tscn" id="16_tcnuu"]
 [ext_resource type="Script" uid="uid://bw3asi1r0raq2" path="res://Scripts/Crafting/CraftingContainer.cs" id="18_i0g27"]
+[ext_resource type="Texture2D" uid="uid://ckuglbdu0oc21" path="res://Materials/Character/Equip/HAND-WITH-PICKAXE.png" id="18_s0gvp"]
+[ext_resource type="Texture2D" uid="uid://b6bend8f1axur" path="res://Materials/Character/left-hand.png" id="20_lggff"]
+[ext_resource type="Texture2D" uid="uid://bh2i5l5pije4a" path="res://Materials/Character/right-hand.png" id="21_s0gvp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_noarx"]
 radius = 0.4
@@ -41,9 +44,12 @@ fog_density = 0.0615
 visible = false
 light_energy = 0.208
 
-[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="." unique_id=931686024]
+[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="." unique_id=931686024 node_paths=PackedStringArray("_handsLeftUi", "_handsRightUi", "_pickaxeHandUi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023540735, 0)
 script = ExtResource("1_a202f")
+_handsLeftUi = NodePath("../CanvasLayer/HandRoot/LeftHand")
+_handsRightUi = NodePath("../CanvasLayer/HandRoot/RightHand")
+_pickaxeHandUi = NodePath("../CanvasLayer/HandRoot/PickaxeHand")
 PlacementPreviewScene = ExtResource("3_r3fl7")
 BlockOutlineScene = ExtResource("5_jka67")
 
@@ -107,6 +113,62 @@ grow_vertical = 2
 layout_mode = 2
 text = "+"
 
+[node name="HandRoot" type="Control" parent="CanvasLayer" unique_id=594024526]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 556.0
+offset_top = 608.0
+offset_right = 596.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="LeftHand" type="TextureRect" parent="CanvasLayer/HandRoot" unique_id=2026448271]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -355.0
+offset_top = -159.0
+offset_right = 278.0
+offset_bottom = 615.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("20_lggff")
+stretch_mode = 5
+
+[node name="RightHand" type="TextureRect" parent="CanvasLayer/HandRoot" unique_id=1144354902]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 220.0
+offset_top = -161.0
+offset_right = 849.0
+offset_bottom = 617.0
+grow_vertical = 0
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("21_s0gvp")
+stretch_mode = 5
+
+[node name="PickaxeHand" type="TextureRect" parent="CanvasLayer/HandRoot" unique_id=1419250010]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -218.0
+offset_right = 2252.0
+offset_bottom = 1190.0
+grow_vertical = 0
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("18_s0gvp")
+stretch_mode = 5
+
 [node name="Hotbar" type="Control" parent="CanvasLayer" unique_id=1204465899]
 layout_mode = 3
 anchors_preset = 15
@@ -137,6 +199,7 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="BackpackUI (Control)" parent="CanvasLayer" unique_id=490715253 instance=ExtResource("16_tcnuu")]
+visible = false
 BackpackCraftingPanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel")
 BackpackCraftingGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid")
 BackpackCraftingOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingOutput/CraftOutputSlot")

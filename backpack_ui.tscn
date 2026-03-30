@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://d3dv1ada0acii" path="res://Scripts/Inventory/BackpackUI.cs" id="1_nao8u"]
 [ext_resource type="PackedScene" uid="uid://bp1ojfia5c1jm" path="res://inventory_slot.tscn" id="3_dy8yp"]
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_d3gwh"]
+
 [node name="BackpackUI (Control)" type="Control" unique_id=490715253]
 layout_mode = 3
 anchors_preset = 15
@@ -11,6 +13,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nao8u")
+DraggedItemPreviewPath = NodePath("DraggedItemPreview")
+DraggedItemIconPath = NodePath("DraggedItemPreview/DraggedItemIcon")
+DraggedItemCountLabelPath = NodePath("DraggedItemPreview/DraggedItemCountLabel")
 BackpackGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid")
 HotbarRowPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow")
 DraggedItemLabelPath = NodePath("DraggedItemLabel")
@@ -265,3 +270,42 @@ visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="DraggedItemPreview" type="Control" parent="." unique_id=206765303]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DraggedItemIcon" type="TextureRect" parent="DraggedItemPreview" unique_id=1593715702]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("PlaceholderTexture2D_d3gwh")
+
+[node name="DraggedItemLabel" type="Label" parent="DraggedItemPreview" unique_id=1701693745]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 40.0
+offset_bottom = 11.5
+grow_vertical = 2
+horizontal_alignment = 2
+
+[node name="DraggedItemCountLabel" type="Label" parent="DraggedItemPreview" unique_id=1207794890]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+horizontal_alignment = 2

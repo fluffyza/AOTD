@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cf02bt86p5je3"]
 
 [ext_resource type="PackedScene" uid="uid://c3vvmxpis0weq" path="res://Scripts/Models/medieval+torch+3d+model.glb" id="1_pa17o"]
+[ext_resource type="Script" uid="uid://hhpo55el2sc0" path="res://Placeables/TorchFlicker.cs" id="1_s1444"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_5w7kb"]
 
@@ -8,6 +9,10 @@
 
 [node name="Torch" type="Node3D" unique_id=522898448]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.5, 0)
+script = ExtResource("1_s1444")
+LightPath = NodePath("OmniLight3D")
+EnergyFlickerAmount = 0.5
+FlickerSpeed = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2133017920]
 transform = Transform3D(0.2, 0, 0, 0, 1, 0, 0, 0, 0.2, 0, 0, 0)
@@ -18,12 +23,16 @@ mesh = SubResource("CylinderMesh_5w7kb")
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.32581925, 0.2073896)
 light_color = Color(1, 1, 0.69411767, 1)
 light_energy = 1.634
+shadow_enabled = true
+shadow_bias = 0.05
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1684077812]
 transform = Transform3D(0.2, 0, 0, 0, 1.5, 0, 0, 0, 0.2, 0, 0, 0)
+collision_layer = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=654785971]
 transform = Transform3D(0.2, 0, 0, 0, 1, 0, 0, 0, 0.2, 0, 0, 0)
+visible = false
 shape = SubResource("CylinderShape3D_pa17o")
 
 [node name="medieval+torch+3d+model" parent="." unique_id=448246032 instance=ExtResource("1_pa17o")]

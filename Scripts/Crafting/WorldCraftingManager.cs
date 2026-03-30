@@ -37,6 +37,36 @@ public partial class WorldCraftingManager : Node
 			}
 		});
 	}
+	
+	private Vector3I GetOpenSideDirectionForRotation(int rotation)
+	{
+		return rotation switch
+		{
+			0 => new Vector3I(0, 0, 1),
+			1 => new Vector3I(1, 0, 0),
+			2 => new Vector3I(0, 0, -1),
+			3 => new Vector3I(-1, 0, 0),
+			_ => new Vector3I(0, 0, 1)
+		};
+	}
+
+	private bool IsOpenSideFacingPlayer(Vector3I anchorCell, int rotation, Vector3 playerWorldPosition)
+	{
+		Vector3 structureCenter = new Vector3(anchorCell.X + 1.0f, anchorCell.Y, anchorCell.Z + 1.0f);
+
+		Vector3 toPlayer = playerWorldPosition - structureCenter;
+		toPlayer.Y = 0f;
+
+		if (toPlayer.LengthSquared() < 0.001f)
+			return true;
+
+		toPlayer = toPlayer.Normalized();
+
+		Vector3I openDirCell = GetOpenSideDirectionForRotation(rotation);
+		Vector3 openDir = new Vector3(openDirCell.X, 0f, openDirCell.Z).Normalized();
+
+		return openDir.Dot(toPlayer) > 0.5f;
+	}
 
 	public bool TryCraftAtAnchor(
 		Vector3I anchorCell,
@@ -56,7 +86,7 @@ public partial class WorldCraftingManager : Node
 				if (TryMatchRecipeAtRotation(recipe, anchorCell, placedPieces, rotation, out matchedPieces))
 				{
 					matchedRecipe = recipe;
-					spawnBasis = Basis.FromEuler(new Vector3(0, Mathf.DegToRad(rotation * 90f), 0));
+					spawnBasis = Basis.Identity; // don't trust rotation here for the bench
 					return true;
 				}
 			}

@@ -257,13 +257,102 @@ public partial class WorldManager : Node
 			return false;
 		}
 
-		instance.Position = GridUtils.CellToWorld(anchorCell);
-		instance.Basis = spawnBasis;
-
 		AddPlacedNode(anchorCell, instance);
+
+		Vector3 spawnWorldPos = GetStructureCenterWorld(matchedPieces);
+		instance.GlobalPosition = spawnWorldPos;
+
+		if (recipe.RecipeId == "log_stone_to_workbench")
+			instance.GlobalBasis = GetWorkbenchSpawnBasis(matchedPieces);
+		else
+			instance.GlobalBasis = spawnBasis;
+
 		GD.Print($"World crafted: {recipe.RecipeId}");
 		return true;
 	}
 
+	private Vector3 GetStructureCenterWorld(List<WorldPlacedPiece> matchedPieces)
+	{
+		int minX = int.MaxValue;
+		int maxX = int.MinValue;
+		int minY = int.MaxValue;
+		int minZ = int.MaxValue;
+		int maxZ = int.MinValue;
+
+		foreach (var piece in matchedPieces)
+		{
+			var c = piece.GridCell;
+
+			if (c.X < minX) minX = c.X;
+			if (c.X > maxX) maxX = c.X;
+			if (c.Y < minY) minY = c.Y;
+			if (c.Z < minZ) minZ = c.Z;
+			if (c.Z > maxZ) maxZ = c.Z;
+		}
+
+		Vector3 minWorld = GridUtils.CellToWorld(new Vector3I(minX, minY, minZ));
+		Vector3 maxWorld = GridUtils.CellToWorld(new Vector3I(maxX, minY, maxZ));
+
+		return (minWorld + maxWorld) * 0.5f;
+	}
+	
+	private Basis GetWorkbenchSpawnBasis(List<WorldPlacedPiece> matchedPieces)
+	{
+		var stones = new List<WorldPlacedPiece>();
+
+		foreach (var piece in matchedPieces)
+		{
+			if (piece.ItemId == "stone")
+				stones.Add(piece);
+		}
+
+		if (stones.Count != 2)
+			return Basis.Identity;
+
+		int minX = int.MaxValue;
+		int maxX = int.MinValue;
+		int minZ = int.MaxValue;
+		int maxZ = int.MinValue;
+
+		foreach (var piece in matchedPieces)
+		{
+			var c = piece.GridCell;
+
+			if (c.X < minX) minX = c.X;
+			if (c.X > maxX) maxX = c.X;
+			if (c.Z < minZ) minZ = c.Z;
+			if (c.Z > maxZ) maxZ = c.Z;
+		}
+
+		var a = stones[0].GridCell;
+		var b = stones[1].GridCell;
+
+		float yawDeg = 0f;
+
+		// Stones form a horizontal row (same Z)
+		if (a.Z == b.Z)
+		{
+			// SS / ..  -> south
+			if (a.Z == minZ)
+				yawDeg = 180f;
+
+			// .. / SS -> north
+			else
+				yawDeg = 0f;
+		}
+		// Stones form a vertical column (same X)
+		else if (a.X == b.X)
+		{
+			// S. / S. -> east
+			if (a.X == minX)
+				yawDeg = -90f;
+
+			// .S / .S -> west
+			else
+				yawDeg = 90f;
+		}
+
+		return Basis.FromEuler(new Vector3(0f, Mathf.DegToRad(yawDeg), 0f));
+	}
 
 }

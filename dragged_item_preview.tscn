@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://58e2vw0f7p4q"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_704xm"]
+
+[node name="DraggedItemPreview" type="Control" unique_id=888999626]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DraggedItemIcon" type="TextureRect" parent="." unique_id=267071794]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("PlaceholderTexture2D_704xm")
+
+[node name="DraggedItemLabel" type="Label" parent="." unique_id=957980893]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 40.0
+offset_bottom = 11.5
+grow_vertical = 2
+text = "64"
+horizontal_alignment = 2
+
+[node name="DraggedItemCountLabel" type="Label" parent="." unique_id=1718997390]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "64"
+horizontal_alignment = 2
