@@ -7,6 +7,27 @@
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_pa17o"]
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s1444"]
+emission_shape_scale = Vector3(0.2, 0.2, 0.2)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 1, 0)
+spread = 20.0
+initial_velocity_min = 0.14999999
+initial_velocity_max = 0.35
+gravity = Vector3(0, 0.05, 0)
+damping_max = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s1444"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_s1444"]
+material = SubResource("StandardMaterial3D_s1444")
+size = Vector2(0.04, 0.04)
+
 [node name="Torch" type="Node3D" unique_id=522898448]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.5, 0)
 script = ExtResource("1_s1444")
@@ -37,3 +58,10 @@ shape = SubResource("CylinderShape3D_pa17o")
 
 [node name="medieval+torch+3d+model" parent="." unique_id=448246032 instance=ExtResource("1_pa17o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0274882, 0)
+
+[node name="TorchSmoke" type="GPUParticles3D" parent="." unique_id=796152915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04135537, 0)
+amount = 12
+lifetime = 2.5
+process_material = SubResource("ParticleProcessMaterial_s1444")
+draw_pass_1 = SubResource("QuadMesh_s1444")

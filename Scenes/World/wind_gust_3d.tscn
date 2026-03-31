@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dqrenft06sdr7"]
+
+[ext_resource type="Script" uid="uid://vo6ry2gvpqra" path="res://Scripts/World/WindGust3D.cs" id="1_3bkuu"]
+
+[node name="WindGust3D" type="Node3D" unique_id=807322748]
+script = ExtResource("1_3bkuu")
+MeshInstancePath = NodePath("MeshInstance3D")
+GustColor = Color(1, 1, 1, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=963169234]

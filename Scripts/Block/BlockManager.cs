@@ -115,6 +115,8 @@ public partial class BlockManager : Node
 				return;
 		}
 
+		RestoreOriginalMeshIfNeeded(node);
+	
 		if (def.HasBlockColor)
 			ApplyOpaqueColorToBlock(node, def.BlockColor);
 	}
@@ -142,6 +144,10 @@ public partial class BlockManager : Node
 		var atlasTexture = BuildBlockAtlasTexture(topImage, sideImage, bottomImage);
 		var material = CreateAtlasBlockMaterial(atlasTexture);
 
+			
+		if (!meshInstance.HasMeta("original_mesh") && meshInstance.Mesh != null)
+			meshInstance.SetMeta("original_mesh", meshInstance.Mesh);
+			
 		meshInstance.Mesh = CreateAtlasCubeMesh();
 		meshInstance.MaterialOverride = material;
 		meshInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.On;
@@ -366,6 +372,21 @@ public partial class BlockManager : Node
 	public void ApplyHeldBlockAppearance(Node node, ItemDefinition def)
 	{
 		ApplyBlockAppearance(node, def);
+	}
+	
+	
+	private void RestoreOriginalMeshIfNeeded(Node node)
+	{
+		var meshInstance = FindFirstMeshInstance(node);
+		if (meshInstance == null)
+			return;
+
+		if (meshInstance.HasMeta("original_mesh"))
+		{
+			var originalMesh = meshInstance.GetMeta("original_mesh").AsGodotObject() as Mesh;
+			if (originalMesh != null)
+				meshInstance.Mesh = originalMesh;
+		}
 	}
 
 
