@@ -5,7 +5,7 @@ public partial class WorldManager : Node
 {
 	[Export] public NodePath BlockManagerPath;
 	[Export] public PackedScene TreeScene;
-	[Export] public float TreeSpawnChance = 0f;//0.12f;
+	[Export] public float TreeSpawnChance = 0.12f;//0f;
 	
 	private WorldCraftingManager _worldCraftingManager;
 	private BlockManager _blockManager;
@@ -353,6 +353,33 @@ public partial class WorldManager : Node
 		}
 
 		return Basis.FromEuler(new Vector3(0f, Mathf.DegToRad(yawDeg), 0f));
+	}
+	
+	public bool TryGetWorldCraftPreviewCells(Vector3I lookedAtCell, out List<Vector3I> previewCells)
+	{
+		previewCells = new List<Vector3I>();
+
+		if (_worldCraftingManager == null)
+			return false;
+
+		var craftingPieces = GetPlacedCraftingPieces();
+		if (craftingPieces.Count == 0)
+			return false;
+
+		foreach (var offset in CraftAnchorOffsets)
+		{
+			var anchorCell = lookedAtCell + offset;
+
+			if (_worldCraftingManager.TryGetPreviewCellsAtAnchor(
+				anchorCell,
+				craftingPieces,
+				out previewCells))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

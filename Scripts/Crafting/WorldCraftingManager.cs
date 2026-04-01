@@ -10,6 +10,30 @@ public partial class WorldCraftingManager : Node
 	{
 		BuildWorldRecipes();
 	}
+	
+	public bool TryGetPreviewCellsAtAnchor(
+		Vector3I anchorCell,
+		Dictionary<Vector3I, WorldPlacedPiece> placedPieces,
+		out List<Vector3I> previewCells)
+	{
+		previewCells = new List<Vector3I>();
+
+		foreach (var recipe in _recipes)
+		{
+			for (int rotation = 0; rotation < 4; rotation++)
+			{
+				if (TryMatchRecipeAtRotation(recipe, anchorCell, placedPieces, rotation, out var matchedPieces))
+				{
+					foreach (var piece in matchedPieces)
+						previewCells.Add(piece.GridCell);
+
+					return previewCells.Count > 0;
+				}
+			}
+		}
+
+		return false;
+	}
 
 	private void BuildWorldRecipes()
 	{

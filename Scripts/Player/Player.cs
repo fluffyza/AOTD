@@ -12,6 +12,7 @@ public partial class Player : CharacterBody3D
 	private PlacementPreview _placementPreview;
 	private BlockOutline _blockOutline;
 	private BackpackUI _backpackUi;
+	private WorldCraftPreview _worldCraftPreview;
 	
 	private BlockManager _blockManager;
 	private string _lastHeldBlockItemId = "";
@@ -47,6 +48,7 @@ public partial class Player : CharacterBody3D
 	[Export] public float HandsLookSwayAmount = 6f;
 	[Export] public float HandsSwayLerpSpeed = 10f;
 	
+	[Export] public PackedScene WorldCraftPreviewScene;
 	[Export] public PackedScene PlacementPreviewScene;
 	[Export] public PackedScene BlockOutlineScene;
 
@@ -68,6 +70,10 @@ public partial class Player : CharacterBody3D
 		_blockOutline = BlockOutlineScene.Instantiate<BlockOutline>();
 		GetTree().CurrentScene.CallDeferred("add_child", _blockOutline);
 		_blockOutline.Visible = false;
+		
+		_worldCraftPreview = WorldCraftPreviewScene.Instantiate<WorldCraftPreview>();
+		GetTree().CurrentScene.CallDeferred("add_child", _worldCraftPreview);
+		_worldCraftPreview.Visible = false;
 		
 		_backpackUi = GetNode<BackpackUI>("../CanvasLayer/BackpackUI (Control)");
 		_backpackUi.Initialize(_inventory);
@@ -289,7 +295,30 @@ public partial class Player : CharacterBody3D
 		if (_blockOutline != null)
 			_blockOutline.UpdateFromTarget(_targetting);
 			
+		UpdateWorldCraftPreview();
+		
 		UpdateHandsViewmodel(delta);
+	}
+	
+	private void UpdateWorldCraftPreview()
+	{
+		if (_worldCraftPreview == null || _targetting == null || _worldManager == null)
+			return;
+
+		if (!_targetting.IsLookingAtPlacedItem)
+		{
+			_worldCraftPreview.HidePreview();
+			return;
+		}
+
+		if (_worldManager.TryGetWorldCraftPreviewCells(_targetting.LookedAtCell, out var previewCells))
+		{
+			_worldCraftPreview.ShowMatch(previewCells);
+		}
+		else
+		{
+			_worldCraftPreview.HidePreview();
+		}
 	}
 
 	private void TryPlaceItem()

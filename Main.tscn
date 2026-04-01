@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://ml5nm258qjyx" path="res://Scripts/World/WindManager.cs" id="16_3ccbu"]
 [ext_resource type="PackedScene" uid="uid://dqrenft06sdr7" path="res://Scenes/World/wind_gust_3d.tscn" id="17_hhcpw"]
 [ext_resource type="Texture2D" uid="uid://b6bend8f1axur" path="res://Materials/Character/left-hand.png" id="17_ny7u2"]
+[ext_resource type="PackedScene" uid="uid://b0dqqf4ewgaea" path="res://Scenes/World/world_craft_preview.tscn" id="18_mxvw5"]
 [ext_resource type="Texture2D" uid="uid://bh2i5l5pije4a" path="res://Materials/Character/right-hand.png" id="18_x3yn0"]
 [ext_resource type="Texture2D" uid="uid://ckuglbdu0oc21" path="res://Materials/Character/Equip/HAND-WITH-PICKAXE.png" id="19_1w2xm"]
 [ext_resource type="Script" uid="uid://b4sq5p6hwiygg" path="res://Scripts/Hotbar/HotbarUI.cs" id="20_gngx1"]
@@ -57,6 +58,7 @@ _heldItemRoot = NodePath("Head/Camera3D/HeldItemRoot")
 _heldTorchRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldTorchRoot")
 _heldBlockRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldBlockRoot")
 _heldTorchLight = NodePath("Head/Camera3D/HeldTorchLight")
+WorldCraftPreviewScene = ExtResource("18_mxvw5")
 PlacementPreviewScene = ExtResource("2_hhcpw")
 BlockOutlineScene = ExtResource("3_mxvw5")
 
@@ -125,6 +127,8 @@ environment = SubResource("Environment_a202f")
 script = ExtResource("16_3ccbu")
 PlayerPath = NodePath("../Player (CharacterBody3D)")
 WindGustScene = ExtResource("17_hhcpw")
+
+[node name="WorldCraftPreview" parent="." unique_id=731278336 instance=ExtResource("18_mxvw5")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=354118164]
 
