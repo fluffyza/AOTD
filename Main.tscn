@@ -14,7 +14,7 @@
 [ext_resource type="Script" uid="uid://djyy0w26nrngh" path="res://Scripts/Player/PlayerLook.cs" id="12_sph85"]
 [ext_resource type="Script" uid="uid://6gtlgg53ypwb" path="res://Scripts/World/GameBootstrap.cs" id="13_o7g6l"]
 [ext_resource type="Script" uid="uid://bufpng8nrm7st" path="res://Scripts/Block/BlockTargetting.cs" id="14_vi5kq"]
-[ext_resource type="Script" uid="uid://dv4djcgmu2vor" path="res://Scripts/Crafting/WorldCraftingManager.cs" id="15_5mkgo"]
+[ext_resource type="Script" uid="uid://dv4djcgmu2vor" path="res://Scripts/Crafting/Structure/WorldCraftingManager.cs" id="15_5mkgo"]
 [ext_resource type="Script" uid="uid://ml5nm258qjyx" path="res://Scripts/World/WindManager.cs" id="16_3ccbu"]
 [ext_resource type="PackedScene" uid="uid://dqrenft06sdr7" path="res://Scenes/World/wind_gust_3d.tscn" id="17_hhcpw"]
 [ext_resource type="Texture2D" uid="uid://b6bend8f1axur" path="res://Materials/Character/left-hand.png" id="17_ny7u2"]
@@ -230,14 +230,19 @@ mouse_filter = 2
 
 [node name="BackpackUI (Control)" parent="CanvasLayer" unique_id=490715253 instance=ExtResource("22_v8qla")]
 visible = false
-BackpackCraftingPanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel")
-BackpackCraftingGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid")
-BackpackCraftingOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingOutput/CraftOutputSlot")
 BackpackCraftingContainerPath = NodePath("BackpackCraftingContainer")
 WorkbenchCraftingPanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel")
 WorkbenchCraftingGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid")
 WorkbenchCraftingOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingOutput/WorkbenchCraftOutputSlot")
 WorkbenchCraftingContainerPath = NodePath("WorkbenchCraftingContainer")
+CampfirePanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel")
+CampfireInputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid/CampfireCraftSlot1")
+CampfireFuelSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid/CampfireFuelSlot1")
+CampfireOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingOutput/CampfireCraftOutputSlot")
+FurnacePanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel")
+FurnaceInputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid/FurnaceCraftSlot1")
+FurnaceFuelSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid/FurnaceFuelSlot1")
+FurnaceOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingOutput/FuranceCraftOutputSlot")
 
 [node name="WorkbenchCraftingContainer" type="Node" parent="CanvasLayer/BackpackUI (Control)" unique_id=1457826599]
 script = ExtResource("23_y1tbi")

@@ -26,6 +26,8 @@ public partial class BlockManager : Node
 	{
 		float roll = GD.Randf();
 
+		if (roll < 0.45f)
+			return "iron_ore";
 		if (roll < 0.65f)
 			return "stone";
 		if (roll < 0.80f)

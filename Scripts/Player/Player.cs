@@ -5,6 +5,7 @@ public partial class Player : CharacterBody3D
 	private Inventory _inventory;
 	private WorldManager _worldManager;
 	private TreeResource _highlightedTree;
+	private CraftedStructure _highlightedStructure;
 	
 	private PlayerMovement _movement;
 	private PlayerLook _look;
@@ -162,7 +163,30 @@ public partial class Player : CharacterBody3D
 			TryRemoveItem();
 			
 		if (@event.IsActionPressed("craft_world_structure"))
-			TryCraftWorldStructure();
+			TryCraftOrDeconstructWorldStructure();
+	}
+	
+	private void TryCraftOrDeconstructWorldStructure()
+	{
+		if (!_targetting.IsLookingAtPlacedItem)
+			return;
+
+		if (_targetting.LookedAtNode != null)
+		{
+			var structure = FindCraftedStructure(_targetting.LookedAtNode);
+			if (structure != null)
+			{
+				bool deconstructed = _worldManager.TryDeconstructStructure(structure);
+				if (!deconstructed)
+					GD.Print("Could not deconstruct structure.");
+				return;
+			}
+		}
+
+		bool crafted = _worldManager.TryCraftWorldStructureFromCell(_targetting.LookedAtCell);
+
+		if (!crafted)
+			GD.Print("No valid world crafting recipe found.");
 	}
 	
 	private void UpdateHandsViewmodel(double delta)
@@ -255,6 +279,20 @@ public partial class Player : CharacterBody3D
 				return;
 			}
 
+			if (current is Campfire campfire)
+			{
+				_backpackUi.OpenCampfire(campfire.GetProcessingContainer());
+				Input.MouseMode = Input.MouseModeEnum.Visible;
+				return;
+			}
+
+			if (current is Furnace furnace)
+			{
+				_backpackUi.OpenFurnace(furnace.GetProcessingContainer());
+				Input.MouseMode = Input.MouseModeEnum.Visible;
+				return;
+			}
+
 			current = current.GetParent();
 		}
 	}
@@ -267,6 +305,12 @@ public partial class Player : CharacterBody3D
 			{
 				_highlightedTree.SetHighlighted(false);
 				_highlightedTree = null;
+			}
+			
+			if (_highlightedStructure != null && IsInstanceValid(_highlightedStructure))
+			{
+				_highlightedStructure.SetHighlighted(false);
+				_highlightedStructure = null;
 			}
 			
 			if (_heldItemRoot != null)
@@ -287,13 +331,35 @@ public partial class Player : CharacterBody3D
 		_movement.HandlePhysics(this, delta);
 		_targetting.UpdateTarget();
 		
+		UpdateCraftedStructureHighlight();
 		UpdateTreeHighlight();
 
 		if (_placementPreview != null)
 			_placementPreview.UpdateFromTarget(_targetting);
 
 		if (_blockOutline != null)
-			_blockOutline.UpdateFromTarget(_targetting);
+		{
+			bool isWorkbench = false;
+
+			if (_targetting != null && _targetting.HitItem != null)
+			{
+				Node current = _targetting.HitItem;
+				while (current != null)
+				{
+					if (current is Workbench)
+					{
+						isWorkbench = true;
+						break;
+					}
+					current = current.GetParent();
+				}
+			}
+
+			if (isWorkbench)
+				_blockOutline.Visible = false;
+			else
+				_blockOutline.UpdateFromTarget(_targetting);
+		}
 			
 		UpdateWorldCraftPreview();
 		
@@ -365,10 +431,29 @@ public partial class Player : CharacterBody3D
 				tree.Mine(this);
 				return;
 			}
+
+			var structure = FindCraftedStructure(lookedAtNode);
+			if (structure != null)
+			{
+				GD.Print("Press F to deconstruct the structure.");
+				return;
+			}
 		}
 
 		if (!_targetting.IsLookingAtPlacedItem)
 			return;
+
+		// Check item before removing it, so we can enforce tool requirements.
+		if (!_worldManager.TryGetBlock(_targetting.LookedAtCell, out Node3D placedNode) || placedNode == null)
+			return;
+
+		string lookedAtItemId = _blockManager.GetDroppedItemId(placedNode);
+
+		if (lookedAtItemId == "iron_ore" && !IsHoldingPickaxe())
+		{
+			GD.Print("You need a pickaxe to mine iron ore.");
+			return;
+		}
 
 		if (!_worldManager.TryRemoveBreakableBlock(_targetting.LookedAtCell, out string itemId))
 		{
@@ -378,6 +463,18 @@ public partial class Player : CharacterBody3D
 
 		_inventory.AddItem(itemId, 1);
 		GD.Print($"Picked up: {itemId}");
+	}
+
+	private bool IsHoldingPickaxe()
+	{
+		if (_inventory == null)
+			return false;
+
+		var selectedSlot = _inventory.GetSelectedSlot();
+		return selectedSlot != null &&
+			   !selectedSlot.IsEmpty &&
+			   selectedSlot.Item != null &&
+			   selectedSlot.Item.ItemId == "pickaxe";
 	}
 
 	private void SelectHotbarSlot(int index)
@@ -426,17 +523,6 @@ public partial class Player : CharacterBody3D
 			if (_highlightedTree != null)
 				_highlightedTree.SetHighlighted(true);
 		}
-	}
-	
-	private void TryCraftWorldStructure()
-	{
-		if (!_targetting.IsLookingAtPlacedItem)
-			return;
-
-		bool crafted = _worldManager.TryCraftWorldStructureFromCell(_targetting.LookedAtCell);
-
-		if (!crafted)
-			GD.Print("No valid world crafting recipe found.");
 	}
 	
 	private void HideAllHeldVisuals()
@@ -514,6 +600,51 @@ public partial class Player : CharacterBody3D
 			return;
 		}
 	}
+	
+	private Workbench FindWorkbench(Node node)
+	{
+		while (node != null)
+		{
+			if (node is Workbench bench)
+				return bench;
 
+			node = node.GetParent();
+		}
+
+		return null;
+	}
+
+	private void UpdateCraftedStructureHighlight()
+	{
+		CraftedStructure newStructure = null;
+
+		if (_targetting != null && _targetting.LookedAtNode != null)
+			newStructure = FindCraftedStructure(_targetting.LookedAtNode);
+
+		if (_highlightedStructure != newStructure)
+		{
+			if (_highlightedStructure != null && IsInstanceValid(_highlightedStructure))
+				_highlightedStructure.SetHighlighted(false);
+
+			_highlightedStructure = newStructure;
+
+			if (_highlightedStructure != null)
+				_highlightedStructure.SetHighlighted(true);
+		}
+		
+	}
+
+	private CraftedStructure FindCraftedStructure(Node node)
+	{
+		while (node != null)
+		{
+			if (node is CraftedStructure structure)
+				return structure;
+
+			node = node.GetParent();
+		}
+
+		return null;
+	}
 	
 }

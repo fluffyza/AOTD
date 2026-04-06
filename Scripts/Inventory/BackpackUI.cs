@@ -16,7 +16,6 @@ public partial class BackpackUI : Control
 	private TextureRect _draggedItemIcon;
 	private Label _draggedItemCountLabel;
 
-
 	[Export] public NodePath BackpackCraftingPanelPath;
 	[Export] public NodePath BackpackCraftingGridPath;
 	[Export] public NodePath BackpackCraftingOutputSlotPath;
@@ -26,6 +25,16 @@ public partial class BackpackUI : Control
 	[Export] public NodePath WorkbenchCraftingGridPath;
 	[Export] public NodePath WorkbenchCraftingOutputSlotPath;
 	[Export] public NodePath WorkbenchCraftingContainerPath;
+	
+	[Export] public NodePath CampfirePanelPath;
+	[Export] public NodePath CampfireInputSlotPath;
+	[Export] public NodePath CampfireFuelSlotPath;
+	[Export] public NodePath CampfireOutputSlotPath;
+
+	[Export] public NodePath FurnacePanelPath;
+	[Export] public NodePath FurnaceInputSlotPath;
+	[Export] public NodePath FurnaceFuelSlotPath;
+	[Export] public NodePath FurnaceOutputSlotPath;
 	
 	private Control _backpackCraftingPanel;
 	private GridContainer _backpackCraftingGrid;
@@ -43,7 +52,20 @@ public partial class BackpackUI : Control
 	private InventorySlotUI _craftOutputSlotUi;
 	private readonly List<InventorySlotUI> _craftingSlotUis = new();
 	private CraftingContainer _craftingContainer;
+	private ProcessingContainer _activeProcessingContainer;
+	
+	private Control _campfirePanel;
+	private InventorySlotUI _campfireInputSlotUi;
+	private InventorySlotUI _campfireFuelSlotUi;
+	private InventorySlotUI _campfireOutputSlotUi;
 
+	private Control _furnacePanel;
+	private InventorySlotUI _furnaceInputSlotUi;
+	private InventorySlotUI _furnaceFuelSlotUi;
+	private InventorySlotUI _furnaceOutputSlotUi;
+	
+	private ProcessingContainer _subscribedProcessingContainer;
+	
 	private InventorySlotUI _hoveredSlotUi = null;
 	private InventorySlotUI _pressedSlotUi = null;
 
@@ -59,6 +81,16 @@ public partial class BackpackUI : Control
 		SingleItem
 	}
 	
+	private enum UiMode
+	{
+		BackpackCrafting,
+		WorkbenchCrafting,
+		CampfireProcessing,
+		FurnaceProcessing
+	}
+
+	private UiMode _currentMode = UiMode.BackpackCrafting;
+
 	
 	private readonly Dictionary<string, Texture2D> _itemIcons = new();
 
@@ -104,14 +136,27 @@ public partial class BackpackUI : Control
 		_workbenchCraftingGrid = GetNode<GridContainer>(WorkbenchCraftingGridPath);
 		_workbenchCraftOutputSlotUi = GetNode<InventorySlotUI>(WorkbenchCraftingOutputSlotPath);
 		_workbenchCraftingContainer = GetNode<CraftingContainer>(WorkbenchCraftingContainerPath);
+		
+		_campfirePanel = GetNode<Control>(CampfirePanelPath);
+		_campfireInputSlotUi = GetNode<InventorySlotUI>(CampfireInputSlotPath);
+		_campfireFuelSlotUi = GetNode<InventorySlotUI>(CampfireFuelSlotPath);
+		_campfireOutputSlotUi = GetNode<InventorySlotUI>(CampfireOutputSlotPath);
 
+		_furnacePanel = GetNode<Control>(FurnacePanelPath);
+		_furnaceInputSlotUi = GetNode<InventorySlotUI>(FurnaceInputSlotPath);
+		_furnaceFuelSlotUi = GetNode<InventorySlotUI>(FurnaceFuelSlotPath);
+		
+		_furnaceOutputSlotUi = GetNode<InventorySlotUI>(FurnaceOutputSlotPath);
 		_draggedItemPreview = GetNode<Control>(DraggedItemPreviewPath);
 		_draggedItemIcon = GetNode<TextureRect>(DraggedItemIconPath);
 		_draggedItemCountLabel = GetNode<Label>(DraggedItemCountLabelPath);
 
 		_draggedItemPreview.Visible = false;
 		_draggedItemLabel.Visible = false;
-
+		
+		_campfirePanel.Visible = false;
+		_furnacePanel.Visible = false;
+		
 		_draggedItemIcon.MouseFilter = MouseFilterEnum.Ignore;
 		_draggedItemCountLabel.MouseFilter = MouseFilterEnum.Ignore;
 		_draggedItemLabel.MouseFilter = MouseFilterEnum.Ignore;
@@ -232,8 +277,14 @@ public partial class BackpackUI : Control
 
 	public void OpenBackpackCraftingMode()
 	{
+		_currentMode = UiMode.BackpackCrafting;
+		_activeProcessingContainer = null;
+		UnsubscribeFromProcessingContainer();
+
 		_backpackCraftingPanel.Visible = true;
 		_workbenchCraftingPanel.Visible = false;
+		_campfirePanel.Visible = false;
+		_furnacePanel.Visible = false;
 
 		_craftingGrid = _backpackCraftingGrid;
 		_craftOutputSlotUi = _backpackCraftOutputSlotUi;
@@ -241,6 +292,27 @@ public partial class BackpackUI : Control
 
 		_craftingSlotUis.Clear();
 		_craftingSlotUis.AddRange(_backpackCraftingSlotUis);
+		Refresh();
+	}
+
+	public void OpenWorkbenchCraftingMode()
+	{
+		_currentMode = UiMode.WorkbenchCrafting;
+		_activeProcessingContainer = null;
+		UnsubscribeFromProcessingContainer();
+
+		_backpackCraftingPanel.Visible = false;
+		_workbenchCraftingPanel.Visible = true;
+		_campfirePanel.Visible = false;
+		_furnacePanel.Visible = false;
+
+		_craftingGrid = _workbenchCraftingGrid;
+		_craftOutputSlotUi = _workbenchCraftOutputSlotUi;
+		_craftingContainer = _workbenchCraftingContainer;
+
+		_craftingSlotUis.Clear();
+		_craftingSlotUis.AddRange(_workbenchCraftingSlotUis);
+
 		Refresh();
 	}
 	
@@ -262,21 +334,6 @@ public partial class BackpackUI : Control
 		OpenWorkbenchCraftingMode();
 	}
 
-	public void OpenWorkbenchCraftingMode()
-	{
-		_backpackCraftingPanel.Visible = false;
-		_workbenchCraftingPanel.Visible = true;
-
-		_craftingGrid = _workbenchCraftingGrid;
-		_craftOutputSlotUi = _workbenchCraftOutputSlotUi;
-		_craftingContainer = _workbenchCraftingContainer;
-
-		_craftingSlotUis.Clear();
-		_craftingSlotUis.AddRange(_workbenchCraftingSlotUis);
-		
-		Refresh();
-	}
-
 	public void Open()
 	{
 		Visible = true;
@@ -288,8 +345,14 @@ public partial class BackpackUI : Control
 	{
 		Visible = false;
 		Input.MouseMode = Input.MouseModeEnum.Captured;
+
 		CancelDragAndReturnHeldStack();
-		ReturnCraftingInputsToInventory();
+
+		if (_currentMode == UiMode.BackpackCrafting || _currentMode == UiMode.WorkbenchCrafting)
+			ReturnCraftingInputsToInventory();
+
+		_activeProcessingContainer = null;
+		UnsubscribeFromProcessingContainer();
 	}
 	
 	private void ReturnCraftingInputsToInventory()
@@ -376,6 +439,48 @@ public partial class BackpackUI : Control
 			_workbenchCraftOutputSlotUi.SlotHovered += OnSlotHovered;
 			_workbenchCraftOutputSlotUi.SlotUnhovered += OnSlotUnhovered;
 		}
+		
+		if (_campfireInputSlotUi != null)
+		{
+			_campfireInputSlotUi.SlotPressed += OnSlotPressed;
+			_campfireInputSlotUi.SlotHovered += OnSlotHovered;
+			_campfireInputSlotUi.SlotUnhovered += OnSlotUnhovered;
+		}
+
+		if (_campfireFuelSlotUi != null)
+		{
+			_campfireFuelSlotUi.SlotPressed += OnSlotPressed;
+			_campfireFuelSlotUi.SlotHovered += OnSlotHovered;
+			_campfireFuelSlotUi.SlotUnhovered += OnSlotUnhovered;
+		}
+
+		if (_campfireOutputSlotUi != null)
+		{
+			_campfireOutputSlotUi.SlotPressed += OnSlotPressed;
+			_campfireOutputSlotUi.SlotHovered += OnSlotHovered;
+			_campfireOutputSlotUi.SlotUnhovered += OnSlotUnhovered;
+		}
+
+		if (_furnaceInputSlotUi != null)
+		{
+			_furnaceInputSlotUi.SlotPressed += OnSlotPressed;
+			_furnaceInputSlotUi.SlotHovered += OnSlotHovered;
+			_furnaceInputSlotUi.SlotUnhovered += OnSlotUnhovered;
+		}
+
+		if (_furnaceFuelSlotUi != null)
+		{
+			_furnaceFuelSlotUi.SlotPressed += OnSlotPressed;
+			_furnaceFuelSlotUi.SlotHovered += OnSlotHovered;
+			_furnaceFuelSlotUi.SlotUnhovered += OnSlotUnhovered;
+		}
+
+		if (_furnaceOutputSlotUi != null)
+		{
+			_furnaceOutputSlotUi.SlotPressed += OnSlotPressed;
+			_furnaceOutputSlotUi.SlotHovered += OnSlotHovered;
+			_furnaceOutputSlotUi.SlotUnhovered += OnSlotUnhovered;
+		}
 	}
 
 	private void Refresh()
@@ -433,6 +538,51 @@ public partial class BackpackUI : Control
 				SetupSlotVisual(_craftOutputSlotUi, -1, _craftingContainer.OutputPreviewSlot, outputHighlighted);
 			}
 		}
+		
+		if (_activeProcessingContainer != null)
+		{
+			if (_campfirePanel.Visible)
+			{
+				SetupSlotVisual(
+					_campfireInputSlotUi,
+					0,
+					_activeProcessingContainer.InputSlot,
+					_hoveredSlotUi == _campfireInputSlotUi);
+
+				SetupSlotVisual(
+					_campfireFuelSlotUi,
+					1,
+					_activeProcessingContainer.FuelSlot,
+					_hoveredSlotUi == _campfireFuelSlotUi);
+
+				SetupSlotVisual(
+					_campfireOutputSlotUi,
+					2,
+					_activeProcessingContainer.OutputSlot,
+					_hoveredSlotUi == _campfireOutputSlotUi);
+			}
+
+			if (_furnacePanel.Visible)
+			{
+				SetupSlotVisual(
+					_furnaceInputSlotUi,
+					0,
+					_activeProcessingContainer.InputSlot,
+					_hoveredSlotUi == _furnaceInputSlotUi);
+
+				SetupSlotVisual(
+					_furnaceFuelSlotUi,
+					1,
+					_activeProcessingContainer.FuelSlot,
+					_hoveredSlotUi == _furnaceFuelSlotUi);
+
+				SetupSlotVisual(
+					_furnaceOutputSlotUi,
+					2,
+					_activeProcessingContainer.OutputSlot,
+					_hoveredSlotUi == _furnaceOutputSlotUi);
+			}
+		}
 
 		UpdateDraggedLabel();
 	}
@@ -485,6 +635,18 @@ public partial class BackpackUI : Control
 
 			case InventorySlotUI.SlotRole.CraftingOutput:
 				StartDragFromCraftingOutput();
+				break;
+
+			case InventorySlotUI.SlotRole.ProcessingInput:
+				StartDragFromProcessingSlot(_activeProcessingContainer?.InputSlot, InventorySlotUI.SlotRole.ProcessingInput);
+				break;
+
+			case InventorySlotUI.SlotRole.ProcessingFuel:
+				StartDragFromProcessingSlot(_activeProcessingContainer?.FuelSlot, InventorySlotUI.SlotRole.ProcessingFuel);
+				break;
+
+			case InventorySlotUI.SlotRole.ProcessingOutput:
+				StartDragFromProcessingSlot(_activeProcessingContainer?.OutputSlot, InventorySlotUI.SlotRole.ProcessingOutput);
 				break;
 		}
 	}
@@ -624,6 +786,22 @@ public partial class BackpackUI : Control
 			case InventorySlotUI.SlotRole.CraftingOutput:
 				CancelDragAndReturnHeldStack();
 				break;
+
+			case InventorySlotUI.SlotRole.ProcessingInput:
+				TryPlaceHeldIntoProcessingInput();
+				break;
+
+			case InventorySlotUI.SlotRole.ProcessingFuel:
+				TryPlaceHeldIntoProcessingFuel();
+				break;
+
+			case InventorySlotUI.SlotRole.ProcessingOutput:
+				TryTakeProcessingOutput();
+				break;
+
+			default:
+				CancelDragAndReturnHeldStack();
+				break;
 		}
 
 		if (_heldCount <= 0)
@@ -734,6 +912,39 @@ public partial class BackpackUI : Control
 				source.Count += _heldCount;
 
 			_craftingContainer.RefreshOutput();
+		}
+		else if (_heldSourceRole == InventorySlotUI.SlotRole.ProcessingInput)
+		{
+			var source = _activeProcessingContainer?.InputSlot;
+			if (source != null)
+			{
+				if (source.IsEmpty)
+					source.SetItem(_heldItem, _heldCount);
+				else if (source.CanStackWith(_heldItem))
+					source.Count += _heldCount;
+			}
+		}
+		else if (_heldSourceRole == InventorySlotUI.SlotRole.ProcessingFuel)
+		{
+			var source = _activeProcessingContainer?.FuelSlot;
+			if (source != null)
+			{
+				if (source.IsEmpty)
+					source.SetItem(_heldItem, _heldCount);
+				else if (source.CanStackWith(_heldItem))
+					source.Count += _heldCount;
+			}
+		}
+		else if (_heldSourceRole == InventorySlotUI.SlotRole.ProcessingOutput)
+		{
+			var source = _activeProcessingContainer?.OutputSlot;
+			if (source != null)
+			{
+				if (source.IsEmpty)
+					source.SetItem(_heldItem, _heldCount);
+				else if (source.CanStackWith(_heldItem))
+					source.Count += _heldCount;
+			}
 		}
 
 		ClearHeldStackState();
@@ -937,6 +1148,225 @@ public partial class BackpackUI : Control
 	private Texture2D GetItemIcon(string itemId)
 	{
 		return _itemIcons.TryGetValue(itemId, out var icon) ? icon : null;
+	}
+	
+	public void OpenCampfire(ProcessingContainer container)
+	{
+		OpenUI();
+		OpenCampfireMode(container);
+	}
+
+	public void OpenFurnace(ProcessingContainer container)
+	{
+		OpenUI();
+		OpenFurnaceMode(container);
+	}
+
+	private void OpenCampfireMode(ProcessingContainer container)
+	{
+		_currentMode = UiMode.CampfireProcessing;
+		_activeProcessingContainer = container;
+		_craftingContainer = null;
+
+		SubscribeToProcessingContainer(container);
+
+		_backpackCraftingPanel.Visible = false;
+		_workbenchCraftingPanel.Visible = false;
+		_campfirePanel.Visible = true;
+		_furnacePanel.Visible = false;
+
+		Refresh();
+	}
+
+	private void OpenFurnaceMode(ProcessingContainer container)
+	{
+		_currentMode = UiMode.FurnaceProcessing;
+		_activeProcessingContainer = container;
+		_craftingContainer = null;
+
+		SubscribeToProcessingContainer(container);
+
+		_backpackCraftingPanel.Visible = false;
+		_workbenchCraftingPanel.Visible = false;
+		_campfirePanel.Visible = false;
+		_furnacePanel.Visible = true;
+
+		Refresh();
+	}
+	
+	private void StartDragFromProcessingSlot(InventorySlot slot, InventorySlotUI.SlotRole sourceRole)
+	{
+		if (_activeProcessingContainer == null || slot == null || slot.IsEmpty || slot.Item == null)
+			return;
+
+		_heldSourceRole = sourceRole;
+		_heldSourceCraftIndex = -1;
+
+		bool shiftHeld = Input.IsKeyPressed(Key.Shift);
+		bool ctrlHeld = Input.IsKeyPressed(Key.Ctrl);
+
+		_dragMode = ctrlHeld ? DragMode.SingleItem :
+					shiftHeld ? DragMode.HalfStack :
+					DragMode.FullStack;
+
+		int amountToTake = slot.Count;
+
+		if (_dragMode == DragMode.SingleItem)
+			amountToTake = 1;
+		else if (_dragMode == DragMode.HalfStack)
+			amountToTake = Mathf.CeilToInt(slot.Count / 2.0f);
+
+		ItemDefinition item = slot.Item;
+		int removed = slot.RemoveAmount(amountToTake);
+
+		if (removed <= 0)
+			return;
+
+		_heldItem = item;
+		_heldCount = removed;
+		_heldSourceSlotIndex = -1;
+		_pressedSlotIndex = -1;
+		_isDragging = true;
+
+		Refresh();
+	}
+	
+	private void TryPlaceHeldIntoProcessingInput()
+	{
+		if (!HasHeldStack() || _activeProcessingContainer == null || _heldItem == null)
+			return;
+
+		// Must be valid for this station.
+		if (!_activeProcessingContainer.CanAcceptInput(_heldItem))
+		{
+			ReturnHeldStackToSource();
+			return;
+		}
+
+		var target = _activeProcessingContainer.InputSlot;
+		if (target == null)
+		{
+			ReturnHeldStackToSource();
+			return;
+		}
+
+		if (target.IsEmpty)
+		{
+			target.SetItem(_heldItem, _heldCount);
+			_heldCount = 0;
+			return;
+		}
+
+		if (target.CanStackWith(_heldItem))
+		{
+			int maxStack = target.Item.MaxStackSize;
+			int spaceLeft = maxStack - target.Count;
+			int toMove = Mathf.Min(spaceLeft, _heldCount);
+
+			if (toMove > 0)
+			{
+				target.Count += toMove;
+				_heldCount -= toMove;
+			}
+
+			if (_heldCount <= 0)
+				return;
+		}
+
+		ReturnHeldStackToSource();
+	}
+
+	private void TryPlaceHeldIntoProcessingFuel()
+	{
+		if (!HasHeldStack() || _activeProcessingContainer == null || _heldItem == null)
+			return;
+
+		if (!_activeProcessingContainer.CanAcceptFuel(_heldItem))
+		{
+			ReturnHeldStackToSource();
+			return;
+		}
+
+		var target = _activeProcessingContainer.FuelSlot;
+		if (target == null)
+		{
+			ReturnHeldStackToSource();
+			return;
+		}
+
+		if (target.IsEmpty)
+		{
+			target.SetItem(_heldItem, _heldCount);
+			_heldCount = 0;
+			return;
+		}
+
+		if (target.CanStackWith(_heldItem))
+		{
+			int maxStack = target.Item.MaxStackSize;
+			int spaceLeft = maxStack - target.Count;
+			int toMove = Mathf.Min(spaceLeft, _heldCount);
+
+			if (toMove > 0)
+			{
+				target.Count += toMove;
+				_heldCount -= toMove;
+			}
+
+			if (_heldCount <= 0)
+				return;
+		}
+
+		ReturnHeldStackToSource();
+	}
+
+	private void TryTakeProcessingOutput()
+	{
+		if (_activeProcessingContainer == null)
+		{
+			CancelDragAndReturnHeldStack();
+			return;
+		}
+
+		// Never allow dropping held items into output.
+		if (HasHeldStack())
+		{
+			CancelDragAndReturnHeldStack();
+			return;
+		}
+
+		if (_activeProcessingContainer.OutputSlot == null || _activeProcessingContainer.OutputSlot.IsEmpty)
+			return;
+
+		StartDragFromProcessingSlot(
+			_activeProcessingContainer.OutputSlot,
+			InventorySlotUI.SlotRole.ProcessingOutput
+		);
+	}
+	
+	private void SubscribeToProcessingContainer(ProcessingContainer container)
+	{
+		if (_subscribedProcessingContainer != null &&
+			IsInstanceValid(_subscribedProcessingContainer))
+		{
+			_subscribedProcessingContainer.ProcessingChanged -= Refresh;
+		}
+
+		_subscribedProcessingContainer = container;
+
+		if (_subscribedProcessingContainer != null)
+			_subscribedProcessingContainer.ProcessingChanged += Refresh;
+	}
+
+	private void UnsubscribeFromProcessingContainer()
+	{
+		if (_subscribedProcessingContainer != null &&
+			IsInstanceValid(_subscribedProcessingContainer))
+		{
+			_subscribedProcessingContainer.ProcessingChanged -= Refresh;
+		}
+
+		_subscribedProcessingContainer = null;
 	}
 
 }

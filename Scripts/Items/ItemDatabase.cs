@@ -23,7 +23,7 @@ public partial class ItemDatabase : Node
 		Register(new ItemDefinition("coal", "Coal", true, 99, BlockScene, true, true, new Color(0.1f, 0.1f, 0.1f)));
 		Register(new ItemDefinition("stone", "Stone", true, 99, BlockScene, true, true, new Color(0.85f, 0.85f, 0.85f)));
 		Register(new ItemDefinition("pickaxe", "Stone Pickaxe", false, 1, null, false, false, null));
-
+		
 		Register(new ItemDefinition(
 			"dirt",
 			"Dirt",
@@ -41,6 +41,15 @@ public partial class ItemDatabase : Node
 		Register(new ItemDefinition("stick", "Stick", false, 99, null, false, false, null));
 		Register(new ItemDefinition("torch", "Torch", true, 99, TorchScene, false, false, null));
 		Register(new ItemDefinition("acorn", "Acorn", false, 99, null, false, false, null));
+		Register(new ItemDefinition("iron_ore", "Iron Ore", true, 99, BlockScene, true, true, new Color(0.75f, 0.2f, 0.2f)));
+		Register(new ItemDefinition("iron_ingot", "Iron Ingot", true, 99, BlockScene, true, true, new Color(0.2f, 0.8f, 0.25f)));
+		
+		Register(new ItemDefinition("workbench", "Workbench", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_workbench.tscn"), false, false, null));
+		Register(new ItemDefinition("campfire", "Campfire", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_campfire.tscn"), false, false, null));
+		Register(new ItemDefinition("furnace", "Furnace", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_furnace.tscn"), false, false, null));
+
+
+
 	}
 
 	private void Register(ItemDefinition item)

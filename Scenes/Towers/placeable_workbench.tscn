@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://bl0jjkypocqcj"]
 
-[ext_resource type="Script" uid="uid://dwgldbe2kfn82" path="res://Scripts/Crafting/Workbench/Workbench.cs" id="1_v12dd"]
+[ext_resource type="Script" uid="uid://dwgldbe2kfn82" path="res://Scripts/Crafting/Structure/Stations/Workbench.cs" id="1_v12dd"]
 [ext_resource type="PackedScene" uid="uid://dw4qqqyuvambv" path="res://Scripts/Models/medieval+forge+workbench+3d+model/tripo_convert_2c2a76b3-078d-49f2-8a8f-3c5876ad52ca.fbx" id="2_itogv"]
+[ext_resource type="Script" uid="uid://63lyw4etirvf" path="res://Scripts/Utils/MeshHighlightController.cs" id="3_plysx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_itogv"]
 
@@ -11,10 +12,13 @@ script = ExtResource("1_v12dd")
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=473219722]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1921322994]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 shape = SubResource("BoxShape3D_itogv")
 
 [node name="MeshPivot" type="Node3D" parent="." unique_id=760719809]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.780806, 0.011095524, -0.7307819)
 
 [node name="WorkbenchModel" parent="MeshPivot" unique_id=86221333 instance=ExtResource("2_itogv")]
-transform = Transform3D(-8.742277e-08, 0, 1.9999999, 0, 2, 0, -1.9999999, 0, -8.742277e-08, -0.8533716, -0.52009267, 0.49300003)
+transform = Transform3D(-8.742277e-08, 0, 1.9999999, 0, 2, 0, -1.9999999, 0, -8.742277e-08, -0.008568287, -0.52009267, -0.29346222)
+
+[node name="MeshHighlightController" type="MeshInstance3D" parent="." unique_id=1224320438]
+script = ExtResource("3_plysx")

@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bi3uwlcqx230c"]
+
+[ext_resource type="PackedScene" uid="uid://b4ji7044i0opo" path="res://Scripts/Models/stone kiln 3d model.glb" id="1_7v8u5"]
+[ext_resource type="Script" uid="uid://bpfoa0utrgmns" path="res://Scripts/Crafting/Structure/Stations/Furnace.cs" id="1_7y7vv"]
+[ext_resource type="Script" uid="uid://63lyw4etirvf" path="res://Scripts/Utils/MeshHighlightController.cs" id="2_t0abu"]
+[ext_resource type="Script" uid="uid://c4pqndgbtjk0f" path="res://Scripts/Crafting/Structure/Processing/ProcessingContainer.cs" id="4_rk7ba"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t0abu"]
+
+[node name="Furnace" type="Node3D" unique_id=1577209066]
+script = ExtResource("1_7y7vv")
+ProcessingContainerPath = NodePath("ProcessingContainer")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=993027865]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=991720323]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+shape = SubResource("BoxShape3D_t0abu")
+
+[node name="MeshPivot" type="Node3D" parent="." unique_id=195508993]
+
+[node name="stone kiln 3d model" parent="MeshPivot" unique_id=2036421615 instance=ExtResource("1_7v8u5")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0.08906984, 0)
+
+[node name="MeshHighlightController" type="MeshInstance3D" parent="." unique_id=1776228839]
+script = ExtResource("2_t0abu")
+
+[node name="ProcessingContainer" type="Node" parent="." unique_id=1262761519]
+script = ExtResource("4_rk7ba")

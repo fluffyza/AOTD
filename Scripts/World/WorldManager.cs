@@ -198,12 +198,39 @@ public partial class WorldManager : Node
 	{
 		new Vector3I(0, 0, 0),
 		new Vector3I(-1, 0, 0),
+		new Vector3I(-2, 0, 0),
+
 		new Vector3I(0, 0, -1),
 		new Vector3I(-1, 0, -1),
+		new Vector3I(-2, 0, -1),
+
+		new Vector3I(0, 0, -2),
+		new Vector3I(-1, 0, -2),
+		new Vector3I(-2, 0, -2),
+
 		new Vector3I(0, -1, 0),
 		new Vector3I(-1, -1, 0),
+		new Vector3I(-2, -1, 0),
+
 		new Vector3I(0, -1, -1),
-		new Vector3I(-1, -1, -1)
+		new Vector3I(-1, -1, -1),
+		new Vector3I(-2, -1, -1),
+
+		new Vector3I(0, -1, -2),
+		new Vector3I(-1, -1, -2),
+		new Vector3I(-2, -1, -2),
+
+		new Vector3I(0, -2, 0),
+		new Vector3I(-1, -2, 0),
+		new Vector3I(-2, -2, 0),
+
+		new Vector3I(0, -2, -1),
+		new Vector3I(-1, -2, -1),
+		new Vector3I(-2, -2, -1),
+
+		new Vector3I(0, -2, -2),
+		new Vector3I(-1, -2, -2),
+		new Vector3I(-2, -2, -2)
 	};
 
 	public bool TryCraftWorldStructureFromCell(Vector3I lookedCell)
@@ -266,6 +293,16 @@ public partial class WorldManager : Node
 			instance.GlobalBasis = GetWorkbenchSpawnBasis(matchedPieces);
 		else
 			instance.GlobalBasis = spawnBasis;
+			
+		if (instance is CraftedStructure structure)
+		{
+			structure.ItemId = recipe.OutputItemId;
+			structure.GridCell = anchorCell;
+			structure.PlacedCell = anchorCell;
+
+			foreach (var piece in matchedPieces)
+				structure.SourceRecipePieces[piece.GridCell] = piece.ItemId;
+		}
 
 		GD.Print($"World crafted: {recipe.RecipeId}");
 		return true;
@@ -380,6 +417,32 @@ public partial class WorldManager : Node
 		}
 
 		return false;
+	}
+	
+	public bool TryDeconstructStructure(CraftedStructure structure)
+	{
+		if (structure == null || !IsInstanceValid(structure))
+			return false;
+
+		if (structure.SourceRecipePieces == null || structure.SourceRecipePieces.Count == 0)
+			return false;
+
+		if (!_placedItems.ContainsKey(structure.PlacedCell))
+			return false;
+
+		_placedItems.Remove(structure.PlacedCell);
+		structure.QueueFree();
+
+		foreach (var kvp in structure.SourceRecipePieces)
+		{
+			Vector3I cell = kvp.Key;
+			string itemId = kvp.Value;
+
+			if (!TryPlaceInventoryItem(cell, itemId))
+				GD.PrintErr($"Failed to restore recipe piece '{itemId}' at {cell}.");
+		}
+
+		return true;
 	}
 
 }

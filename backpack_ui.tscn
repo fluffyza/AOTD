@@ -16,6 +16,9 @@ script = ExtResource("1_nao8u")
 DraggedItemPreviewPath = NodePath("DraggedItemPreview")
 DraggedItemIconPath = NodePath("DraggedItemPreview/DraggedItemIcon")
 DraggedItemCountLabelPath = NodePath("DraggedItemPreview/DraggedItemCountLabel")
+BackpackCraftingPanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel")
+BackpackCraftingGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid")
+BackpackCraftingOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingOutput/CraftOutputSlot")
 BackpackGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid")
 HotbarRowPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow")
 DraggedItemLabelPath = NodePath("DraggedItemLabel")
@@ -128,6 +131,66 @@ alignment = 2
 [node name="WorkbenchCraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingOutput" unique_id=29914131 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
+
+[node name="FurnaceCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=447576796]
+layout_mode = 2
+alignment = 2
+
+[node name="FurnaceCraftingGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel" unique_id=2111943954]
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+
+[node name="FurnaceCraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid" unique_id=542369523 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 3
+CraftingSlotIndex = 0
+
+[node name="FurnaceFuelSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid" unique_id=1058481792 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 4
+CraftingSlotIndex = 1
+
+[node name="FurnaceCraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel" unique_id=499617908]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 2
+
+[node name="FuranceCraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingOutput" unique_id=847701096 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 5
+
+[node name="CampfireCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1103788579]
+layout_mode = 2
+alignment = 2
+
+[node name="CampfireCraftingGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel" unique_id=1176090638]
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+
+[node name="CampfireCraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid" unique_id=679731801 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 3
+CraftingSlotIndex = 0
+
+[node name="CampfireFuelSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid" unique_id=1952869296 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 4
+CraftingSlotIndex = 1
+
+[node name="CampfireCraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel" unique_id=427454702]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 2
+
+[node name="CampfireCraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingOutput" unique_id=1211672916 instance=ExtResource("3_dy8yp")]
+layout_mode = 2
+Role = 5
 
 [node name="BackpackCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1816742573]
 layout_mode = 2

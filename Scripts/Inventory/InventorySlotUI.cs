@@ -15,7 +15,10 @@ public partial class InventorySlotUI : Button
 	{
 		Inventory,
 		CraftingInput,
-		CraftingOutput
+		CraftingOutput,
+		ProcessingInput,
+		ProcessingFuel,
+		ProcessingOutput
 	}
 
 	[Export] public NodePath ItemLabelPath;

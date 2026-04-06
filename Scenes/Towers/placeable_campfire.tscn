@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://b511esw4lc8sq"]
+
+[ext_resource type="Script" uid="uid://c1gaqhs2aa6lf" path="res://Scripts/Crafting/Structure/Stations/Campfire.cs" id="1_15v8g"]
+[ext_resource type="PackedScene" uid="uid://dayjre1to675k" path="res://Scripts/Models/campfire+3d+model.glb" id="1_605i7"]
+[ext_resource type="Script" uid="uid://63lyw4etirvf" path="res://Scripts/Utils/MeshHighlightController.cs" id="2_iekog"]
+[ext_resource type="Script" uid="uid://c4pqndgbtjk0f" path="res://Scripts/Crafting/Structure/Processing/ProcessingContainer.cs" id="4_421gk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iekog"]
+
+[node name="PlaceableCampfire" type="Node3D" unique_id=14953340]
+script = ExtResource("1_15v8g")
+ProcessingContainerPath = NodePath("ProcessingContainer")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=218819431]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1093016237]
+shape = SubResource("BoxShape3D_iekog")
+
+[node name="MeshPivot" type="Node3D" parent="." unique_id=1864584252]
+
+[node name="campfire+3d+model" parent="MeshPivot" unique_id=1381191265 instance=ExtResource("1_605i7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5280232, 0)
+
+[node name="MeshHighlightController" type="MeshInstance3D" parent="." unique_id=2088826500]
+script = ExtResource("2_iekog")
+
+[node name="ProcessingContainer" type="Node" parent="." unique_id=1226852605]
+script = ExtResource("4_421gk")
+StationType = "Campfire"
