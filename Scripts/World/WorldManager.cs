@@ -6,6 +6,16 @@ public partial class WorldManager : Node
 	[Export] public NodePath BlockManagerPath;
 	[Export] public PackedScene TreeScene;
 	[Export] public float TreeSpawnChance = 0.12f;//0f;
+	[Export] public PackedScene GrassClumpScene;
+	[Export] public PackedScene RockOneScene;
+	[Export] public PackedScene RockTwoScene;
+	[Export] public PackedScene RockThreeScene;
+
+	[Export] public float GrassSpawnChance = 0.35f;
+	[Export] public float RockSpawnChance = 0.08f;
+	
+	[Export] public PackedScene GrassTileScene;
+	
 	
 	private WorldCraftingManager _worldCraftingManager;
 	private BlockManager _blockManager;
@@ -105,6 +115,15 @@ public partial class WorldManager : Node
 
 	public void GenerateSurfaceFloor(int halfSize, int yLevel)
 	{
+		if (GrassTileScene == null)
+		{
+			GD.PrintErr("GrassTileScene not assigned.");
+			return;
+		}
+
+		var rng = new RandomNumberGenerator();
+		rng.Randomize();
+
 		for (int x = -halfSize; x <= halfSize; x++)
 		{
 			for (int z = -halfSize; z <= halfSize; z++)
@@ -116,12 +135,23 @@ public partial class WorldManager : Node
 
 				Vector3 worldPos = GridUtils.CellToWorld(cell);
 
-				var block = _blockManager.CreateSurfaceBlock(worldPos);
-				if (block == null)
-					continue;
+				var tile = GrassTileScene.Instantiate<Node3D>();
 
-				AddPlacedNode(cell, block);
-				TrySpawnTree(worldPos, x, z);
+				// Slight variation
+				float heightOffset = rng.RandfRange(-0.03f, 0.03f);
+				float tiltX = rng.RandfRange(-1.5f, 1.5f);
+				float tiltZ = rng.RandfRange(-1.5f, 1.5f);
+
+				tile.Position = worldPos + new Vector3(0, heightOffset, 0);
+				tile.RotationDegrees = new Vector3(tiltX, 0, tiltZ);
+
+				AddPlacedNode(cell, tile);
+				
+				Vector3 decorSpawnPos = tile.GlobalPosition;
+				
+				TrySpawnTree(decorSpawnPos, x, z);
+				TrySpawnGrass(decorSpawnPos, x, z);
+				TrySpawnRock(decorSpawnPos, x, z);
 			}
 		}
 	}
@@ -444,5 +474,55 @@ public partial class WorldManager : Node
 
 		return true;
 	}
+	
+	private void TrySpawnGrass(Vector3 worldPosition, int x, int z)
+	{
+		if (GrassClumpScene == null)
+			return;
 
+		if (GD.Randf() > GrassSpawnChance)
+			return;
+
+		var grass = GrassClumpScene.Instantiate<Node3D>();
+		AddChild(grass);
+
+		float offsetX = GD.Randf() * 0.6f - 0.3f;
+		float offsetZ = GD.Randf() * 0.6f - 0.3f;
+		float yaw = GD.Randf() * 360f;
+		float scale = GD.Randf() * 0.25f + 0.9f;
+		grass.GlobalPosition = worldPosition + new Vector3(offsetX, 0.6f, offsetZ);
+		grass.RotationDegrees = new Vector3(0f, yaw, 0f);
+		grass.Scale = new Vector3(scale, scale, scale);
+	}
+	
+	private void TrySpawnRock(Vector3 worldPosition, int x, int z)
+	{
+		if (GD.Randf() > RockSpawnChance)
+			return;
+
+		PackedScene chosenRock = null;
+
+		var roll = GD.Randf();
+		if (roll < 0.33f)
+			chosenRock = RockOneScene;
+		else if (roll < 0.66f)
+			chosenRock = RockTwoScene;
+		else
+			chosenRock = RockThreeScene;
+
+		if (chosenRock == null)
+			return;
+
+		var rock = chosenRock.Instantiate<Node3D>();
+		AddChild(rock);
+
+		float offsetX = GD.Randf() * 0.5f - 0.25f;
+		float offsetZ = GD.Randf() * 0.5f - 0.25f;
+		float yaw = GD.Randf() * 360f;
+		float scale = GD.Randf() * 0.3f + 0.85f;
+		
+		rock.GlobalPosition = worldPosition + new Vector3(offsetX, 0.35f, offsetZ);
+		rock.RotationDegrees = new Vector3(0f, yaw, 0f);
+		rock.Scale = new Vector3(scale, scale, scale);
+	}
 }

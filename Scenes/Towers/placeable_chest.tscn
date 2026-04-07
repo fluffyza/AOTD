@@ -18,6 +18,7 @@ shape = SubResource("BoxShape3D_x6yry")
 [node name="MeshPivot" type="Node3D" parent="." unique_id=1796627]
 
 [node name="chest" parent="MeshPivot" unique_id=1275573574 instance=ExtResource("2_4te67")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, -0.48798054, 0)
 
 [node name="MeshHighlightController" type="MeshInstance3D" parent="." unique_id=764186923]
 script = ExtResource("3_ikg72")

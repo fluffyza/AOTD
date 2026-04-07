@@ -11,10 +11,15 @@
 [ext_resource type="Script" uid="uid://d3a3n2yq781ne" path="res://Scripts/World/WorldManager.cs" id="9_oye8v"]
 [ext_resource type="PackedScene" uid="uid://dcgbdpntcbor3" path="res://tree_resource.tscn" id="10_40n85"]
 [ext_resource type="Script" uid="uid://bsj5mjx3w2wiw" path="res://Scripts/Player/PlayerMovement.cs" id="11_gb15f"]
+[ext_resource type="PackedScene" uid="uid://drg0b6y6266te" path="res://Scenes/World/grass_clump.tscn" id="12_5mvff"]
 [ext_resource type="Script" uid="uid://djyy0w26nrngh" path="res://Scripts/Player/PlayerLook.cs" id="12_sph85"]
+[ext_resource type="PackedScene" uid="uid://40vto3ecn446" path="res://Scenes/World/grass_tile.tscn" id="12_xrxkg"]
 [ext_resource type="Script" uid="uid://6gtlgg53ypwb" path="res://Scripts/World/GameBootstrap.cs" id="13_o7g6l"]
+[ext_resource type="PackedScene" uid="uid://ctdw5pwovv47u" path="res://Scenes/World/rock_one.tscn" id="13_oye8v"]
+[ext_resource type="PackedScene" uid="uid://b4cnngdqr14jl" path="res://Scenes/World/rock_two.tscn" id="14_40n85"]
 [ext_resource type="Script" uid="uid://bufpng8nrm7st" path="res://Scripts/Block/BlockTargetting.cs" id="14_vi5kq"]
 [ext_resource type="Script" uid="uid://dv4djcgmu2vor" path="res://Scripts/Crafting/Structure/WorldCraftingManager.cs" id="15_5mkgo"]
+[ext_resource type="PackedScene" uid="uid://gndcck5phme6" path="res://Scenes/World/rock_three.tscn" id="15_gb15f"]
 [ext_resource type="Script" uid="uid://ml5nm258qjyx" path="res://Scripts/World/WindManager.cs" id="16_3ccbu"]
 [ext_resource type="PackedScene" uid="uid://dqrenft06sdr7" path="res://Scenes/World/wind_gust_3d.tscn" id="17_hhcpw"]
 [ext_resource type="Texture2D" uid="uid://b6bend8f1axur" path="res://Materials/Character/left-hand.png" id="17_ny7u2"]
@@ -102,6 +107,11 @@ BlockManagerPath = NodePath("../BlockManager")
 script = ExtResource("9_oye8v")
 BlockManagerPath = NodePath("../BlockManager")
 TreeScene = ExtResource("10_40n85")
+GrassClumpScene = ExtResource("12_5mvff")
+RockOneScene = ExtResource("13_oye8v")
+RockTwoScene = ExtResource("14_40n85")
+RockThreeScene = ExtResource("15_gb15f")
+GrassTileScene = ExtResource("12_xrxkg")
 
 [node name="PlayerMovement" type="Node" parent="Player (CharacterBody3D)" unique_id=1539078673]
 script = ExtResource("11_gb15f")

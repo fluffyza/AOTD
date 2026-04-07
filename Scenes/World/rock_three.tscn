@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://gndcck5phme6"]
+
+[ext_resource type="PackedScene" uid="uid://crdm78w6lt5bc" path="res://Scripts/Models/World/Rocks3.glb" id="1_lhkao"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2apcq"]
+
+[node name="RockThree" type="Node3D" unique_id=1048672171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48923337, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1589103437]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=265119589]
+shape = SubResource("BoxShape3D_2apcq")
+
+[node name="Rocks3" parent="." unique_id=791879617 instance=ExtResource("1_lhkao")]

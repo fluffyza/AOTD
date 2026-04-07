@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://40vto3ecn446"]
+
+[ext_resource type="PackedScene" uid="uid://bgxvv5kw6rl60" path="res://Scripts/Models/World/GrassTile.glb" id="1_1qfc3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6d347"]
+
+[node name="GrassTile" type="Node3D" unique_id=479033987]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=428754089]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1869561567]
+shape = SubResource("BoxShape3D_6d347")
+
+[node name="GrassTile" parent="." unique_id=332459897 instance=ExtResource("1_1qfc3")]
+transform = Transform3D(0.5489181, 0, 0, 0, 1.4518325, 0, 0, 0, 0.5470465, 0, 0.27885365, 0)
