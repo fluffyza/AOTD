@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://crs0tko0kb6ie"]
+
+[ext_resource type="Script" uid="uid://dgxlfpmeboups" path="res://Scripts/Crafting/Structure/Stations/Chest.cs" id="1_a7080"]
+[ext_resource type="PackedScene" uid="uid://jtg4chxbk6md" path="res://Scripts/Models/chest.glb" id="2_4te67"]
+[ext_resource type="Script" uid="uid://63lyw4etirvf" path="res://Scripts/Utils/MeshHighlightController.cs" id="3_ikg72"]
+[ext_resource type="Script" uid="uid://c4pqndgbtjk0f" path="res://Scripts/Crafting/Structure/Processing/ProcessingContainer.cs" id="4_tqtpq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x6yry"]
+
+[node name="PlaceableChest" type="Node3D" unique_id=577872614]
+script = ExtResource("1_a7080")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1492998339]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1822982424]
+shape = SubResource("BoxShape3D_x6yry")
+
+[node name="MeshPivot" type="Node3D" parent="." unique_id=1796627]
+
+[node name="chest" parent="MeshPivot" unique_id=1275573574 instance=ExtResource("2_4te67")]
+
+[node name="MeshHighlightController" type="MeshInstance3D" parent="." unique_id=764186923]
+script = ExtResource("3_ikg72")
+
+[node name="ProcessingContainer" type="Node" parent="." unique_id=1489796557]
+script = ExtResource("4_tqtpq")
+StationType = "Campfire"

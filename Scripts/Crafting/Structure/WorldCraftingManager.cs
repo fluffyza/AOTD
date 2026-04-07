@@ -114,6 +114,28 @@ public partial class WorldCraftingManager : Node
 				{ "C", "campfire" }
 			}
 		});
+		
+		_recipes.Add(new WorldStructureRecipe
+		{
+			RecipeId = "chest_recipe",
+			OutputItemId = "chest",
+			OutputScene = GD.Load<PackedScene>("res://Scenes/Towers/placeable_chest.tscn"),
+			Layer0 = new Godot.Collections.Array<string>
+			{
+		        "WW"
+			},
+			Layer1 = new Godot.Collections.Array<string>
+			{
+		        "SS"
+			},
+			Layer2 = new Godot.Collections.Array<string>(),
+			KeyMap =  new Godot.Collections.Dictionary<string, string>
+			{
+				{ "W", "wood" },
+				{ "S", "stone" }
+			}
+		});
+		
 	}
 
 	public bool TryCraftAtAnchor(

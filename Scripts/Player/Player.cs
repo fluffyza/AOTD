@@ -292,6 +292,12 @@ public partial class Player : CharacterBody3D
 				Input.MouseMode = Input.MouseModeEnum.Visible;
 				return;
 			}
+			
+			if (current is Chest chest)
+			{
+				chest.Interact();
+				return;
+			}
 
 			current = current.GetParent();
 		}

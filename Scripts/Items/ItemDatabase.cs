@@ -47,7 +47,7 @@ public partial class ItemDatabase : Node
 		Register(new ItemDefinition("workbench", "Workbench", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_workbench.tscn"), false, false, null));
 		Register(new ItemDefinition("campfire", "Campfire", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_campfire.tscn"), false, false, null));
 		Register(new ItemDefinition("furnace", "Furnace", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_furnace.tscn"), false, false, null));
-
+		Register(new ItemDefinition("chest", "Chest", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_chest.tscn"), false, false, null));
 
 
 	}
