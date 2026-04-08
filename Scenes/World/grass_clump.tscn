@@ -20,7 +20,6 @@ lightmap_size_hint = Vector2i(7, 7)
 material = SubResource("StandardMaterial3D_777ej")
 
 [node name="GrassClump" type="Node3D" unique_id=1741968390]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06467044, 0)
 
 [node name="PlaneA" type="MeshInstance3D" parent="." unique_id=781780072]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2084133, 0)

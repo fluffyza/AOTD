@@ -147,11 +147,12 @@ public partial class WorldManager : Node
 
 				AddPlacedNode(cell, tile);
 				
-				Vector3 decorSpawnPos = tile.GlobalPosition;
-				
-				TrySpawnTree(decorSpawnPos, x, z);
-				TrySpawnGrass(decorSpawnPos, x, z);
-				TrySpawnRock(decorSpawnPos, x, z);
+				var decorAnchor = tile.GetNodeOrNull<Marker3D>("DecorAnchor");
+				Vector3 decorPos = decorAnchor != null ? decorAnchor.GlobalPosition : tile.GlobalPosition;
+
+				TrySpawnTree(decorPos, x, z);
+				TrySpawnGrass(decorPos, x, z);
+				TrySpawnRock(decorPos, x, z);
 			}
 		}
 	}
@@ -490,7 +491,7 @@ public partial class WorldManager : Node
 		float offsetZ = GD.Randf() * 0.6f - 0.3f;
 		float yaw = GD.Randf() * 360f;
 		float scale = GD.Randf() * 0.25f + 0.9f;
-		grass.GlobalPosition = worldPosition + new Vector3(offsetX, 0.6f, offsetZ);
+		grass.GlobalPosition = worldPosition + new Vector3(offsetX, .4f, offsetZ);
 		grass.RotationDegrees = new Vector3(0f, yaw, 0f);
 		grass.Scale = new Vector3(scale, scale, scale);
 	}
@@ -521,7 +522,7 @@ public partial class WorldManager : Node
 		float yaw = GD.Randf() * 360f;
 		float scale = GD.Randf() * 0.3f + 0.85f;
 		
-		rock.GlobalPosition = worldPosition + new Vector3(offsetX, 0.35f, offsetZ);
+		rock.GlobalPosition = worldPosition + new Vector3(offsetX, 0.5f, offsetZ);
 		rock.RotationDegrees = new Vector3(0f, yaw, 0f);
 		rock.Scale = new Vector3(scale, scale, scale);
 	}

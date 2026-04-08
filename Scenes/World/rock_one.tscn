@@ -5,7 +5,6 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_kof5d"]
 
 [node name="RockOne" type="Node3D" unique_id=1472580682]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49159384, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=398488642]
 
