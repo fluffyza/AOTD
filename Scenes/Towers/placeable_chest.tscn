@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://crs0tko0kb6ie"]
 
 [ext_resource type="Script" uid="uid://dgxlfpmeboups" path="res://Scripts/Crafting/Structure/Stations/Chest.cs" id="1_a7080"]
-[ext_resource type="PackedScene" uid="uid://jtg4chxbk6md" path="res://Scripts/Models/chest.glb" id="2_4te67"]
+[ext_resource type="PackedScene" uid="uid://jtg4chxbk6md" path="res://Models/chest.glb" id="2_4te67"]
 [ext_resource type="Script" uid="uid://63lyw4etirvf" path="res://Scripts/Utils/MeshHighlightController.cs" id="3_ikg72"]
 [ext_resource type="Script" uid="uid://c4pqndgbtjk0f" path="res://Scripts/Crafting/Structure/Processing/ProcessingContainer.cs" id="4_tqtpq"]
 

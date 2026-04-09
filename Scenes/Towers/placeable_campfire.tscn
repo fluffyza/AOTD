@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b511esw4lc8sq"]
 
 [ext_resource type="Script" uid="uid://c1gaqhs2aa6lf" path="res://Scripts/Crafting/Structure/Stations/Campfire.cs" id="1_15v8g"]
-[ext_resource type="PackedScene" uid="uid://dayjre1to675k" path="res://Scripts/Models/campfire+3d+model.glb" id="1_605i7"]
+[ext_resource type="PackedScene" uid="uid://dayjre1to675k" path="res://Models/campfire+3d+model.glb" id="1_605i7"]
 [ext_resource type="Script" uid="uid://63lyw4etirvf" path="res://Scripts/Utils/MeshHighlightController.cs" id="2_iekog"]
 [ext_resource type="Script" uid="uid://c4pqndgbtjk0f" path="res://Scripts/Crafting/Structure/Processing/ProcessingContainer.cs" id="4_421gk"]
 

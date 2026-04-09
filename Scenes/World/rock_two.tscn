@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b4cnngdqr14jl"]
 
-[ext_resource type="PackedScene" uid="uid://dpwhn6xscgwfa" path="res://Scripts/Models/World/Rocks2.glb" id="1_jkn2j"]
+[ext_resource type="PackedScene" uid="uid://dpwhn6xscgwfa" path="res://Models/World/Rocks2.glb" id="1_jkn2j"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yd38c"]
 

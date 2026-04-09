@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://40vto3ecn446"]
 
-[ext_resource type="PackedScene" uid="uid://bgxvv5kw6rl60" path="res://Scripts/Models/World/GrassTileFirst.glb" id="1_1qfc3"]
-[ext_resource type="PackedScene" uid="uid://bhw53b5kr3em4" path="res://Scripts/Models/World/GrassTile.glb" id="2_6d347"]
+[ext_resource type="PackedScene" uid="uid://bgxvv5kw6rl60" path="res://Models/World/GrassTileFirst.glb" id="1_1qfc3"]
+[ext_resource type="PackedScene" uid="uid://bhw53b5kr3em4" path="res://Models/World/GrassTile.glb" id="2_6d347"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6d347"]
 

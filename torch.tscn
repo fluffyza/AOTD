@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cf02bt86p5je3"]
 
-[ext_resource type="PackedScene" uid="uid://c3vvmxpis0weq" path="res://Scripts/Models/medieval+torch+3d+model.glb" id="1_pa17o"]
-[ext_resource type="Script" uid="uid://hhpo55el2sc0" path="res://Placeables/TorchFlicker.cs" id="1_s1444"]
+[ext_resource type="PackedScene" uid="uid://c3vvmxpis0weq" path="res://Models/medieval+torch+3d+model.glb" id="1_pa17o"]
+[ext_resource type="Script" uid="uid://hhpo55el2sc0" path="res://Scripts/Placeables/TorchFlicker.cs" id="1_s1444"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_5w7kb"]
 
@@ -56,7 +56,7 @@ transform = Transform3D(0.2, 0, 0, 0, 1, 0, 0, 0, 0.2, 0, 0, 0)
 visible = false
 shape = SubResource("CylinderShape3D_pa17o")
 
-[node name="medieval+torch+3d+model" parent="." unique_id=448246032 instance=ExtResource("1_pa17o")]
+[node name="medieval+torch+3d+model" parent="." unique_id=1123712415 instance=ExtResource("1_pa17o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0274882, 0)
 
 [node name="TorchSmoke" type="GPUParticles3D" parent="." unique_id=796152915]

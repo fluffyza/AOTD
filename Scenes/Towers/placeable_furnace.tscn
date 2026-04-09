@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bi3uwlcqx230c"]
 
-[ext_resource type="PackedScene" uid="uid://b4ji7044i0opo" path="res://Scripts/Models/stone kiln 3d model.glb" id="1_7v8u5"]
+[ext_resource type="PackedScene" uid="uid://b4ji7044i0opo" path="res://Models/stone kiln 3d model.glb" id="1_7v8u5"]
 [ext_resource type="Script" uid="uid://bpfoa0utrgmns" path="res://Scripts/Crafting/Structure/Stations/Furnace.cs" id="1_7y7vv"]
 [ext_resource type="Script" uid="uid://63lyw4etirvf" path="res://Scripts/Utils/MeshHighlightController.cs" id="2_t0abu"]
 [ext_resource type="Script" uid="uid://c4pqndgbtjk0f" path="res://Scripts/Crafting/Structure/Processing/ProcessingContainer.cs" id="4_rk7ba"]
