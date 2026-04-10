@@ -8,7 +8,7 @@ public partial class WorldViewTexture : TextureRect
 	{
 		MouseFilter = MouseFilterEnum.Ignore;
 
-		var viewport = GetNodeOrNull<SubViewport>(SubViewportPath);
+		var viewport = GetNodeOrNull<SubViewport>("SubViewportPath");
 		if (viewport == null)
 		{
 			GD.PrintErr("WorldViewTexture: SubViewport not found.");

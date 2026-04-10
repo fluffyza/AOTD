@@ -9,6 +9,13 @@ uniform bool enable_dithering = true;
 uniform float dither_strength : hint_range(0.0, 1.0) = 0.65;
 uniform float band_steps : hint_range(2.0, 16.0) = 6.0;
 
+uniform bool enable_screen_wobble = false;
+uniform float wobble_strength : hint_range(0.0, 0.02) = 0.0025;
+uniform float wobble_speed : hint_range(0.1, 20.0) = 4.0;
+
+uniform bool enable_screen_jitter = false;
+uniform float jitter_strength : hint_range(0.0, 5.0) = 1.0;
+
 //uniform bool enable_fog = true;
 //uniform vec3 fog_color : source_color = vec3(0.72, 0.76, 0.78);
 //uniform float fog_strength : hint_range(0.0, 1.0) = 0.35;
@@ -46,6 +53,18 @@ float bayer4x4(vec2 position) {
 
 void fragment() {
 	vec2 uv = SCREEN_UV;
+
+	if (enable_screen_wobble) {
+		uv.x += sin(uv.y * 12.0 + TIME * wobble_speed) * wobble_strength;
+		uv.y += cos(uv.x * 10.0 + TIME * wobble_speed * 0.8) * wobble_strength * 0.5;
+	}
+
+	if (enable_screen_jitter) {
+		vec2 pixel_size = SCREEN_PIXEL_SIZE;
+		float jitter_x = (fract(sin(TIME * 37.0) * 43758.5453) - 0.5) * jitter_strength;
+		float jitter_y = (fract(cos(TIME * 29.0) * 24634.6345) - 0.5) * jitter_strength;
+		uv += vec2(jitter_x * pixel_size.x, jitter_y * pixel_size.y);
+	}
 	vec3 final_color = texture(screen_texture, uv).rgb;
 
 	//if (enable_fog) {
