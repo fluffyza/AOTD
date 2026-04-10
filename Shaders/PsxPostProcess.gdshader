@@ -7,7 +7,7 @@ uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_n
 uniform bool enable_fog = true;
 uniform vec3 fog_color : source_color = vec3(0.72, 0.82, 0.82);
 uniform vec3 noise_color : source_color = vec3(0.12, 0.14, 0.18);
-uniform float fog_distance : hint_range(1.0, 6000.0) = 15.0;
+uniform float fog_distance : hint_range(1.0, 6000.0) = 2.0;
 uniform float fog_fade_range : hint_range(1.0, 6000.0) = 10.0;
 
 uniform bool enable_noise = true;
@@ -80,7 +80,7 @@ void fragment() {
 	//fog_factor = pow(fog_factor, 1.5);
 //
 	//float depth_mask_inv = fog_factor;
-	
+	//
 	
 	
 
