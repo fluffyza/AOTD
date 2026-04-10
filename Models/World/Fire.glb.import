@@ -3,18 +3,18 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cvqwyx1rqpx7x"
-path="res://.godot/imported/GrassTile.glb-9bd0d06f4885748145f9e08ca047da44.scn"
+uid="uid://st4m5u158jr4"
+path="res://.godot/imported/Fire.glb-0be0725408e300df7e911f63bb2e90ae.scn"
 
 [deps]
 
-source_file="res://Models/World/GrassTile.glb"
-dest_files=["res://.godot/imported/GrassTile.glb-9bd0d06f4885748145f9e08ca047da44.scn"]
+source_file="res://Models/World/Fire.glb"
+dest_files=["res://.godot/imported/Fire.glb-0be0725408e300df7e911f63bb2e90ae.scn"]
 
 [params]
 
 nodes/root_type=""
-nodes/root_name="GraddTileaaaa"
+nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true
 nodes/root_scale=1.0

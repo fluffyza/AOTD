@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://40vto3ecn446"]
 
 [ext_resource type="PackedScene" uid="uid://bgxvv5kw6rl60" path="res://Models/World/GrassTileFirst.glb" id="1_1qfc3"]
-[ext_resource type="PackedScene" uid="uid://bhw53b5kr3em4" path="res://Models/World/GrassTile.glb" id="2_6d347"]
+[ext_resource type="PackedScene" uid="uid://cvqwyx1rqpx7x" path="res://Models/World/GrassTile.glb" id="2_6d347"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6d347"]
 
@@ -19,5 +19,5 @@ visible = false
 [node name="DecorAnchor" type="Marker3D" parent="." unique_id=1359316239]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51786584, 0)
 
-[node name="GrassTile2" parent="." unique_id=397749947 instance=ExtResource("2_6d347")]
+[node name="GrassTile2" parent="." unique_id=648748043 instance=ExtResource("2_6d347")]
 transform = Transform3D(0.549, 0, 0, 0, 1.452, 0, 0, 0, 0.547, 0, 0.279, 0)

@@ -92,10 +92,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+stretch = true
+stretch_shrink = 2
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=86638585]
 handle_input_locally = false
-size = Vector2i(1152, 648)
+size = Vector2i(576, 324)
 render_target_update_mode = 4
 
 [node name="WorldRoot" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=2139506528]
@@ -200,15 +202,6 @@ PlayerPath = NodePath("../Player (CharacterBody3D)")
 WindGustScene = ExtResource("17_hhcpw")
 
 [node name="WorldCraftPreview" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=731278336 instance=ExtResource("18_mxvw5")]
-
-[node name="PostProcessReact" type="ColorRect" parent="." unique_id=115338203]
-material = SubResource("ShaderMaterial_oye8v")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=354118164]
 
@@ -334,3 +327,15 @@ InputSlotCount = 9
 
 [node name="BackpackCraftingContainer" type="Node" parent="CanvasLayer/BackpackUI (Control)" unique_id=998710843]
 script = ExtResource("23_y1tbi")
+
+[node name="FinalPostprocessLayer" type="CanvasLayer" parent="." unique_id=393387350]
+layer = 3
+
+[node name="PostProcessReact" type="ColorRect" parent="FinalPostprocessLayer" unique_id=115338203]
+material = SubResource("ShaderMaterial_oye8v")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

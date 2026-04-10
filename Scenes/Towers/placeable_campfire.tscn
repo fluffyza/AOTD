@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c1gaqhs2aa6lf" path="res://Scripts/Crafting/Structure/Stations/Campfire.cs" id="1_15v8g"]
 [ext_resource type="PackedScene" uid="uid://dayjre1to675k" path="res://Models/campfire+3d+model.glb" id="1_605i7"]
 [ext_resource type="Script" uid="uid://63lyw4etirvf" path="res://Scripts/Utils/MeshHighlightController.cs" id="2_iekog"]
+[ext_resource type="PackedScene" uid="uid://st4m5u158jr4" path="res://Models/World/Fire.glb" id="3_2t41o"]
 [ext_resource type="Script" uid="uid://c4pqndgbtjk0f" path="res://Scripts/Crafting/Structure/Processing/ProcessingContainer.cs" id="4_421gk"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_iekog"]
@@ -20,6 +21,9 @@ shape = SubResource("BoxShape3D_iekog")
 
 [node name="campfire+3d+model" parent="MeshPivot" unique_id=1381191265 instance=ExtResource("1_605i7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5280232, 0)
+visible = false
+
+[node name="Fire" parent="MeshPivot" unique_id=566665758 instance=ExtResource("3_2t41o")]
 
 [node name="MeshHighlightController" type="MeshInstance3D" parent="." unique_id=2088826500]
 script = ExtResource("2_iekog")

@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p7mk7s0e665i"
-path.s3tc="res://.godot/imported/GrassTile_text2.png-80bef875a8d651325d7153d48c5f4899.s3tc.ctex"
+uid="uid://gjts0g86anfa"
+path.s3tc="res://.godot/imported/Fire_Image_1.png-666fe1e9754a7f7e2a4f167c8584ee7e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "cbf278042d76def234c01244ec1516fa"
+"md5": "8204356a7703930bc5527053698d3334"
 }
 
 [deps]
 
-source_file="res://Models/World/GrassTile_text2.png"
-dest_files=["res://.godot/imported/GrassTile_text2.png-80bef875a8d651325d7153d48c5f4899.s3tc.ctex"]
+source_file="res://Models/World/Fire_Image_1.png"
+dest_files=["res://.godot/imported/Fire_Image_1.png-666fe1e9754a7f7e2a4f167c8584ee7e.s3tc.ctex"]
 
 [params]
 
@@ -29,8 +29,8 @@ compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=8
+roughness/src_normal="res://Scenes/Towers/Fire_Image_2.png"
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2
