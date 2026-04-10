@@ -37,19 +37,16 @@ radius = 0.4
 height = 1.9
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_40n85"]
-render_priority = 0
 shader = ExtResource("7_oye8v")
-shader_parameter/enable_fog = true
-shader_parameter/fog_color = Color(0.72, 0.82, 0.82, 1)
-shader_parameter/noise_color = Color(0.12, 0.14, 0.18, 1)
-shader_parameter/fog_distance = 35.0
-shader_parameter/fog_fade_range = 20.0
-shader_parameter/enable_noise = true
-shader_parameter/noise_time_fac = 4.0
 shader_parameter/enable_color_limitation = true
 shader_parameter/color_levels = 32
 shader_parameter/enable_dithering = true
 shader_parameter/dither_strength = 0.3
+shader_parameter/band_steps = 6.0
+shader_parameter/enable_noise = true
+shader_parameter/noise_color = Color(0.12, 0.14, 0.18, 1)
+shader_parameter/noise_strength = 0.12
+shader_parameter/noise_time_fac = 4.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_5mvff"]
 size = Vector2(2, 2)
@@ -65,19 +62,45 @@ fog_enabled = true
 fog_light_energy = 0.05
 fog_density = 0.0615
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oye8v"]
+shader = ExtResource("7_oye8v")
+shader_parameter/enable_color_limitation = true
+shader_parameter/color_levels = 20
+shader_parameter/enable_dithering = true
+shader_parameter/dither_strength = 0.65
+shader_parameter/band_steps = 6.0
+shader_parameter/enable_noise = true
+shader_parameter/noise_color = Color(0.18, 0.2, 0.24, 1)
+shader_parameter/noise_strength = 0.12
+shader_parameter/noise_time_fac = 4.0
+
 [node name="Main" type="Node3D" unique_id=1253849847]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1325688476]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=357134454]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=86638585]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="WorldRoot" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=2139506528]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=1325688476]
 visible = false
 light_energy = 0.208
 
-[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="." unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight")]
+[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023540735, 0)
 script = ExtResource("1_bg4s2")
-_handRoot = NodePath("../CanvasLayer/HandRoot")
-_handsLeftUi = NodePath("../CanvasLayer/HandRoot/LeftHand")
-_handsRightUi = NodePath("../CanvasLayer/HandRoot/RightHand")
-_pickaxeHandUi = NodePath("../CanvasLayer/HandRoot/PickaxeHand")
+_handRoot = NodePath("../../../../CanvasLayer/HandRoot")
+_handsLeftUi = NodePath("../../../../CanvasLayer/HandRoot/LeftHand")
+_handsRightUi = NodePath("../../../../CanvasLayer/HandRoot/RightHand")
+_pickaxeHandUi = NodePath("../../../../CanvasLayer/HandRoot/PickaxeHand")
 _heldItemRoot = NodePath("Head/Camera3D/HeldItemRoot")
 _heldTorchRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldTorchRoot")
 _heldBlockRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldBlockRoot")
@@ -86,49 +109,52 @@ WorldCraftPreviewScene = ExtResource("18_mxvw5")
 PlacementPreviewScene = ExtResource("2_hhcpw")
 BlockOutlineScene = ExtResource("3_mxvw5")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player (CharacterBody3D)" unique_id=691915729]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=691915729]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_noarx")
 
-[node name="Head" type="Node3D" parent="Player (CharacterBody3D)" unique_id=319576049]
+[node name="Head" type="Node3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=319576049]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Player (CharacterBody3D)/Head" unique_id=1284740424]
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)/Head" unique_id=1284740424]
+current = true
 
-[node name="HeldItemRoot" type="Node3D" parent="Player (CharacterBody3D)/Head/Camera3D" unique_id=1937382226]
+[node name="HeldItemRoot" type="Node3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)/Head/Camera3D" unique_id=1937382226]
 
-[node name="HeldBlockRoot" type="Node3D" parent="Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot" unique_id=898209147]
+[node name="HeldBlockRoot" type="Node3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot" unique_id=898209147]
 
-[node name="PlaceableBlock" parent="Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot/HeldBlockRoot" unique_id=1789745689 instance=ExtResource("4_xrxkg")]
+[node name="PlaceableBlock" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot/HeldBlockRoot" unique_id=1789745689 instance=ExtResource("4_xrxkg")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.6916306, -0.6489279, -0.94659936)
 
-[node name="HeldTorchRoot" type="Node3D" parent="Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot" unique_id=1986077642]
+[node name="HeldTorchRoot" type="Node3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot" unique_id=1986077642]
 
-[node name="Torch" parent="Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot/HeldTorchRoot" unique_id=522898448 instance=ExtResource("5_sqvbp")]
+[node name="Torch" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)/Head/Camera3D/HeldItemRoot/HeldTorchRoot" unique_id=522898448 instance=ExtResource("5_sqvbp")]
 transform = Transform3D(0.47281608, -0.15569067, -0.046961315, 0.16261904, 0.45267183, 0.13654038, 0, -0.14439058, 0.47869757, 0.4365815, -0.13335991, -0.6622163)
 
-[node name="HeldTorchLight" type="OmniLight3D" parent="Player (CharacterBody3D)/Head/Camera3D" unique_id=267396881]
+[node name="HeldTorchLight" type="OmniLight3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)/Head/Camera3D" unique_id=267396881]
+process_priority = 1
 
-[node name="PsxPostProcessQuad" type="MeshInstance3D" parent="Player (CharacterBody3D)/Head/Camera3D" unique_id=296576583]
+[node name="PsxPostProcessQuad" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)/Head/Camera3D" unique_id=296576583]
+visible = false
 material_override = SubResource("ShaderMaterial_40n85")
 cast_shadow = 0
 extra_cull_margin = 157.83
 mesh = SubResource("QuadMesh_5mvff")
 
-[node name="Inventory" type="Node3D" parent="Player (CharacterBody3D)" unique_id=1389988037]
+[node name="Inventory" type="Node3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=1389988037]
 script = ExtResource("6_hri7i")
 
-[node name="BlockManager" type="Node" parent="Player (CharacterBody3D)" unique_id=1367533013]
+[node name="BlockManager" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=1367533013]
 script = ExtResource("7_w3rk5")
 BlockScene = ExtResource("4_xrxkg")
 TorchScene = ExtResource("5_sqvbp")
 
-[node name="MineManager" type="Node" parent="Player (CharacterBody3D)" unique_id=677754771]
+[node name="MineManager" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=677754771]
 script = ExtResource("8_5mvff")
 WorldManagerPath = NodePath("../WorldManager")
 BlockManagerPath = NodePath("../BlockManager")
 
-[node name="WorldManager" type="Node" parent="Player (CharacterBody3D)" unique_id=2082777558]
+[node name="WorldManager" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=2082777558]
 script = ExtResource("9_oye8v")
 BlockManagerPath = NodePath("../BlockManager")
 TreeScene = ExtResource("10_40n85")
@@ -138,32 +164,41 @@ RockTwoScene = ExtResource("14_40n85")
 RockThreeScene = ExtResource("15_gb15f")
 GrassTileScene = ExtResource("12_xrxkg")
 
-[node name="PlayerMovement" type="Node" parent="Player (CharacterBody3D)" unique_id=1539078673]
+[node name="PlayerMovement" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=1539078673]
 script = ExtResource("11_gb15f")
 
-[node name="PlayerLook" type="Node" parent="Player (CharacterBody3D)" unique_id=1699113708]
+[node name="PlayerLook" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=1699113708]
 script = ExtResource("12_sph85")
 HeadPath = NodePath("../Head")
 
-[node name="GameBootstrap" type="Node" parent="Player (CharacterBody3D)" unique_id=667494911]
+[node name="GameBootstrap" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=667494911]
 script = ExtResource("13_o7g6l")
 
-[node name="BlockTargetting" type="Node" parent="Player (CharacterBody3D)" unique_id=346760064]
+[node name="BlockTargetting" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=346760064]
 script = ExtResource("14_vi5kq")
 CameraPath = NodePath("../Head/Camera3D")
 
-[node name="WorldCraftingManager" type="Node" parent="Player (CharacterBody3D)" unique_id=1520499744]
+[node name="WorldCraftingManager" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=1520499744]
 script = ExtResource("15_5mkgo")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1498523069]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=1498523069]
 environment = SubResource("Environment_a202f")
 
-[node name="WindManager" type="Node3D" parent="." unique_id=1639072271]
+[node name="WindManager" type="Node3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=1639072271]
 script = ExtResource("16_3ccbu")
 PlayerPath = NodePath("../Player (CharacterBody3D)")
 WindGustScene = ExtResource("17_hhcpw")
 
-[node name="WorldCraftPreview" parent="." unique_id=731278336 instance=ExtResource("18_mxvw5")]
+[node name="WorldCraftPreview" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=731278336 instance=ExtResource("18_mxvw5")]
+
+[node name="PostProcessReact" type="ColorRect" parent="." unique_id=115338203]
+material = SubResource("ShaderMaterial_oye8v")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=354118164]
 
@@ -173,6 +208,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="+" type="Label" parent="CanvasLayer/CenterContainer" unique_id=1196079008]
 layout_mode = 2
@@ -187,6 +223,7 @@ offset_right = 596.0
 offset_bottom = 648.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="LeftHand" type="TextureRect" parent="CanvasLayer/HandRoot" unique_id=2026448271]
 layout_mode = 1
@@ -265,6 +302,7 @@ mouse_filter = 2
 
 [node name="BackpackUI (Control)" parent="CanvasLayer" unique_id=490715253 instance=ExtResource("22_v8qla")]
 visible = false
+mouse_filter = 2
 BackpackCraftingContainerPath = NodePath("BackpackCraftingContainer")
 WorkbenchCraftingPanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel")
 WorkbenchCraftingGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid")

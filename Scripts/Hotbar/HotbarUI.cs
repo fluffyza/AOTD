@@ -9,7 +9,7 @@ public partial class HotbarUI : Control
 	private HBoxContainer _container;
 	private List<HotbarSlot> _slotUis = new();
 	private readonly Dictionary<string, Texture2D> _itemIcons = new();
-	
+
 	private void LoadItemIcons()
 	{
 		_itemIcons["acorn"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-ACORN.png");
@@ -21,7 +21,7 @@ public partial class HotbarUI : Control
 		_itemIcons["torch"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-TORCH.png");
 		_itemIcons["pickaxe"] = GD.Load<Texture2D>("res://Materials/Backpack/Equip/ICON-PICKAXE.png");
 	}
-	
+
 	private Texture2D GetItemIcon(string itemId)
 	{
 		if (string.IsNullOrWhiteSpace(itemId))
@@ -39,14 +39,26 @@ public partial class HotbarUI : Control
 
 		_container = GetNode<HBoxContainer>("MarginContainer/HBoxContainer");
 
-		var player = GetTree().CurrentScene.GetNode<Player>("Player (CharacterBody3D)");
-		_inventory = player.GetNode<Inventory>("Inventory");
+		Node root = GetTree().Root;
+		Player player = root.FindChild("Player (CharacterBody3D)", true, false) as Player;
+
+		if (player == null)
+		{
+			GD.PrintErr("HotbarUI: Could not find Player anywhere in the scene tree.");
+			return;
+		}
+
+		_inventory = player.GetNodeOrNull<Inventory>("Inventory");
+
+		if (_inventory == null)
+		{
+			GD.PrintErr("HotbarUI: Could not find Inventory under Player.");
+			return;
+		}
 
 		BuildSlots();
-		
-		if (_inventory != null)
-			_inventory.InventoryChanged += Refresh;
 
+		_inventory.InventoryChanged += Refresh;
 		Refresh();
 	}
 

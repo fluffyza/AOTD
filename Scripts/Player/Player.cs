@@ -76,7 +76,7 @@ public partial class Player : CharacterBody3D
 		GetTree().CurrentScene.CallDeferred("add_child", _worldCraftPreview);
 		_worldCraftPreview.Visible = false;
 		
-		_backpackUi = GetNode<BackpackUI>("../CanvasLayer/BackpackUI (Control)");
+		_backpackUi = GetNode<BackpackUI>("../../../../CanvasLayer/BackpackUI (Control)");
 		_backpackUi.Initialize(_inventory);
 
 		_inventory.AddItem("stone", 32);
