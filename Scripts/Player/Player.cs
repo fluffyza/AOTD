@@ -39,6 +39,18 @@ public partial class Player : CharacterBody3D
 	[Export] public Node3D _heldBlockRoot;
 	[Export] public OmniLight3D _heldTorchLight;
 	
+	private bool _isHeldItemHitting = false;
+	private bool _isHeldItemHeld = false;
+	private bool _heldItemHitApplied = false;
+	private float _heldItemHitTimer = 0f;
+	private bool _pendingHeldItemVisualRefresh = false;
+	
+
+	[Export] public float HeldItemHitDuration = 0.18f;
+	[Export] public float HeldItemHitReturnDuration = 0.12f;
+	[Export] public Vector3 HeldItemHitPositionOffset = new Vector3(0.08f, -0.08f, -0.10f);
+	[Export] public Vector3 HeldItemHitRotationOffsetDegrees = new Vector3(-18f, 12f, 8f);
+	
 	[Export] public FistPunch _fistPunchController;
 	private bool _pendingHeldVisualRefresh = false;
 	
@@ -109,8 +121,15 @@ public partial class Player : CharacterBody3D
 			
 		if (_fistPunchController != null)
 			_fistPunchController.PunchImpact += OnFistPunchImpact;
-		
-		UpdateHeldVisual();
+			
+		if (_isHeldItemHitting)
+		{
+			_pendingHeldItemVisualRefresh = true;
+		}
+		else
+		{
+			UpdateHeldVisual();
+		}
 	}
 	
 	private void OnFistPunchImpact()
@@ -200,9 +219,26 @@ public partial class Player : CharacterBody3D
 					_fistPunchController?.StartPunch();
 					return;
 				}
+				if (IsUsing3DHeldItem())
+				{
+					_isHeldItemHeld = true;
+
+					if (!_isHeldItemHitting)
+						StartHeldItemHit();
+
+					return;
+				}
 
 				TryRemoveItem();
-				UpdateHeldVisual();
+				
+				if (_isHeldItemHitting)
+				{
+					_pendingHeldItemVisualRefresh = true;
+				}
+				else
+				{
+					UpdateHeldVisual();
+				}
 				return;
 			}
 			else
@@ -210,6 +246,12 @@ public partial class Player : CharacterBody3D
 				if (IsEmptyHanded())
 				{
 					_fistPunchController?.SetHeld(false);
+					return;
+				}
+				
+				if (IsUsing3DHeldItem())
+				{
+					_isHeldItemHeld = false;
 					return;
 				}
 			}
@@ -424,14 +466,21 @@ public partial class Player : CharacterBody3D
 			(_fistPunchController == null || !_fistPunchController.IsPunching))
 		{
 			_pendingHeldVisualRefresh = false;
-			UpdateHeldVisual();
+			
+			if (_isHeldItemHitting)
+			{
+				_pendingHeldItemVisualRefresh = true;
+			}
+			else
+			{
+				UpdateHeldVisual();
+			}
 		}
 		
 		UpdateWorldCraftPreview();
-		
 		UpdateFakeHandLighting(delta);
-		
 		UpdateHandsViewmodel(delta);
+		UpdateHeldItemHitAnimation(delta);
 	}
 	
 	private void UpdateWorldCraftPreview()
@@ -454,12 +503,9 @@ public partial class Player : CharacterBody3D
 			_worldCraftPreview.HidePreview();
 		}
 	}
-
+	
 	private void TryPlaceItem()
 	{
-		if (!_targetting.HasValidPlacementTarget)
-			return;
-
 		var selectedSlot = _inventory.GetSelectedSlot();
 		if (selectedSlot == null || selectedSlot.IsEmpty)
 		{
@@ -467,16 +513,31 @@ public partial class Player : CharacterBody3D
 			return;
 		}
 
-		bool placed = _worldManager.TryPlaceInventoryItem(_targetting.TargetCell, selectedSlot.Item.ItemId);
-		if (!placed)
+		Vector3I placementCell = _targetting.TargetCell;
+
+		if (_targetting.IsLookingAtPlacedItem &&
+			_worldManager.TryGetBlock(_targetting.LookedAtCell, out Node3D lookedAtBlock) &&
+			lookedAtBlock != null &&
+			lookedAtBlock.HasMeta("is_ground_tile") &&
+			(bool)lookedAtBlock.GetMeta("is_ground_tile"))
 		{
-			GD.Print("Cell occupied or item could not be placed.");
+			placementCell = _targetting.LookedAtCell + Vector3I.Up;
+		}
+		else if (!_targetting.HasValidPlacementTarget)
+		{
 			return;
 		}
-		
+
 		if (selectedSlot.Item.ItemId == "acorn")
 		{
 			GD.Print("You can't place the acorn yet.");
+			return;
+		}
+
+		bool placed = _worldManager.TryPlaceInventoryItem(placementCell, selectedSlot.Item.ItemId);
+		if (!placed)
+		{
+			GD.Print("Cell occupied or item could not be placed.");
 			return;
 		}
 
@@ -507,7 +568,14 @@ public partial class Player : CharacterBody3D
 				}
 				else
 				{
-					UpdateHeldVisual();
+					if (_isHeldItemHitting)
+					{
+						_pendingHeldItemVisualRefresh = true;
+					}
+					else
+					{
+						UpdateHeldVisual();
+					}
 				}
 
 				return;
@@ -553,7 +621,14 @@ public partial class Player : CharacterBody3D
 		}
 		else
 		{
-			UpdateHeldVisual();
+			if (_isHeldItemHitting)
+			{
+				_pendingHeldItemVisualRefresh = true;
+			}
+			else
+			{
+				UpdateHeldVisual();
+			}
 		}
 
 		GD.Print($"Picked up: {itemId}");;
@@ -575,14 +650,31 @@ public partial class Player : CharacterBody3D
 	private void SelectHotbarSlot(int index)
 	{
 		_inventory.SelectSlot(index);
-		UpdateHeldVisual();
+		
+		if (_isHeldItemHitting)
+		{
+			_pendingHeldItemVisualRefresh = true;
+		}
+		else
+		{
+			UpdateHeldVisual();
+		}
 		GD.Print($"Selected slot {index + 1}: {_inventory.GetSelectedSlotLabel()}");
 	}
 
 	private void CycleHotbar(int direction)
 	{
 		_inventory.CycleSelection(direction);
-		UpdateHeldVisual();
+		
+		if (_isHeldItemHitting)
+		{
+			_pendingHeldItemVisualRefresh = true;
+		}
+		else
+		{
+			UpdateHeldVisual();
+		}
+		
 		GD.Print($"Selected slot {_inventory.SelectedIndex + 1}: {_inventory.GetSelectedSlotLabel()}");
 	}
 	
@@ -622,6 +714,11 @@ public partial class Player : CharacterBody3D
 	
 	private void HideAllHeldVisuals()
 	{
+		_isHeldItemHitting = false;
+		_isHeldItemHeld = false;
+		_heldItemHitApplied = false;
+		_heldItemHitTimer = 0f;
+
 		if (_handsLeftUi != null)
 			_handsLeftUi.Visible = false;
 
@@ -844,5 +941,116 @@ public partial class Player : CharacterBody3D
 
 		return false;
 	}
+	
+	private bool IsUsing3DHeldItem()
+	{
+		return (_heldTorchRoot != null && _heldTorchRoot.Visible) ||
+			   (_heldBlockRoot != null && _heldBlockRoot.Visible);
+	}
+	
+	private void StartHeldItemHit()
+	{
+		if (_isHeldItemHitting)
+			return;
+
+		if (!IsUsing3DHeldItem())
+			return;
+
+		_isHeldItemHitting = true;
+		_heldItemHitApplied = false;
+		_heldItemHitTimer = 0f;
+	}
+	
+	private void UpdateHeldItemHitAnimation(double delta)
+	{
+		if (_heldItemRoot == null || !IsUsing3DHeldItem())
+			return;
+
+		if (!_isHeldItemHitting)
+			return;
+
+		_heldItemHitTimer += (float)delta;
+
+		float totalDuration = HeldItemHitDuration + HeldItemHitReturnDuration;
+
+		Vector3 hitOffset = Vector3.Zero;
+		Vector3 hitRotation = Vector3.Zero;
+
+		if (_heldItemHitTimer <= HeldItemHitDuration)
+		{
+			float forwardT = _heldItemHitTimer / HeldItemHitDuration;
+			float eased = 1f - Mathf.Pow(1f - forwardT, 3f);
+
+			hitOffset = HeldItemHitPositionOffset * eased;
+			hitRotation = new Vector3(
+				Mathf.DegToRad(HeldItemHitRotationOffsetDegrees.X),
+				Mathf.DegToRad(HeldItemHitRotationOffsetDegrees.Y),
+				Mathf.DegToRad(HeldItemHitRotationOffsetDegrees.Z)
+			) * eased;
+
+			// Apply one hit near the end of the forward motion
+			if (!_heldItemHitApplied && forwardT >= 0.85f)
+			{
+				_heldItemHitApplied = true;
+				TryRemoveItem();
+			}
+		}
+		else
+		{
+			float returnT = (_heldItemHitTimer - HeldItemHitDuration) / HeldItemHitReturnDuration;
+			returnT = Mathf.Clamp(returnT, 0f, 1f);
+
+			float eased = 1f - returnT;
+
+			hitOffset = HeldItemHitPositionOffset * eased;
+			hitRotation = new Vector3(
+				Mathf.DegToRad(HeldItemHitRotationOffsetDegrees.X),
+				Mathf.DegToRad(HeldItemHitRotationOffsetDegrees.Y),
+				Mathf.DegToRad(HeldItemHitRotationOffsetDegrees.Z)
+			) * eased;
+		}
+
+		_heldItemRoot.Position += hitOffset;
+		_heldItemRoot.Rotation += hitRotation;
+
+		if (_heldItemHitTimer >= totalDuration)
+		{
+			_isHeldItemHitting = false;
+			_heldItemHitTimer = 0f;
+			_heldItemHitApplied = false;
+
+			if (_pendingHeldItemVisualRefresh)
+			{
+				_pendingHeldItemVisualRefresh = false;
+
+				// Only refresh if the selected held visual actually changed.
+				// If you're still holding the same item, don't kill the hold loop.
+				bool selectedSlotStillSameVisual = !IsEmptyHanded();
+
+				if (selectedSlotStillSameVisual)
+				{
+					if (_isHeldItemHeld && IsUsing3DHeldItem())
+						StartHeldItemHit();
+
+					return;
+				}
+				
+				if (_isHeldItemHitting)
+				{
+					_pendingHeldItemVisualRefresh = true;
+				}
+				else
+				{
+					UpdateHeldVisual();
+				}
+				
+				return;
+			}
+
+			if (_isHeldItemHeld && IsUsing3DHeldItem())
+				StartHeldItemHit();
+		}
+	}
+
 	
 }

@@ -145,6 +145,9 @@ public partial class WorldManager : Node
 				tile.Position = worldPos + new Vector3(0, heightOffset, 0);
 				tile.RotationDegrees = new Vector3(tiltX, 0, tiltZ);
 
+				tile.SetMeta("unbreakable", true);
+				tile.SetMeta("is_ground_tile", true);
+
 				AddPlacedNode(cell, tile);
 				
 				var decorAnchor = tile.GetNodeOrNull<Marker3D>("DecorAnchor");
