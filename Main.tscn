@@ -31,6 +31,33 @@
 [ext_resource type="PackedScene" uid="uid://dwv2kxm5c43yh" path="res://HotbarSlot.tscn" id="21_jt61w"]
 [ext_resource type="PackedScene" uid="uid://bjmvlf4s8kve1" path="res://backpack_ui.tscn" id="22_v8qla"]
 [ext_resource type="Script" uid="uid://bw3asi1r0raq2" path="res://Scripts/Crafting/CraftingContainer.cs" id="23_y1tbi"]
+[ext_resource type="Texture2D" uid="uid://qtmvq8aswd6c" path="res://Materials/Character/Equip/Hands/FistPunch/1.png" id="28_v8qla"]
+[ext_resource type="Texture2D" uid="uid://d2egwsyjbkysf" path="res://Materials/Character/Equip/Hands/FistPunch/2.png" id="29_y1tbi"]
+[ext_resource type="Texture2D" uid="uid://df766tf4fouxh" path="res://Materials/Character/Equip/Hands/FistPunch/3.png" id="30_c2s76"]
+[ext_resource type="Texture2D" uid="uid://dasca5h8cprpt" path="res://Materials/Character/Equip/Hands/FistPunch/4.png" id="31_f4ese"]
+[ext_resource type="Texture2D" uid="uid://coklk5suja3kv" path="res://Materials/Character/Equip/Hands/FistPunch/5.png" id="32_rchyr"]
+[ext_resource type="Texture2D" uid="uid://dxaygnwoa38y6" path="res://Materials/Character/Equip/Hands/FistPunch/6.png" id="33_pljue"]
+[ext_resource type="Texture2D" uid="uid://bwako2l1yyldb" path="res://Materials/Character/Equip/Hands/FistPunch/7.png" id="34_nx4yo"]
+[ext_resource type="Texture2D" uid="uid://cpp4h6wilmng6" path="res://Materials/Character/Equip/Hands/FistPunch/8.png" id="35_5tfui"]
+[ext_resource type="Texture2D" uid="uid://b0hkf6wxqsawv" path="res://Materials/Character/Equip/Hands/FistPunch/9.png" id="36_38apo"]
+[ext_resource type="Texture2D" uid="uid://4d0l7yfsat4r" path="res://Materials/Character/Equip/Hands/FistPunch/10.png" id="37_khphd"]
+[ext_resource type="Texture2D" uid="uid://ciaunxw3x0hed" path="res://Materials/Character/Equip/Hands/FistPunch/11.png" id="38_g4yo4"]
+[ext_resource type="Texture2D" uid="uid://cc0002s33iwaq" path="res://Materials/Character/Equip/Hands/FistPunch/12.png" id="39_im7ls"]
+[ext_resource type="Texture2D" uid="uid://d4jlvojye74e" path="res://Materials/Character/Equip/Hands/FistPunch/13.png" id="40_a34eg"]
+[ext_resource type="Texture2D" uid="uid://cslsst72t1hop" path="res://Materials/Character/Equip/Hands/Action Left hand/1.png" id="41_ac6pf"]
+[ext_resource type="Script" uid="uid://nsh4dnym6jrs" path="res://Scripts/Animation/Hands/FistPunch.cs" id="41_y1tbi"]
+[ext_resource type="Texture2D" uid="uid://c4pkafa3qi576" path="res://Materials/Character/Equip/Hands/Action Left hand/2.png" id="42_ek63v"]
+[ext_resource type="Texture2D" uid="uid://dxdi440mu31ki" path="res://Materials/Character/Equip/Hands/Action Left hand/3.png" id="43_oaklg"]
+[ext_resource type="Texture2D" uid="uid://ddklbyn461fq4" path="res://Materials/Character/Equip/Hands/Action Left hand/4.png" id="44_4bst2"]
+[ext_resource type="Texture2D" uid="uid://8vgnb58urgrg" path="res://Materials/Character/Equip/Hands/Action Left hand/5.png" id="45_uy3go"]
+[ext_resource type="Texture2D" uid="uid://c06rd2qphrjym" path="res://Materials/Character/Equip/Hands/Action Left hand/6.png" id="46_yf3a2"]
+[ext_resource type="Texture2D" uid="uid://no36bua6meyy" path="res://Materials/Character/Equip/Hands/Action Left hand/7.png" id="47_gdb40"]
+[ext_resource type="Texture2D" uid="uid://bb0xii5fqcnon" path="res://Materials/Character/Equip/Hands/Action Left hand/8.png" id="48_8h1yq"]
+[ext_resource type="Texture2D" uid="uid://br7k28krlf6fc" path="res://Materials/Character/Equip/Hands/Action Left hand/9.png" id="49_fykug"]
+[ext_resource type="Texture2D" uid="uid://d14g43tagvi6t" path="res://Materials/Character/Equip/Hands/Action Left hand/10.png" id="50_wrbn1"]
+[ext_resource type="Texture2D" uid="uid://8fl0253llj6b" path="res://Materials/Character/Equip/Hands/Action Left hand/11.png" id="51_cfjnh"]
+[ext_resource type="Texture2D" uid="uid://bj1o6fgohjsvy" path="res://Materials/Character/Equip/Hands/Action Left hand/12.png" id="52_mplfx"]
+[ext_resource type="Texture2D" uid="uid://c5o72w1lelq66" path="res://Materials/Character/Equip/Hands/Action Left hand/13.png" id="53_gyych"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_noarx"]
 radius = 0.4
@@ -66,6 +93,100 @@ ambient_light_energy = 0.0
 fog_enabled = true
 fog_light_energy = 0.05
 fog_density = 0.0615
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ac6pf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_v8qla")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_y1tbi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_c2s76")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_f4ese")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_rchyr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_pljue")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_nx4yo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_5tfui")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_38apo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_khphd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_g4yo4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_im7ls")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_a34eg")
+}],
+"loop": false,
+"name": &"fist punch",
+"speed": 35.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_via5u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("41_ac6pf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_ek63v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_oaklg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_4bst2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_uy3go")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_yf3a2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_gdb40")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_8h1yq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_fykug")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_wrbn1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_cfjnh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_mplfx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_gyych")
+}],
+"loop": false,
+"name": &"fist punch left hand",
+"speed": 35.0
+}]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_oye8v"]
 shader = ExtResource("7_oye8v")
@@ -106,7 +227,7 @@ render_target_update_mode = 4
 visible = false
 light_energy = 0.208
 
-[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight")]
+[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023540735, 0)
 script = ExtResource("1_bg4s2")
 _handRoot = NodePath("../../../../CanvasLayer/HandRoot")
@@ -117,6 +238,7 @@ _heldItemRoot = NodePath("Head/Camera3D/HeldItemRoot")
 _heldTorchRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldTorchRoot")
 _heldBlockRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldBlockRoot")
 _heldTorchLight = NodePath("Head/Camera3D/HeldTorchLight")
+_fistPunchController = NodePath("../../../../CanvasLayer/HandRoot/PunchController")
 WorldCraftPreviewScene = ExtResource("18_mxvw5")
 PlacementPreviewScene = ExtResource("2_hhcpw")
 BlockOutlineScene = ExtResource("3_mxvw5")
@@ -273,6 +395,28 @@ grow_vertical = 0
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("19_1w2xm")
 stretch_mode = 5
+
+[node name="RightPunch" type="AnimatedSprite2D" parent="CanvasLayer/HandRoot" unique_id=327013064]
+position = Vector2(229, -126)
+scale = Vector2(0.24934895, 0.25097653)
+sprite_frames = SubResource("SpriteFrames_ac6pf")
+animation = &"fist punch"
+
+[node name="LeftPunch" type="AnimatedSprite2D" parent="CanvasLayer/HandRoot" unique_id=2092426651]
+position = Vector2(-76, -131)
+scale = Vector2(0.24934895, 0.25097653)
+sprite_frames = SubResource("SpriteFrames_via5u")
+animation = &"fist punch left hand"
+frame = 12
+frame_progress = 1.0
+
+[node name="PunchController" type="Node2D" parent="CanvasLayer/HandRoot" unique_id=1765463032 node_paths=PackedStringArray("LeftHand", "RightHand", "PickaxeHand", "RightPunch", "LeftPunch")]
+script = ExtResource("41_y1tbi")
+LeftHand = NodePath("../LeftHand")
+RightHand = NodePath("../RightHand")
+PickaxeHand = NodePath("../PickaxeHand")
+RightPunch = NodePath("../RightPunch")
+LeftPunch = NodePath("../LeftPunch")
 
 [node name="Hotbar" type="Control" parent="CanvasLayer" unique_id=1204465899]
 layout_mode = 3

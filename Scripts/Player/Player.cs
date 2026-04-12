@@ -31,7 +31,10 @@ public partial class Player : CharacterBody3D
 	[Export] public Node3D _heldTorchRoot;
 	[Export] public Node3D _heldBlockRoot;
 	[Export] public OmniLight3D _heldTorchLight;
-
+	
+	[Export] public FistPunch _fistPunchController;
+	private bool _pendingHeldVisualRefresh = false;
+	
 	private Vector2 _handRootBasePosition;
 	private Vector3 _heldItemRootBasePosition;
 	
@@ -96,8 +99,28 @@ public partial class Player : CharacterBody3D
 
 		if (_heldTorchLight != null)
 			_heldTorchLight.Visible = false;
+			
+		if (_fistPunchController != null)
+			_fistPunchController.PunchImpact += OnFistPunchImpact;
 		
 		UpdateHeldVisual();
+	}
+	
+	private void OnFistPunchImpact()
+	{
+		if (!IsEmptyHanded())
+			return;
+
+		TryRemoveItem();
+	}
+	
+	private bool IsEmptyHanded()
+	{
+		if (_inventory == null)
+			return true;
+
+		var selectedSlot = _inventory.GetSelectedSlot();
+		return selectedSlot == null || selectedSlot.IsEmpty || selectedSlot.Item == null;
 	}
 	
 	private void UpdateHeldBlockVisual(ItemDefinition item)
@@ -131,6 +154,9 @@ public partial class Player : CharacterBody3D
 			TryInteract();
 			return;
 		}
+		
+		if (@event.IsActionPressed("place_item"))
+			TryPlaceItem();
 
 		if (_backpackUi != null && _backpackUi.IsOpen)
 			return;
@@ -156,11 +182,31 @@ public partial class Player : CharacterBody3D
 				CycleHotbar(1);
 		}
 
-		if (@event.IsActionPressed("place_item"))
-			TryPlaceItem();
+		if (@event is InputEventMouseButton mouseButton &&
+			mouseButton.ButtonIndex == MouseButton.Left)
+		{
+			if (mouseButton.Pressed)
+			{
+				if (IsEmptyHanded())
+				{
+					_fistPunchController?.SetHeld(true);
+					_fistPunchController?.StartPunch();
+					return;
+				}
 
-		if (@event.IsActionPressed("remove_item"))
-			TryRemoveItem();
+				TryRemoveItem();
+				UpdateHeldVisual();
+				return;
+			}
+			else
+			{
+				if (IsEmptyHanded())
+				{
+					_fistPunchController?.SetHeld(false);
+					return;
+				}
+			}
+		}
 			
 		if (@event.IsActionPressed("craft_world_structure"))
 			TryCraftOrDeconstructWorldStructure();
@@ -366,7 +412,14 @@ public partial class Player : CharacterBody3D
 			else
 				_blockOutline.UpdateFromTarget(_targetting);
 		}
-			
+		
+		if (_pendingHeldVisualRefresh &&
+			(_fistPunchController == null || !_fistPunchController.IsPunching))
+		{
+			_pendingHeldVisualRefresh = false;
+			UpdateHeldVisual();
+		}
+		
 		UpdateWorldCraftPreview();
 		
 		UpdateHandsViewmodel(delta);
@@ -435,6 +488,19 @@ public partial class Player : CharacterBody3D
 			if (tree != null)
 			{
 				tree.Mine(this);
+
+				if (!IsEmptyHanded())
+					_fistPunchController?.SetHeld(false);
+
+				if (_fistPunchController != null && _fistPunchController.IsPunching)
+				{
+					_pendingHeldVisualRefresh = true;
+				}
+				else
+				{
+					UpdateHeldVisual();
+				}
+
 				return;
 			}
 
@@ -468,7 +534,21 @@ public partial class Player : CharacterBody3D
 		}
 
 		_inventory.AddItem(itemId, 1);
-		GD.Print($"Picked up: {itemId}");
+		
+		if (!IsEmptyHanded())
+			_fistPunchController?.SetHeld(false);
+
+		if (_fistPunchController != null && _fistPunchController.IsPunching)
+		{
+			_pendingHeldVisualRefresh = true;
+		}
+		else
+		{
+			UpdateHeldVisual();
+		}
+
+		GD.Print($"Picked up: {itemId}");;
+		
 	}
 
 	private bool IsHoldingPickaxe()
@@ -550,13 +630,16 @@ public partial class Player : CharacterBody3D
 
 		if (_heldTorchLight != null)
 			_heldTorchLight.Visible = false;
+			
+		_fistPunchController?.StopPunch();
+		
 	}
 	
 	private void UpdateHeldVisual()
 	{
 		if (_inventory == null)
 			return;
-
+		
 		HideAllHeldVisuals();
 		_lastHeldBlockItemId = "";
 		var selectedSlot = _inventory.GetSelectedSlot();
