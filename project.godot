@@ -25,6 +25,10 @@ CraftingManager="*uid://cnbfsoickx7mm"
 
 project/assembly_name="New Game Project"
 
+[global_group]
+
+world_light=""
+
 [input]
 
 move_forward={

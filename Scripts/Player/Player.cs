@@ -17,7 +17,14 @@ public partial class Player : CharacterBody3D
 	
 	private BlockManager _blockManager;
 	private string _lastHeldBlockItemId = "";
+	
+	private float _currentHandBrightness = 1.0f;
+	private float _targetHandBrightness = 1.0f;
 
+	[Export] public float HandBrightnessLerpSpeed = 5.0f;
+	[Export] public float DarkHandBrightness = 0.1f;
+	[Export] public float LitHandBrightness = 1.0f;
+	[Export] public float HandLightDetectionRange = .01f;
 	
 	private Vector3 _currentHeldItemRotation = Vector3.Zero;
 	
@@ -422,6 +429,8 @@ public partial class Player : CharacterBody3D
 		
 		UpdateWorldCraftPreview();
 		
+		UpdateFakeHandLighting(delta);
+		
 		UpdateHandsViewmodel(delta);
 	}
 	
@@ -734,6 +743,106 @@ public partial class Player : CharacterBody3D
 		}
 
 		return null;
+	}
+	
+	private void UpdateFakeHandLighting(double delta)
+	{
+		float lightFactor = GetNearestWorldLightFactor(20.0f);
+
+		var selectedSlot = _inventory?.GetSelectedSlot();
+		bool holdingTorch =
+			selectedSlot != null &&
+			!selectedSlot.IsEmpty &&
+			selectedSlot.Item != null &&
+			selectedSlot.Item.ItemId == "torch";
+
+		if (holdingTorch)
+			lightFactor = 1.0f;
+
+		_targetHandBrightness = Mathf.Lerp(
+			DarkHandBrightness,
+			LitHandBrightness,
+			lightFactor
+		);
+
+		_currentHandBrightness = Mathf.Lerp(
+			_currentHandBrightness,
+			_targetHandBrightness,
+			(float)delta * HandBrightnessLerpSpeed
+		);
+
+		Color handTint = new Color(
+			_currentHandBrightness,
+			_currentHandBrightness,
+			_currentHandBrightness,
+			1f
+		);
+
+		if (_handsLeftUi != null)
+			_handsLeftUi.Modulate = handTint;
+
+		if (_handsRightUi != null)
+			_handsRightUi.Modulate = handTint;
+
+		if (_pickaxeHandUi != null)
+			_pickaxeHandUi.Modulate = handTint;
+
+		if (_fistPunchController != null)
+		{
+			if (_fistPunchController.RightPunch != null)
+				_fistPunchController.RightPunch.Modulate = handTint;
+
+			if (_fistPunchController.LeftPunch != null)
+				_fistPunchController.LeftPunch.Modulate = handTint;
+		}
+
+	}
+	
+	private float GetNearestWorldLightFactor(float maxDistance)
+	{
+		var lights = GetTree().GetNodesInGroup("world_light");
+		float bestFactor = 0.0f;
+
+		foreach (Node node in lights)
+		{
+			if (node is not OmniLight3D omniLight)
+				continue;
+
+			if (!omniLight.Visible)
+				continue;
+
+			// Ignore the player's own held torch light
+			if (omniLight == _heldTorchLight)
+				continue;
+
+			// Ignore any light that lives under the player hierarchy
+			if (IsDescendantOfPlayer(omniLight))
+				continue;
+
+			float distance = GlobalPosition.DistanceTo(omniLight.GlobalPosition);
+			if (distance > maxDistance)
+				continue;
+
+			float normalized = 1.0f - Mathf.Clamp(distance / maxDistance, 0.0f, 1.0f);
+			float factor = normalized * normalized * normalized;
+			bestFactor = Mathf.Max(bestFactor, factor);
+		}
+
+		return bestFactor;
+	}
+
+	private bool IsDescendantOfPlayer(Node node)
+	{
+		Node current = node;
+		while (current != null)
+		{
+			if (current == this)
+				return true;
+
+			current = current.GetParent();
+		}
+
+		return false;
 	}
 	
 }

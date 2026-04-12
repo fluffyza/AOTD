@@ -41,7 +41,7 @@ transform = Transform3D(0.2, 0, 0, 0, 1, 0, 0, 0, 0.2, 0, 0, 0)
 visible = false
 mesh = SubResource("CylinderMesh_5w7kb")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2107344647]
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2107344647 groups=["world_light"]]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.32581925, 0.2073896)
 light_color = Color(1, 1, 0.69411767, 1)
 light_energy = 1.634
