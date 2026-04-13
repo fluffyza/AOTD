@@ -5,7 +5,7 @@ public partial class WorldManager : Node
 {
 	[Export] public NodePath BlockManagerPath;
 	[Export] public PackedScene TreeScene;
-	[Export] public float TreeSpawnChance = 0.12f;//0f;
+	[Export] public float TreeSpawnChance = 0.06f;//0f;
 	[Export] public PackedScene GrassClumpScene;
 	[Export] public PackedScene RockOneScene;
 	[Export] public PackedScene RockTwoScene;

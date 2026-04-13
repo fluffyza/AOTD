@@ -2,24 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://eguhs6e0th5u"
-path.s3tc="res://.godot/imported/campfire+3d+model_campfire3dmodel_basecolor.jpg-8209c69919f9a1ef3e1a6b005f396bfa.s3tc.ctex"
+uid="uid://djvilwagj31l6"
+path="res://.godot/imported/STONE-TEXTURE.png-f12cb4351f81d2665500884e1e8def42.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
-}
-generator_parameters={
-"md5": "3cc28b44989baed78ef76b155164c134"
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Models/campfire+3d+model_campfire3dmodel_basecolor.jpg"
-dest_files=["res://.godot/imported/campfire+3d+model_campfire3dmodel_basecolor.jpg-8209c69919f9a1ef3e1a6b005f396bfa.s3tc.ctex"]
+source_file="res://Materials/Mineable/Blocks/STONE-TEXTURE.png"
+dest_files=["res://.godot/imported/STONE-TEXTURE.png-f12cb4351f81d2665500884e1e8def42.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -27,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -41,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

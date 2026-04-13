@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://chrnsfml5q758"
-path="res://.godot/imported/rusty+chest+3d+model.glb-0cd2cbed3e7f06cc936ca290e5c1b8cf.scn"
+uid="uid://csbld637fmbp1"
+path="res://.godot/imported/CAMPFIRE-MODEL-OFF (1).glb-937d1d7e6ec7e10d84ec97ab1b63afd7.scn"
 
 [deps]
 
-source_file="res://Models/rusty+chest+3d+model.glb"
-dest_files=["res://.godot/imported/rusty+chest+3d+model.glb-0cd2cbed3e7f06cc936ca290e5c1b8cf.scn"]
+source_file="res://Models/Fire/Fire2/CAMPFIRE-MODEL-OFF (1).glb"
+dest_files=["res://.godot/imported/CAMPFIRE-MODEL-OFF (1).glb-937d1d7e6ec7e10d84ec97ab1b63afd7.scn"]
 
 [params]
 
