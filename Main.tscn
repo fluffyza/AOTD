@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" uid="uid://dwv2kxm5c43yh" path="res://HotbarSlot.tscn" id="21_jt61w"]
 [ext_resource type="PackedScene" uid="uid://bjmvlf4s8kve1" path="res://backpack_ui.tscn" id="22_v8qla"]
 [ext_resource type="Script" uid="uid://bw3asi1r0raq2" path="res://Scripts/Crafting/CraftingContainer.cs" id="23_y1tbi"]
+[ext_resource type="PackedScene" uid="uid://1gfropwtqfbn" path="res://GodotSky/GodotSky.tscn" id="25_ek63v"]
 [ext_resource type="Texture2D" uid="uid://qtmvq8aswd6c" path="res://Materials/Character/Equip/Hands/FistPunch/1.png" id="28_v8qla"]
 [ext_resource type="Texture2D" uid="uid://d2egwsyjbkysf" path="res://Materials/Character/Equip/Hands/FistPunch/2.png" id="29_y1tbi"]
 [ext_resource type="Texture2D" uid="uid://df766tf4fouxh" path="res://Materials/Character/Equip/Hands/FistPunch/3.png" id="30_c2s76"]
@@ -267,6 +268,7 @@ transform = Transform3D(0.47281608, -0.15569067, -0.046961315, 0.16261904, 0.452
 
 [node name="HeldTorchLight" type="OmniLight3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)/Head/Camera3D" unique_id=267396881]
 process_priority = 1
+light_color = Color(0.91764706, 0.69411767, 0.5176471, 1)
 
 [node name="PsxPostProcessQuad" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)/Head/Camera3D" unique_id=296576583]
 visible = false
@@ -315,15 +317,20 @@ CameraPath = NodePath("../Head/Camera3D")
 [node name="WorldCraftingManager" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=1520499744]
 script = ExtResource("15_5mkgo")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=1498523069]
-environment = SubResource("Environment_a202f")
-
 [node name="WindManager" type="Node3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=1639072271]
 script = ExtResource("16_3ccbu")
 PlayerPath = NodePath("../Player (CharacterBody3D)")
 WindGustScene = ExtResource("17_hhcpw")
 
 [node name="WorldCraftPreview" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=731278336 instance=ExtResource("18_mxvw5")]
+
+[node name="GodotSky" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=270944954 instance=ExtResource("25_ek63v")]
+timeOfDay = 94.86
+skyRotation = 145.9
+cloudCoverage = 0.444
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=1498523069]
+environment = SubResource("Environment_a202f")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=354118164]
 
