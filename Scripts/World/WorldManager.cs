@@ -5,13 +5,13 @@ public partial class WorldManager : Node
 {
 	[Export] public NodePath BlockManagerPath;
 	[Export] public PackedScene TreeScene;
-	[Export] public float TreeSpawnChance = 0.06f;//0f;
+	[Export] public float TreeSpawnChance = 0.1f;//0f;
 	[Export] public PackedScene GrassClumpScene;
 	[Export] public PackedScene RockOneScene;
 	[Export] public PackedScene RockTwoScene;
 	[Export] public PackedScene RockThreeScene;
 
-	[Export] public float GrassSpawnChance = 0.35f;
+	[Export] public float GrassSpawnChance = 0.6f;
 	[Export] public float RockSpawnChance = 0.08f;
 	
 	[Export] public PackedScene GrassTileScene;

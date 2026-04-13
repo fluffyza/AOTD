@@ -3,9 +3,90 @@
 [ext_resource type="Script" uid="uid://c1gaqhs2aa6lf" path="res://Scripts/Crafting/Structure/Stations/Campfire.cs" id="1_15v8g"]
 [ext_resource type="PackedScene" uid="uid://csbld637fmbp1" path="res://Models/Fire/Fire2/CAMPFIRE-MODEL-OFF (1).glb" id="2_421gk"]
 [ext_resource type="Script" uid="uid://63lyw4etirvf" path="res://Scripts/Utils/MeshHighlightController.cs" id="2_iekog"]
+[ext_resource type="Script" uid="uid://bc4axxkirgbes" path="res://Scripts/Graphics/CampfireLightFlicker.cs" id="3_2t41o"]
 [ext_resource type="Script" uid="uid://c4pqndgbtjk0f" path="res://Scripts/Crafting/Structure/Processing/ProcessingContainer.cs" id="4_421gk"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_iekog"]
+
+[sub_resource type="Gradient" id="Gradient_421gk"]
+offsets = PackedFloat32Array(0, 0.22988506, 0.43390805, 0.66091955, 1)
+colors = PackedColorArray(0.8340891, 0.39106256, 0.19396555, 1, 0.9421428, 0.5090403, 0.33983457, 1, 0.99215686, 0.11372549, 0.078431375, 1, 0.3019608, 0.011764706, 0.043137256, 0.49411765, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2t41o"]
+gradient = SubResource("Gradient_421gk")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_dl7un"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_de3ku"]
+curve = SubResource("Curve_dl7un")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ojdhj"]
+emission_shape = 1
+emission_sphere_radius = 0.4
+direction = Vector3(0, 1, 0)
+spread = 18.0
+initial_velocity_min = 0.7
+initial_velocity_max = 1.4
+angular_velocity_min = -4.000016
+angular_velocity_max = 3.9999838
+gravity = Vector3(0, 2, 0)
+scale_min = 0.7
+scale_max = 1.3
+scale_curve = SubResource("CurveTexture_de3ku")
+color_ramp = SubResource("GradientTexture1D_2t41o")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_421gk"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_421gk"]
+material = SubResource("StandardMaterial3D_421gk")
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="Gradient" id="Gradient_2t41o"]
+offsets = PackedFloat32Array(0.022988506, 0.25287357, 0.6408046, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.23529413, 0.23529413, 0.23529413, 1, 0.6313726, 0.6313726, 0.6313726, 0.43137255, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dl7un"]
+resource_local_to_scene = true
+gradient = SubResource("Gradient_2t41o")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_de3ku"]
+_data = [Vector2(0, 0.4318419), 0.0, 0.0, 0, 0, Vector2(0.5106952, 0.9797087), 0.0, 0.0, 0, 0, Vector2(0.99732625, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ojdhj"]
+curve = SubResource("Curve_de3ku")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qulpc"]
+emission_shape = 1
+emission_sphere_radius = 10.67
+direction = Vector3(0, 1, 0)
+gravity = Vector3(0, 5, 0)
+scale_min = 0.79999995
+scale_max = 1.1999999
+scale_curve = SubResource("CurveTexture_ojdhj")
+color_ramp = SubResource("GradientTexture1D_dl7un")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qulpc"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_sbpop"]
+material = SubResource("StandardMaterial3D_qulpc")
 
 [node name="PlaceableCampfire" type="Node3D" unique_id=14953340]
 script = ExtResource("1_15v8g")
@@ -20,6 +101,33 @@ shape = SubResource("BoxShape3D_iekog")
 
 [node name="CAMPFIRE-MODEL-OFF (1)" parent="MeshPivot" unique_id=1669128018 instance=ExtResource("2_421gk")]
 transform = Transform3D(0.38302258, 0, 0, 0, 0.513101, 0, 0, 0, 0.38100263, 0, -0.5185658, 0)
+
+[node name="FireChunkParticles" type="GPUParticles3D" parent="MeshPivot" unique_id=2133624568]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.19364735, 0)
+cast_shadow = 0
+amount = 80
+lifetime = 1.5
+preprocess = 0.8
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_ojdhj")
+draw_pass_1 = SubResource("BoxMesh_421gk")
+
+[node name="SmokeParticles" type="GPUParticles3D" parent="MeshPivot" unique_id=1336338902]
+transform = Transform3D(0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, 0, 0.614475, 0)
+amount = 20
+lifetime = 3.0
+preprocess = 1.8
+randomness = 0.4
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_qulpc")
+draw_pass_1 = SubResource("QuadMesh_sbpop")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="MeshPivot" unique_id=668077977 groups=["world_light"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.69371045, 0)
+light_color = Color(1, 0.7019608, 0.2784314, 1)
+light_energy = 2.5
+omni_range = 7.0
+script = ExtResource("3_2t41o")
 
 [node name="MeshHighlightController" type="MeshInstance3D" parent="." unique_id=2088826500]
 script = ExtResource("2_iekog")

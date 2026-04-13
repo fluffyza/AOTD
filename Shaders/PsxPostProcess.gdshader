@@ -6,8 +6,8 @@ uniform bool enable_color_limitation = true;
 uniform int color_levels : hint_range(2, 256, 1) = 20;
 
 uniform bool enable_dithering = true;
-//uniform float dither_strength : hint_range(0.0, 1.0) = 0.65;
-uniform float dither_strength : hint_range(0.0, 1.0) = 25;
+uniform float dither_strength : hint_range(0.0, 1.0) = 0.65;
+//uniform float dither_strength : hint_range(0.0, 1.0) = 25;
 uniform float band_steps : hint_range(2.0, 16.0) = 6.0;
 
 uniform bool enable_screen_wobble = false;
