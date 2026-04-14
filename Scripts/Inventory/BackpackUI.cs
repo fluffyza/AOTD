@@ -86,7 +86,8 @@ public partial class BackpackUI : Control
 		BackpackCrafting,
 		WorkbenchCrafting,
 		CampfireProcessing,
-		FurnaceProcessing
+		FurnaceProcessing,
+		ChestStorage
 	}
 
 	private UiMode _currentMode = UiMode.BackpackCrafting;
@@ -118,6 +119,13 @@ public partial class BackpackUI : Control
 	private DragMode _dragMode = DragMode.None;
 
 	public bool IsOpen => Visible;
+	
+	[Export] public NodePath ChestGridPath;
+	private GridContainer _chestGrid;
+	private readonly List<InventorySlotUI> _chestSlotUis = new();
+	private StorageContainer _activeStorageContainer;
+	private Chest _activeChest;
+	
 
 	public override void _Ready()
 	{
@@ -150,10 +158,13 @@ public partial class BackpackUI : Control
 		_draggedItemPreview = GetNode<Control>(DraggedItemPreviewPath);
 		_draggedItemIcon = GetNode<TextureRect>(DraggedItemIconPath);
 		_draggedItemCountLabel = GetNode<Label>(DraggedItemCountLabelPath);
+		
+		_chestGrid = GetNode<GridContainer>(ChestGridPath);
 
 		_draggedItemPreview.Visible = false;
 		_draggedItemLabel.Visible = false;
 		
+		_chestGrid.Visible = false;
 		_campfirePanel.Visible = false;
 		_furnacePanel.Visible = false;
 		
@@ -277,6 +288,7 @@ public partial class BackpackUI : Control
 
 	public void OpenBackpackCraftingMode()
 	{
+		CloseActiveChestIfAny();
 		_currentMode = UiMode.BackpackCrafting;
 		_activeProcessingContainer = null;
 		UnsubscribeFromProcessingContainer();
@@ -285,7 +297,9 @@ public partial class BackpackUI : Control
 		_workbenchCraftingPanel.Visible = false;
 		_campfirePanel.Visible = false;
 		_furnacePanel.Visible = false;
-
+		UnsubscribeFromStorageContainer();
+		_chestGrid.Visible = false;
+		
 		_craftingGrid = _backpackCraftingGrid;
 		_craftOutputSlotUi = _backpackCraftOutputSlotUi;
 		_craftingContainer = _backpackCraftingContainer;
@@ -297,11 +311,14 @@ public partial class BackpackUI : Control
 
 	public void OpenWorkbenchCraftingMode()
 	{
+		CloseActiveChestIfAny();
 		_currentMode = UiMode.WorkbenchCrafting;
 		_activeProcessingContainer = null;
 		UnsubscribeFromProcessingContainer();
 
 		_backpackCraftingPanel.Visible = false;
+		UnsubscribeFromStorageContainer();
+		_chestGrid.Visible = false;
 		_workbenchCraftingPanel.Visible = true;
 		_campfirePanel.Visible = false;
 		_furnacePanel.Visible = false;
@@ -343,10 +360,20 @@ public partial class BackpackUI : Control
 
 	public void Close()
 	{
+		CloseActiveChestIfAny();
 		Visible = false;
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 
 		CancelDragAndReturnHeldStack();
+		
+		UnsubscribeFromStorageContainer();
+		_chestGrid.Visible = false;
+		
+		if (_activeChest != null)
+		{
+			_activeChest.CloseChestVisual();
+			_activeChest = null;
+		}
 
 		if (_currentMode == UiMode.BackpackCrafting || _currentMode == UiMode.WorkbenchCrafting)
 			ReturnCraftingInputsToInventory();
@@ -380,7 +407,8 @@ public partial class BackpackUI : Control
 		_backpackCraftingSlotUis.Clear();
 		_workbenchCraftingSlotUis.Clear();
 		_craftingSlotUis.Clear();
-
+		_chestSlotUis.Clear();
+		
 		foreach (Node child in _backpackGrid.GetChildren())
 		{
 			if (child is InventorySlotUI slotUi)
@@ -425,6 +453,16 @@ public partial class BackpackUI : Control
 			}
 		}
 		
+		foreach (Node child in _chestGrid.GetChildren())
+		{
+			if (child is InventorySlotUI slotUi)
+			{
+				slotUi.SlotPressed += OnSlotPressed;
+				slotUi.SlotHovered += OnSlotHovered;
+				slotUi.SlotUnhovered += OnSlotUnhovered;
+				_chestSlotUis.Add(slotUi);
+			}
+		}
 
 		if (_backpackCraftOutputSlotUi != null)
 		{
@@ -539,6 +577,25 @@ public partial class BackpackUI : Control
 			}
 		}
 		
+		if (_activeStorageContainer != null && _chestGrid.Visible)
+		{
+			for (int i = 0; i < _chestSlotUis.Count; i++)
+			{
+				var ui = _chestSlotUis[i];
+				ui.SetSlotIndex(i);
+
+				var slot = _activeStorageContainer.GetSlot(i);
+
+				bool highlighted =
+					_hoveredSlotUi == ui ||
+					(_isDragging &&
+					 _heldSourceRole == InventorySlotUI.SlotRole.ChestStorage &&
+					 _heldSourceSlotIndex == i);
+
+				SetupSlotVisual(ui, i, slot, highlighted);
+			}
+		}
+		
 		if (_activeProcessingContainer != null)
 		{
 			if (_campfirePanel.Visible)
@@ -636,7 +693,11 @@ public partial class BackpackUI : Control
 			case InventorySlotUI.SlotRole.CraftingOutput:
 				StartDragFromCraftingOutput();
 				break;
-
+				
+			case InventorySlotUI.SlotRole.ChestStorage:
+				StartDragFromChestSlot(_pressedSlotUi.SlotIndex);
+				break;
+				
 			case InventorySlotUI.SlotRole.ProcessingInput:
 				StartDragFromProcessingSlot(_activeProcessingContainer?.InputSlot, InventorySlotUI.SlotRole.ProcessingInput);
 				break;
@@ -781,6 +842,10 @@ public partial class BackpackUI : Control
 
 			case InventorySlotUI.SlotRole.CraftingInput:
 				TryPlaceHeldIntoCraftingInput(_hoveredSlotUi.CraftingSlotIndex);
+				break;
+				
+			case InventorySlotUI.SlotRole.ChestStorage:
+				TryPlaceHeldIntoChestSlot(_hoveredSlotUi.SlotIndex);
 				break;
 
 			case InventorySlotUI.SlotRole.CraftingOutput:
@@ -946,6 +1011,22 @@ public partial class BackpackUI : Control
 					source.Count += _heldCount;
 			}
 		}
+		else if (_heldSourceRole == InventorySlotUI.SlotRole.ChestStorage)
+		{
+			if (_activeStorageContainer == null || _heldSourceSlotIndex < 0)
+				return;
+
+			var source = _activeStorageContainer.GetSlot(_heldSourceSlotIndex);
+			if (source == null)
+				return;
+
+			if (source.IsEmpty)
+				source.SetItem(_heldItem, _heldCount);
+			else if (source.CanStackWith(_heldItem))
+				source.Count += _heldCount;
+
+			_activeStorageContainer.EmitSignal(StorageContainer.SignalName.StorageChanged);
+		}
 
 		ClearHeldStackState();
 	}
@@ -1002,6 +1083,15 @@ public partial class BackpackUI : Control
 				source.SetItem(item, count);
 
 			_craftingContainer?.RefreshOutput();
+		}
+		else if (_heldSourceRole == InventorySlotUI.SlotRole.ChestStorage)
+		{
+			var source = _activeStorageContainer?.GetSlot(_heldSourceSlotIndex);
+			if (source != null)
+			{
+				source.SetItem(item, count);
+				_activeStorageContainer.EmitSignal(StorageContainer.SignalName.StorageChanged);
+			}
 		}
 	}
 
@@ -1164,6 +1254,7 @@ public partial class BackpackUI : Control
 
 	private void OpenCampfireMode(ProcessingContainer container)
 	{
+		CloseActiveChestIfAny();
 		_currentMode = UiMode.CampfireProcessing;
 		_activeProcessingContainer = container;
 		_craftingContainer = null;
@@ -1174,18 +1265,22 @@ public partial class BackpackUI : Control
 		_workbenchCraftingPanel.Visible = false;
 		_campfirePanel.Visible = true;
 		_furnacePanel.Visible = false;
+		UnsubscribeFromStorageContainer();
+		_chestGrid.Visible = false;
 
 		Refresh();
 	}
 
 	private void OpenFurnaceMode(ProcessingContainer container)
 	{
+		CloseActiveChestIfAny();
 		_currentMode = UiMode.FurnaceProcessing;
 		_activeProcessingContainer = container;
 		_craftingContainer = null;
 
 		SubscribeToProcessingContainer(container);
-
+		UnsubscribeFromStorageContainer();
+		_chestGrid.Visible = false;
 		_backpackCraftingPanel.Visible = false;
 		_workbenchCraftingPanel.Visible = false;
 		_campfirePanel.Visible = false;
@@ -1367,6 +1462,150 @@ public partial class BackpackUI : Control
 		}
 
 		_subscribedProcessingContainer = null;
+	}
+	
+	public void OpenChest(Chest chest, StorageContainer container)
+	{
+		if (container == null || chest == null)
+			return;
+
+		OpenUI();
+
+		UnsubscribeFromProcessingContainer();
+		UnsubscribeFromStorageContainer();
+
+		_currentMode = UiMode.ChestStorage;
+		_activeProcessingContainer = null;
+		_craftingContainer = null;
+
+		_activeChest = chest;
+		_activeStorageContainer = container;
+
+		_chestGrid.Visible = true;
+		_backpackCraftingPanel.Visible = false;
+		_workbenchCraftingPanel.Visible = false;
+		_campfirePanel.Visible = false;
+		_furnacePanel.Visible = false;
+
+		_activeStorageContainer.StorageChanged += Refresh;
+
+		Refresh();
+	}
+	
+	private void UnsubscribeFromStorageContainer()
+	{
+		if (_activeStorageContainer != null && IsInstanceValid(_activeStorageContainer))
+			_activeStorageContainer.StorageChanged -= Refresh;
+
+		_activeStorageContainer = null;
+	}
+	
+	private void StartDragFromChestSlot(int slotIndex)
+	{
+		if (_activeStorageContainer == null)
+			return;
+
+		_heldSourceRole = InventorySlotUI.SlotRole.ChestStorage;
+		_heldSourceCraftIndex = -1;
+
+		var slot = _activeStorageContainer.GetSlot(slotIndex);
+		if (slot == null || slot.IsEmpty || slot.Item == null)
+			return;
+
+		bool shiftHeld = Input.IsKeyPressed(Key.Shift);
+		bool ctrlHeld = Input.IsKeyPressed(Key.Ctrl);
+
+		_dragMode = ctrlHeld ? DragMode.SingleItem :
+					shiftHeld ? DragMode.HalfStack :
+					DragMode.FullStack;
+
+		int amountToTake = slot.Count;
+
+		if (_dragMode == DragMode.SingleItem)
+			amountToTake = 1;
+		else if (_dragMode == DragMode.HalfStack)
+			amountToTake = Mathf.CeilToInt(slot.Count / 2.0f);
+
+		ItemDefinition item = slot.Item;
+		int removed = slot.RemoveAmount(amountToTake);
+
+		if (removed <= 0)
+			return;
+
+		_heldItem = item;
+		_heldCount = removed;
+		_heldSourceSlotIndex = slotIndex;
+
+		_pressedSlotIndex = -1;
+		_isDragging = true;
+
+		Refresh();
+	}
+	
+	private void TryPlaceHeldIntoChestSlot(int slotIndex)
+	{
+		if (!HasHeldStack() || _activeStorageContainer == null)
+			return;
+
+		if (IsHoldingCraftOutput())
+		{
+			CancelCraftOutputDrag();
+			return;
+		}
+
+		var target = _activeStorageContainer.GetSlot(slotIndex);
+		if (target == null)
+			return;
+
+		if (target.IsEmpty)
+		{
+			target.SetItem(_heldItem, _heldCount);
+			_heldCount = 0;
+			_activeStorageContainer.EmitSignal(StorageContainer.SignalName.StorageChanged);
+			return;
+		}
+
+		if (target.CanStackWith(_heldItem))
+		{
+			int maxStack = target.Item.MaxStackSize;
+			int spaceLeft = maxStack - target.Count;
+			int toMove = Mathf.Min(spaceLeft, _heldCount);
+
+			if (toMove > 0)
+			{
+				target.Count += toMove;
+				_heldCount -= toMove;
+			}
+
+			_activeStorageContainer.EmitSignal(StorageContainer.SignalName.StorageChanged);
+
+			if (_heldCount <= 0)
+				return;
+		}
+
+		if (_dragMode == DragMode.FullStack)
+		{
+			var tempItem = target.Item;
+			int tempCount = target.Count;
+
+			target.SetItem(_heldItem, _heldCount);
+			RestoreSwapToSource(tempItem, tempCount);
+
+			_heldCount = 0;
+			_activeStorageContainer.EmitSignal(StorageContainer.SignalName.StorageChanged);
+			return;
+		}
+
+		ReturnHeldStackToSource();
+	}
+	
+	private void CloseActiveChestIfAny()
+	{
+		if (_activeChest != null && IsInstanceValid(_activeChest))
+		{
+			_activeChest.CloseChestVisual();
+			_activeChest = null;
+		}
 	}
 
 }

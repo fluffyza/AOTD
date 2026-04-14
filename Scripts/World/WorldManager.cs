@@ -19,6 +19,8 @@ public partial class WorldManager : Node
 	
 	private WorldCraftingManager _worldCraftingManager;
 	private BlockManager _blockManager;
+	private int _nextPlacementOrder = 0;
+	
 
 	private readonly Dictionary<Vector3I, Node3D> _placedItems = new();
 
@@ -162,6 +164,11 @@ public partial class WorldManager : Node
 
 	public bool TryPlaceInventoryItem(Vector3I cell, string itemId)
 	{
+		return TryPlaceInventoryItem(cell, itemId, Vector3.Forward);
+	}
+
+	public bool TryPlaceInventoryItem(Vector3I cell, string itemId, Vector3 playerForward)
+	{
 		if (_placedItems.ContainsKey(cell))
 			return false;
 
@@ -169,12 +176,14 @@ public partial class WorldManager : Node
 		if (item == null)
 			return false;
 
-		// Register crafting piece data if this placed object supports it.
 		if (item is WorldPlacedPiece placedPiece)
 		{
 			placedPiece.ItemId = itemId;
 			placedPiece.GridCell = cell;
-			GD.Print($"Registered world piece: {placedPiece.ItemId} at {placedPiece.GridCell}");
+			placedPiece.PlacementOrder = _nextPlacementOrder++;
+			placedPiece.PlacementForward = SnapToCardinal(playerForward);
+
+			GD.Print($"Registered world piece: {placedPiece.ItemId} at {placedPiece.GridCell} facing {placedPiece.PlacementForward}");
 		}
 		else
 		{
@@ -529,4 +538,20 @@ public partial class WorldManager : Node
 		rock.RotationDegrees = new Vector3(0f, yaw, 0f);
 		rock.Scale = new Vector3(scale, scale, scale);
 	}
+	
+	private Vector3 SnapToCardinal(Vector3 forward)
+	{
+		forward.Y = 0f;
+
+		if (forward.LengthSquared() < 0.0001f)
+			return Vector3.Forward;
+
+		forward = forward.Normalized();
+
+		if (Mathf.Abs(forward.X) > Mathf.Abs(forward.Z))
+			return forward.X > 0f ? Vector3.Right : Vector3.Left;
+
+		return forward.Z > 0f ? Vector3.Back : Vector3.Forward;
+	}
+
 }

@@ -156,7 +156,7 @@ public partial class WorldCraftingManager : Node
 				if (TryMatchRecipeAtRotation(recipe, anchorCell, placedPieces, rotation, out matchedPieces))
 				{
 					matchedRecipe = recipe;
-					spawnBasis = Basis.Identity;
+					spawnBasis = GetRecipeSpawnBasis(recipe, matchedPieces);
 					return true;
 				}
 			}
@@ -240,4 +240,48 @@ public partial class WorldCraftingManager : Node
 			_ => cell
 		};
 	}
+	
+	private Basis GetRecipeSpawnBasis(
+		WorldStructureRecipe recipe,
+		List<WorldPlacedPiece> matchedPieces)
+	{
+		if (recipe == null || matchedPieces == null || matchedPieces.Count == 0)
+			return Basis.Identity;
+
+		if (recipe.OutputItemId != "chest")
+			return Basis.Identity;
+
+		WorldPlacedPiece firstPlaced = matchedPieces[0];
+
+		foreach (var piece in matchedPieces)
+		{
+			if (piece.PlacementOrder < firstPlaced.PlacementOrder)
+				firstPlaced = piece;
+		}
+
+		Vector3 facing = firstPlaced.PlacementForward;
+		facing.Y = 0f;
+
+		if (facing.LengthSquared() < 0.0001f)
+			facing = Vector3.Forward;
+
+		facing = facing.Normalized();
+
+		// Chest should face opposite the player's facing when first block was placed.
+		Vector3 chestForward = -facing;
+
+		float yawDeg = 0f;
+
+		if (chestForward == Vector3.Forward)
+			yawDeg = 180f;
+		else if (chestForward == Vector3.Back)
+			yawDeg = 0f;
+		else if (chestForward == Vector3.Right)
+			yawDeg = 90f;
+		else if (chestForward == Vector3.Left)
+			yawDeg = -90f;
+
+		return Basis.FromEuler(new Vector3(0f, Mathf.DegToRad(yawDeg), 0f));
+	}
+
 }

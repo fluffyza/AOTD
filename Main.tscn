@@ -470,6 +470,7 @@ FurnacePanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer
 FurnaceInputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid/FurnaceCraftSlot1")
 FurnaceFuelSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid/FurnaceFuelSlot1")
 FurnaceOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingOutput/FuranceCraftOutputSlot")
+ChestGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/ChestGrid")
 
 [node name="WorkbenchCraftingContainer" type="Node" parent="CanvasLayer/BackpackUI (Control)" unique_id=1457826599]
 script = ExtResource("23_y1tbi")

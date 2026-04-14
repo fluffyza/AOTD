@@ -14,6 +14,7 @@ public partial class InventorySlotUI : Button
 	public enum SlotRole
 	{
 		Inventory,
+		ChestStorage,
 		CraftingInput,
 		CraftingOutput,
 		ProcessingInput,

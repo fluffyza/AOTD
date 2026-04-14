@@ -2,24 +2,50 @@ using Godot;
 
 public partial class Chest : CraftedStructure
 {
+	[Export] public NodePath AnimationPlayerPath = "MeshPivot/chest/AnimationPlayer";
+	[Export] public NodePath StorageContainerPath = "StorageContainer";
+
 	private AnimationPlayer _animationPlayer;
+	private StorageContainer _storageContainer;
 	private bool _isOpen = false;
 
 	public override void _Ready()
 	{
-		_animationPlayer = GetNodeOrNull<AnimationPlayer>("MeshPivot/chest/AnimationPlayer");
+		_animationPlayer = GetNodeOrNull<AnimationPlayer>(AnimationPlayerPath);
+		_storageContainer = GetNodeOrNull<StorageContainer>(StorageContainerPath);
+
+		if (_storageContainer == null)
+			GD.PrintErr($"{Name}: StorageContainer is missing.");
 	}
 
-	public void Interact()
+	public StorageContainer GetStorageContainer()
 	{
-		if (_animationPlayer == null)
+		return _storageContainer;
+	}
+
+	public void Interact(BackpackUI backpackUi)
+	{
+		if (backpackUi == null || _storageContainer == null)
 			return;
 
-		if (_isOpen)
-			_animationPlayer.PlayBackwards("Open");
-		else
-			_animationPlayer.Play("Open");
+		if (_animationPlayer != null)
+		{
+			if (!_isOpen)
+			{
+				_animationPlayer.Play("Open");
+				_isOpen = true;
+			}
+		}
 
-		_isOpen = !_isOpen;
+		backpackUi.OpenChest(this, _storageContainer);
+	}
+
+	public void CloseChestVisual()
+	{
+		if (_animationPlayer == null || !_isOpen)
+			return;
+
+		_animationPlayer.PlayBackwards("Open");
+		_isOpen = false;
 	}
 }

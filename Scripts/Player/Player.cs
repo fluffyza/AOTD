@@ -390,7 +390,7 @@ public partial class Player : CharacterBody3D
 			
 			if (current is Chest chest)
 			{
-				chest.Interact();
+				chest.Interact(_backpackUi);
 				return;
 			}
 
@@ -533,8 +533,9 @@ public partial class Player : CharacterBody3D
 			GD.Print("You can't place the acorn yet.");
 			return;
 		}
-
-		bool placed = _worldManager.TryPlaceInventoryItem(placementCell, selectedSlot.Item.ItemId);
+		
+		Vector3 playerForward = -GlobalTransform.Basis.Z;
+		bool placed = _worldManager.TryPlaceInventoryItem(placementCell, selectedSlot.Item.ItemId, playerForward);
 		if (!placed)
 		{
 			GD.Print("Cell occupied or item could not be placed.");
