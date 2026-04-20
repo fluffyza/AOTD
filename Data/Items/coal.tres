@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://cl8k74yfonxch"]
 
+[ext_resource type="Texture2D" uid="uid://bkbxnku4ud1cu" path="res://Materials/Mineable/Blocks/COAL-TEXTURE.png" id="1_k0vdp"]
 [ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_v2cgj"]
 [ext_resource type="Texture2D" uid="uid://dau6oqsbmpn7l" path="res://Materials/Backpack/ICON-BLOCK-COAL.png" id="1_ycdto"]
 [ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="2_k0vdp"]
@@ -10,9 +11,13 @@ ItemId = "coal"
 DisplayName = "Coal"
 Icon = ExtResource("1_ycdto")
 IsBlock = true
+CanPlaceInWorld = true
 WorldScene = ExtResource("2_k0vdp")
 CanBeFuel = true
 FuelBurnTimeSeconds = 12.0
+TopTexture = ExtResource("1_k0vdp")
+SideTexture = ExtResource("1_k0vdp")
+BottomTexture = ExtResource("1_k0vdp")
 BlockColor = Color(0, 0, 0, 1)
 UseBlockColor = true
 metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

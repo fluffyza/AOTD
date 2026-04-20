@@ -26,14 +26,14 @@ public partial class BlockManager : Node
 	{
 		float roll = GD.Randf();
 
-		if (roll < 0.45f)
-			return "iron_ore";
-		if (roll < 0.65f)
+		if (roll < 0.50f)
 			return "stone";
-		if (roll < 0.80f)
+		if (roll < 0.75f)
 			return "dirt";
+		if (roll < 0.90f)
+			return "coal";
 
-		return "coal";
+		return "iron_ore";
 	}
 
 	public Node3D CreatePlacedItem(string itemId, Vector3 worldPosition)
@@ -133,23 +133,40 @@ public partial class BlockManager : Node
 		var side = def.SideTexture ?? def.TopTexture ?? def.BottomTexture;
 		var bottom = def.BottomTexture ?? def.SideTexture ?? def.TopTexture;
 
-		if (top == null || side == null || bottom == null)
-			return false;
-
 		Image topImage = top.GetImage();
 		Image sideImage = side.GetImage();
 		Image bottomImage = bottom.GetImage();
+		
+		topImage.Convert(Image.Format.Rgba8);
+		sideImage.Convert(Image.Format.Rgba8);
+		bottomImage.Convert(Image.Format.Rgba8);
+
+		if (top == null || side == null || bottom == null)
+			return false;
+
 
 		if (topImage == null || sideImage == null || bottomImage == null)
 			return false;
 
+		topImage = (Image)topImage.Duplicate();
+		sideImage = (Image)sideImage.Duplicate();
+		bottomImage = (Image)bottomImage.Duplicate();
+
+		int targetWidth = topImage.GetWidth();
+		int targetHeight = topImage.GetHeight();
+
+		if (sideImage.GetWidth() != targetWidth || sideImage.GetHeight() != targetHeight)
+			sideImage.Resize(targetWidth, targetHeight, Image.Interpolation.Nearest);
+
+		if (bottomImage.GetWidth() != targetWidth || bottomImage.GetHeight() != targetHeight)
+			bottomImage.Resize(targetWidth, targetHeight, Image.Interpolation.Nearest);
+
 		var atlasTexture = BuildBlockAtlasTexture(topImage, sideImage, bottomImage);
 		var material = CreateAtlasBlockMaterial(atlasTexture);
 
-			
 		if (!meshInstance.HasMeta("original_mesh") && meshInstance.Mesh != null)
 			meshInstance.SetMeta("original_mesh", meshInstance.Mesh);
-			
+
 		meshInstance.Mesh = CreateAtlasCubeMesh();
 		meshInstance.MaterialOverride = material;
 		meshInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.On;

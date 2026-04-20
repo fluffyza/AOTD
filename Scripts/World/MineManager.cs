@@ -697,7 +697,7 @@ public partial class MineManager : Node
 			if (caveInterior.Contains(cell))
 				continue;
 
-			PlaceMineBlock(cell, true);
+			PlaceMineBlock(cell, false);
 		}
 	}
 
@@ -733,7 +733,7 @@ public partial class MineManager : Node
 					}
 					else
 					{
-						PlaceMineBlock(cell, true);
+						PlaceMineBlock(cell, false);
 					}
 				}
 			}

@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://cvsja17sfsbd8"]
 
+[ext_resource type="Texture2D" uid="uid://btxb8l7flja65" path="res://Materials/Mineable/Wood/TEXTURE-WOOD-TOP-BLOCK.png" id="1_7hxrs"]
 [ext_resource type="Texture2D" uid="uid://cliv015ng6g6y" path="res://Materials/Backpack/ICON-BLOCK-WOOD.png" id="1_gf6x1"]
 [ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_vx67u"]
 [ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="2_c4eiu"]
+[ext_resource type="Texture2D" uid="uid://cjf42flioldqa" path="res://Materials/Mineable/Wood/TEXTURE-WOOD-SIDE-BLOCK.png" id="3_07xxa"]
 
 [resource]
 script = ExtResource("1_vx67u")
@@ -10,9 +12,12 @@ ItemId = "wood"
 DisplayName = "Wood"
 Icon = ExtResource("1_gf6x1")
 IsBlock = true
+CanPlaceInWorld = true
 WorldScene = ExtResource("2_c4eiu")
 CanBeFuel = true
 FuelBurnTimeSeconds = 5.0
+TopTexture = ExtResource("1_7hxrs")
+SideTexture = ExtResource("3_07xxa")
+BottomTexture = ExtResource("1_7hxrs")
 BlockColor = Color(0.47745472, 0.41982648, 0.3180705, 1)
-UseBlockColor = true
 metadata/_custom_type_script = "uid://b6tyu0mb75t1c"
