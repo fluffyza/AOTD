@@ -402,11 +402,11 @@ public partial class Player : CharacterBody3D
 	{
 		if (_backpackUi != null && _backpackUi.IsOpen)
 		{
-			if (_highlightedTree != null && IsInstanceValid(_highlightedTree))
-			{
-				_highlightedTree.SetHighlighted(false);
-				_highlightedTree = null;
-			}
+			//if (_highlightedTree != null && IsInstanceValid(_highlightedTree))
+			//{
+				//_highlightedTree.SetHighlighted(false);
+				//_highlightedTree = null;
+			//}
 			
 			if (_highlightedStructure != null && IsInstanceValid(_highlightedStructure))
 			{
@@ -433,7 +433,7 @@ public partial class Player : CharacterBody3D
 		_targetting.UpdateTarget();
 		
 		UpdateCraftedStructureHighlight();
-		UpdateTreeHighlight();
+		//UpdateTreeHighlight();
 
 		if (_placementPreview != null)
 			_placementPreview.UpdateFromTarget(_targetting);
@@ -692,26 +692,26 @@ public partial class Player : CharacterBody3D
 		return null;
 	}
 	
-	private void UpdateTreeHighlight()
-	{
-		TreeResource newTree = null;
-
-		if (_targetting != null && _targetting.LookedAtNode != null)
-		{
-			newTree = FindTreeResource(_targetting.LookedAtNode);
-		}
-
-		if (_highlightedTree != newTree)
-		{
-			if (_highlightedTree != null && IsInstanceValid(_highlightedTree))
-				_highlightedTree.SetHighlighted(false);
-
-			_highlightedTree = newTree;
-
-			if (_highlightedTree != null)
-				_highlightedTree.SetHighlighted(true);
-		}
-	}
+	//private void UpdateTreeHighlight()
+	//{
+		//TreeResource newTree = null;
+//
+		//if (_targetting != null && _targetting.LookedAtNode != null)
+		//{
+			//newTree = FindTreeResource(_targetting.LookedAtNode);
+		//}
+//
+		//if (_highlightedTree != newTree)
+		//{
+			//if (_highlightedTree != null && IsInstanceValid(_highlightedTree))
+				//_highlightedTree.SetHighlighted(false);
+//
+			//_highlightedTree = newTree;
+//
+			//if (_highlightedTree != null)
+				//_highlightedTree.SetHighlighted(true);
+		//}
+	//}
 	
 	private void HideAllHeldVisuals()
 	{

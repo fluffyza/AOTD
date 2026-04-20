@@ -234,7 +234,7 @@ visible = false
 light_energy = 0.208
 
 [node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023540735, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3724365, 0)
 script = ExtResource("1_bg4s2")
 _handRoot = NodePath("../../../../CanvasLayer/HandRoot")
 _handsLeftUi = NodePath("../../../../CanvasLayer/HandRoot/LeftHand")

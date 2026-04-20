@@ -2,34 +2,61 @@ using Godot;
 
 public partial class TreeResource : Node3D
 {
-	[Export] public int MaxHealth = 3;
-	[Export] public int MinWoodDrop = 5;
-	[Export] public int MaxWoodDrop = 8;
-	[Export] public float AcornDropChance = 0.25f;
 	[Export] public NodePath SpritePath;
+	[Export] public TreeDefinition Definition;
 
 	private int _health;
 	private Sprite3D _sprite;
 
 	public override void _Ready()
 	{
-		_health = MaxHealth;
 		_sprite = GetNodeOrNull<Sprite3D>(SpritePath);
 
 		if (_sprite == null)
+		{
 			GD.PrintErr($"{Name}: SpritePath is missing or invalid.");
-	}
-
-	public void SetHighlighted(bool highlighted)
-	{
-		if (_sprite == null)
 			return;
-			
-		_sprite.Modulate = highlighted
-			? new Color(1f, 0f, 0f, 1f)
-			: Colors.White;
+		}
 
+		ApplyDefinition();
 	}
+
+	private void ApplyDefinition()
+	{
+		if (Definition == null)
+		{
+			GD.PrintErr($"{Name}: TreeDefinition is missing.");
+			return;
+		}
+
+		_health = Definition.MaxHealth;
+
+		if (_sprite != null)
+		{
+			_sprite.Texture = Definition.SpriteTexture;
+			_sprite.Scale = Definition.SpriteScale;
+			_sprite.Modulate = Definition.NormalTint;
+
+			if (_sprite.MaterialOverride is StandardMaterial3D material)
+			{
+				material.AlbedoTexture = Definition.SpriteTexture;
+				material.AlbedoColor = Definition.NormalTint;
+			}
+		}
+	}
+
+	//public void SetHighlighted(bool highlighted)
+	//{
+		//if (_sprite == null || Definition == null)
+			//return;
+//
+		//Color tint = highlighted ? Definition.HighlightTint : Definition.NormalTint;
+//
+		//_sprite.Modulate = tint;
+//
+		//if (_sprite.MaterialOverride is StandardMaterial3D material)
+			//material.AlbedoColor = tint;
+	//}
 
 	public void Mine(Player player)
 	{
@@ -47,13 +74,19 @@ public partial class TreeResource : Node3D
 	private void Harvest(Player player)
 	{
 		var inventory = player.GetNodeOrNull<Inventory>("Inventory");
-		if (inventory != null)
+		if (inventory != null && Definition != null)
 		{
-			int woodAmount = (int)GD.RandRange(MinWoodDrop, MaxWoodDrop);
-			inventory.AddItem("wood", woodAmount);
+			if (!string.IsNullOrEmpty(Definition.PrimaryDropItemId))
+			{
+				int amount = (int)GD.RandRange(Definition.MinPrimaryDrop, Definition.MaxPrimaryDrop);
+				inventory.AddItem(Definition.PrimaryDropItemId, amount);
+			}
 
-			if (GD.Randf() < AcornDropChance)
-				inventory.AddItem("acorn", 1);
+			if (!string.IsNullOrEmpty(Definition.SecondaryDropItemId) &&
+				GD.Randf() < Definition.SecondaryDropChance)
+			{
+				inventory.AddItem(Definition.SecondaryDropItemId, Definition.SecondaryDropAmount);
+			}
 		}
 
 		QueueFree();

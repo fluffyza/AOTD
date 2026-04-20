@@ -11,6 +11,7 @@ ItemId = "iron_ore"
 DisplayName = "Iron Ore"
 Icon = ExtResource("2_8mp1q")
 IsBlock = true
+CanPlaceInWorld = true
 WorldScene = ExtResource("3_rgahx")
 TopTexture = ExtResource("1_4ra1n")
 SideTexture = ExtResource("1_4ra1n")

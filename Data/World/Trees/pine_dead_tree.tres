@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="TreeDefinition" format=3 uid="uid://b34gowygf7fec"]
+
+[ext_resource type="Script" uid="uid://budhv6nu37bwf" path="res://Scripts/Crafting/Structure/World/TreeDefinition.cs" id="1_b8crc"]
+[ext_resource type="Texture2D" uid="uid://cm3mgb82x8uog" path="res://Materials/World/Tree/TREE-PINE-NOLEAVES.png" id="1_tidu8"]
+
+[resource]
+script = ExtResource("1_b8crc")
+TreeId = "pine_dead_tree"
+DisplayName = "Dead Pine"
+SpriteTexture = ExtResource("1_tidu8")
+SpriteScale = Vector3(0.639, 0.54, 0.639)
+MaxHealth = 2
+MinPrimaryDrop = 2
+MaxPrimaryDrop = 4
+SecondaryDropItemId = ""
+SecondaryDropChance = 0.0
+SecondaryDropAmount = 0
+metadata/_custom_type_script = "uid://budhv6nu37bwf"

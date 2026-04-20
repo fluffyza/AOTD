@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cgdqp8xdnxoig" path="res://Scripts/Block/Wood/TreeResource.cs" id="1_d8fsw"]
 [ext_resource type="Texture2D" uid="uid://bpi5lrx3ijch7" path="res://Materials/World/Tree/TREE-PINE-LEAVES.png" id="2_d8fsw"]
+[ext_resource type="Resource" uid="uid://b34gowygf7fec" path="res://Data/World/Trees/pine_dead_tree.tres" id="2_e73wm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d8fsw"]
 transparency = 2
@@ -17,6 +18,7 @@ billboard_keep_scale = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07981944, 0)
 script = ExtResource("1_d8fsw")
 SpritePath = NodePath("Sprite3D")
+Definition = ExtResource("2_e73wm")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1245546973]
 transform = Transform3D(0.639, 0, 0, 0, 0.54, 0, 0, 0, 0.639, 0, 2.5506527, 0)
