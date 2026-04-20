@@ -18,5 +18,5 @@ fog_density = 0.0238
 fog_sky_affect = 0.229
 fog_height = 10.0
 volumetric_fog_enabled = true
-volumetric_fog_density = -0.002688
+volumetric_fog_density = -0.024
 volumetric_fog_temporal_reprojection_enabled = false

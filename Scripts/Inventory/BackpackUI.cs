@@ -4,17 +4,15 @@ using System.Collections.Generic;
 public partial class BackpackUI : Control
 {
 	
-	private InventorySlotUI.SlotRole _heldSourceRole = InventorySlotUI.SlotRole.Inventory;
-	private int _heldSourceCraftIndex = -1;
-	private const int CraftOutputSourceMarker = -999;
+	
 	
 	[Export] public NodePath DraggedItemPreviewPath;
 	[Export] public NodePath DraggedItemIconPath;
 	[Export] public NodePath DraggedItemCountLabelPath;
 	
-	private Control _draggedItemPreview;
-	private TextureRect _draggedItemIcon;
-	private Label _draggedItemCountLabel;
+	public Control _draggedItemPreview;
+	public TextureRect _draggedItemIcon;
+	public Label _draggedItemCountLabel;
 
 	[Export] public NodePath BackpackCraftingPanelPath;
 	[Export] public NodePath BackpackCraftingGridPath;
@@ -36,44 +34,42 @@ public partial class BackpackUI : Control
 	[Export] public NodePath FurnaceFuelSlotPath;
 	[Export] public NodePath FurnaceOutputSlotPath;
 	
-	private Control _backpackCraftingPanel;
-	private GridContainer _backpackCraftingGrid;
-	private InventorySlotUI _backpackCraftOutputSlotUi;
-	private readonly List<InventorySlotUI> _backpackCraftingSlotUis = new();
-	private CraftingContainer _backpackCraftingContainer;
+	public Control _backpackCraftingPanel;
+	public GridContainer _backpackCraftingGrid;
+	public InventorySlotUI _backpackCraftOutputSlotUi;
+	public readonly List<InventorySlotUI> _backpackCraftingSlotUis = new();
+	public CraftingContainer _backpackCraftingContainer;
 
-	private Control _workbenchCraftingPanel;
-	private GridContainer _workbenchCraftingGrid;
-	private InventorySlotUI _workbenchCraftOutputSlotUi;
-	private readonly List<InventorySlotUI> _workbenchCraftingSlotUis = new();
-	private CraftingContainer _workbenchCraftingContainer;
+	public Control _workbenchCraftingPanel;
+	public GridContainer _workbenchCraftingGrid;
+	public InventorySlotUI _workbenchCraftOutputSlotUi;
+	public readonly List<InventorySlotUI> _workbenchCraftingSlotUis = new();
+	public CraftingContainer _workbenchCraftingContainer;
 
-	private GridContainer _craftingGrid;
-	private InventorySlotUI _craftOutputSlotUi;
-	private readonly List<InventorySlotUI> _craftingSlotUis = new();
-	private CraftingContainer _craftingContainer;
-	private ProcessingContainer _activeProcessingContainer;
+	public GridContainer _craftingGrid;
+	public InventorySlotUI _craftOutputSlotUi;
+	public readonly List<InventorySlotUI> _craftingSlotUis = new();
+	public CraftingContainer _craftingContainer;
+	public ProcessingContainer _activeProcessingContainer;
 	
-	private Control _campfirePanel;
-	private InventorySlotUI _campfireInputSlotUi;
-	private InventorySlotUI _campfireFuelSlotUi;
-	private InventorySlotUI _campfireOutputSlotUi;
+	public Control _campfirePanel;
+	public InventorySlotUI _campfireInputSlotUi;
+	public InventorySlotUI _campfireFuelSlotUi;
+	public InventorySlotUI _campfireOutputSlotUi;
 
-	private Control _furnacePanel;
-	private InventorySlotUI _furnaceInputSlotUi;
-	private InventorySlotUI _furnaceFuelSlotUi;
-	private InventorySlotUI _furnaceOutputSlotUi;
+	public Control _furnacePanel;
+	public InventorySlotUI _furnaceInputSlotUi;
+	public InventorySlotUI _furnaceFuelSlotUi;
+	public InventorySlotUI _furnaceOutputSlotUi;
 	
-	private ProcessingContainer _subscribedProcessingContainer;
-	
-	private InventorySlotUI _hoveredSlotUi = null;
-	private InventorySlotUI _pressedSlotUi = null;
+	public ProcessingContainer _subscribedProcessingContainer;
+
 
 	[Export] public NodePath BackpackGridPath;
 	[Export] public NodePath HotbarRowPath;
 	[Export] public NodePath DraggedItemLabelPath;
 
-	private enum DragMode
+	public enum DragMode
 	{
 		None,
 		FullStack,
@@ -81,7 +77,7 @@ public partial class BackpackUI : Control
 		SingleItem
 	}
 	
-	private enum UiMode
+	public enum UiMode
 	{
 		BackpackCrafting,
 		WorkbenchCrafting,
@@ -89,42 +85,31 @@ public partial class BackpackUI : Control
 		FurnaceProcessing,
 		ChestStorage
 	}
+	
+	public InventoryDragController _dragController;
+	public InventoryUiModeController _modeController;
 
-	private UiMode _currentMode = UiMode.BackpackCrafting;
+	public UiMode _currentMode = UiMode.BackpackCrafting;
 
 	
-	private readonly Dictionary<string, Texture2D> _itemIcons = new();
+	public readonly Dictionary<string, Texture2D> _itemIcons = new();
 
-	private GridContainer _backpackGrid;
-	private HBoxContainer _hotbarRow;
-	private Label _draggedItemLabel;
+	public GridContainer _backpackGrid;
+	public HBoxContainer _hotbarRow;
+	public Label _draggedItemLabel;
 
-	private readonly List<InventorySlotUI> _backpackSlotUis = new();
-	private readonly List<InventorySlotUI> _hotbarSlotUis = new();
+	public readonly List<InventorySlotUI> _backpackSlotUis = new();
+	public readonly List<InventorySlotUI> _hotbarSlotUis = new();
 
-	private Inventory _inventory;
-
-	private int _pressedSlotIndex = -1;
-	private int _hoveredSlotIndex = -1;
-	private int _heldSourceSlotIndex = -1;
-
-	private bool _isMouseHeld = false;
-	private bool _isDragging = false;
-
-	private Vector2 _pressMousePosition;
-	private const float DragThreshold = 12f;
-
-	private ItemDefinition _heldItem = null;
-	private int _heldCount = 0;
-	private DragMode _dragMode = DragMode.None;
+	public Inventory _inventory;
 
 	public bool IsOpen => Visible;
 	
 	[Export] public NodePath ChestGridPath;
-	private GridContainer _chestGrid;
-	private readonly List<InventorySlotUI> _chestSlotUis = new();
-	private StorageContainer _activeStorageContainer;
-	private Chest _activeChest;
+	public GridContainer _chestGrid;
+	public readonly List<InventorySlotUI> _chestSlotUis = new();
+	public StorageContainer _activeStorageContainer;
+	public Chest _activeChest;
 	
 
 	public override void _Ready()
@@ -173,9 +158,12 @@ public partial class BackpackUI : Control
 		_draggedItemLabel.MouseFilter = MouseFilterEnum.Ignore;
 		_draggedItemPreview.MouseFilter = MouseFilterEnum.Ignore;
 
-		CacheSlotReferences();
-		OpenBackpackCraftingMode();
+		_dragController = new InventoryDragController(this);
+		_modeController = new InventoryUiModeController(this);
 
+		CacheSlotReferences();
+		_modeController.OpenBackpackCraftingMode();
+		
 		Visible = false;
 		_draggedItemLabel.Visible = false;
 
@@ -192,6 +180,12 @@ public partial class BackpackUI : Control
 
 		if (_inventory != null)
 			_inventory.InventoryChanged += Refresh;
+
+		if (!IsNodeReady())
+		{
+			CallDeferred(nameof(Initialize), inventory);
+			return;
+		}
 
 		Refresh();
 	}
@@ -227,23 +221,7 @@ public partial class BackpackUI : Control
 		if (!Visible)
 			return;
 
-		if (_isMouseHeld && !_isDragging && _pressedSlotUi != null)
-		{
-			Vector2 mousePos = GetGlobalMousePosition();
-			if (mousePos.DistanceTo(_pressMousePosition) >= DragThreshold)
-				StartDrag();
-		}
-
-		if (_draggedItemLabel.Visible)
-			_draggedItemLabel.Position = GetGlobalMousePosition() + new Vector2(16, 16);
-			
-		Vector2 dragPos = GetGlobalMousePosition() + new Vector2(16, 16);
-
-		if (_draggedItemLabel.Visible)
-			_draggedItemLabel.Position = dragPos;
-
-		if (_draggedItemPreview.Visible)
-			_draggedItemPreview.Position = dragPos;
+		_dragController.Process(delta);
 	
 	}
 
@@ -254,135 +232,24 @@ public partial class BackpackUI : Control
 
 		if (@event.IsActionPressed("toggle_inventory"))
 		{
-			Close();
+			_modeController.Close();
 			GetViewport().SetInputAsHandled();
 			return;
 		}
 
-		if (@event is InputEventMouseButton mouseButton &&
-			mouseButton.ButtonIndex == MouseButton.Left)
-		{
-			if (mouseButton.Pressed)
-			{
-				_isMouseHeld = true;
-			}
-			else
-			{
-				_isMouseHeld = false;
-
-				if (_isDragging)
-					FinishDrag();
-				else
-					ClearPressedState();
-			}
-		}
+		_dragController.HandleInput(@event);
 	}
 
 	public void Toggle()
 	{
 		if (Visible)
-			Close();
+			_modeController.Close();
 		else
-			OpenBackpack();
+			_modeController.OpenBackpack();
 	}
 
-	public void OpenBackpackCraftingMode()
-	{
-		CloseActiveChestIfAny();
-		_currentMode = UiMode.BackpackCrafting;
-		_activeProcessingContainer = null;
-		UnsubscribeFromProcessingContainer();
-
-		_backpackCraftingPanel.Visible = true;
-		_workbenchCraftingPanel.Visible = false;
-		_campfirePanel.Visible = false;
-		_furnacePanel.Visible = false;
-		UnsubscribeFromStorageContainer();
-		_chestGrid.Visible = false;
-		
-		_craftingGrid = _backpackCraftingGrid;
-		_craftOutputSlotUi = _backpackCraftOutputSlotUi;
-		_craftingContainer = _backpackCraftingContainer;
-
-		_craftingSlotUis.Clear();
-		_craftingSlotUis.AddRange(_backpackCraftingSlotUis);
-		Refresh();
-	}
-
-	public void OpenWorkbenchCraftingMode()
-	{
-		CloseActiveChestIfAny();
-		_currentMode = UiMode.WorkbenchCrafting;
-		_activeProcessingContainer = null;
-		UnsubscribeFromProcessingContainer();
-
-		_backpackCraftingPanel.Visible = false;
-		UnsubscribeFromStorageContainer();
-		_chestGrid.Visible = false;
-		_workbenchCraftingPanel.Visible = true;
-		_campfirePanel.Visible = false;
-		_furnacePanel.Visible = false;
-
-		_craftingGrid = _workbenchCraftingGrid;
-		_craftOutputSlotUi = _workbenchCraftOutputSlotUi;
-		_craftingContainer = _workbenchCraftingContainer;
-
-		_craftingSlotUis.Clear();
-		_craftingSlotUis.AddRange(_workbenchCraftingSlotUis);
-
-		Refresh();
-	}
 	
-	public void OpenBackpack()
-	{
-		OpenUI();
-		OpenBackpackCraftingMode();
-	}
-	
-	public void OpenUI()
-	{
-		Visible = true;
-		Input.MouseMode = Input.MouseModeEnum.Visible;
-	}
-
-	public void OpenWorkbench()
-	{
-		OpenUI();
-		OpenWorkbenchCraftingMode();
-	}
-
-	public void Open()
-	{
-		Visible = true;
-		Input.MouseMode = Input.MouseModeEnum.Visible;
-		Refresh();
-	}
-
-	public void Close()
-	{
-		CloseActiveChestIfAny();
-		Visible = false;
-		Input.MouseMode = Input.MouseModeEnum.Captured;
-
-		CancelDragAndReturnHeldStack();
-		
-		UnsubscribeFromStorageContainer();
-		_chestGrid.Visible = false;
-		
-		if (_activeChest != null)
-		{
-			_activeChest.CloseChestVisual();
-			_activeChest = null;
-		}
-
-		if (_currentMode == UiMode.BackpackCrafting || _currentMode == UiMode.WorkbenchCrafting)
-			ReturnCraftingInputsToInventory();
-
-		_activeProcessingContainer = null;
-		UnsubscribeFromProcessingContainer();
-	}
-	
-	private void ReturnCraftingInputsToInventory()
+	public void ReturnCraftingInputsToInventory()
 	{
 		if (_craftingContainer == null || _inventory == null)
 			return;
@@ -521,7 +388,7 @@ public partial class BackpackUI : Control
 		}
 	}
 
-	private void Refresh()
+	public void Refresh()
 	{
 		if (_inventory == null)
 			return;
@@ -532,10 +399,10 @@ public partial class BackpackUI : Control
 			int inventoryIndex = Inventory.HotbarSize + i;
 
 			bool highlighted =
-				_hoveredSlotUi == ui ||
-				(_isDragging &&
-				 _heldSourceRole == InventorySlotUI.SlotRole.Inventory &&
-				 _heldSourceSlotIndex == ui.SlotIndex);
+				_dragController.HoveredSlotUi == ui ||
+				(_dragController.IsDragging &&
+				 _dragController.HeldSourceRole == InventorySlotUI.SlotRole.Inventory &&
+				 _dragController.HeldSourceSlotIndex == ui.SlotIndex);
 
 			SetupSlotVisual(ui, inventoryIndex, _inventory.GetSlot(inventoryIndex), highlighted);
 		}
@@ -546,10 +413,10 @@ public partial class BackpackUI : Control
 
 			bool selected = i == _inventory.SelectedIndex;
 			bool highlighted =
-				_hoveredSlotUi == ui ||
-				(_isDragging &&
-				 _heldSourceRole == InventorySlotUI.SlotRole.Inventory &&
-				 _heldSourceSlotIndex == ui.SlotIndex);
+				_dragController.HoveredSlotUi == ui ||
+				(_dragController.IsDragging &&
+				 _dragController.HeldSourceRole == InventorySlotUI.SlotRole.Inventory &&
+				_dragController.HeldSourceSlotIndex == ui.SlotIndex);
 
 			SetupSlotVisual(ui, i, _inventory.GetSlot(i), selected || highlighted);
 		}
@@ -562,18 +429,29 @@ public partial class BackpackUI : Control
 				var slot = _craftingContainer.GetInputSlot(ui.CraftingSlotIndex);
 
 				bool highlighted =
-					_hoveredSlotUi == ui ||
-					(_isDragging &&
-					 _heldSourceRole == InventorySlotUI.SlotRole.CraftingInput &&
-					 _heldSourceCraftIndex == ui.CraftingSlotIndex);
+					_dragController.HoveredSlotUi == ui ||
+					(_dragController.IsDragging &&
+					 _dragController.HeldSourceRole == InventorySlotUI.SlotRole.CraftingInput &&
+					 _dragController.HeldSourceCraftIndex == ui.CraftingSlotIndex);
 
 				SetupSlotVisual(ui, ui.CraftingSlotIndex, slot, highlighted);
 			}
 
 			if (_craftOutputSlotUi != null)
 			{
-				bool outputHighlighted = _hoveredSlotUi == _craftOutputSlotUi;
-				SetupSlotVisual(_craftOutputSlotUi, -1, _craftingContainer.OutputPreviewSlot, outputHighlighted);
+				bool outputHighlighted = _dragController.HoveredSlotUi == _craftOutputSlotUi;
+
+				InventorySlot outputSlotToShow = _craftingContainer.OutputPreviewSlot;
+
+				// While dragging crafted output, hide the preview visually so it
+				// doesn't look duplicated.
+				if (_dragController.IsDragging &&
+					_dragController.HeldSourceRole == InventorySlotUI.SlotRole.CraftingOutput)
+				{
+					outputSlotToShow = null;
+				}
+
+				SetupSlotVisual(_craftOutputSlotUi, -1, outputSlotToShow, outputHighlighted);
 			}
 		}
 		
@@ -587,10 +465,10 @@ public partial class BackpackUI : Control
 				var slot = _activeStorageContainer.GetSlot(i);
 
 				bool highlighted =
-					_hoveredSlotUi == ui ||
-					(_isDragging &&
-					 _heldSourceRole == InventorySlotUI.SlotRole.ChestStorage &&
-					 _heldSourceSlotIndex == i);
+					_dragController.HoveredSlotUi == ui ||
+					(_dragController.IsDragging &&
+					 _dragController.HeldSourceRole == InventorySlotUI.SlotRole.ChestStorage &&
+					 _dragController.HeldSourceSlotIndex == i);
 
 				SetupSlotVisual(ui, i, slot, highlighted);
 			}
@@ -604,19 +482,19 @@ public partial class BackpackUI : Control
 					_campfireInputSlotUi,
 					0,
 					_activeProcessingContainer.InputSlot,
-					_hoveredSlotUi == _campfireInputSlotUi);
+					_dragController.HoveredSlotUi == _campfireInputSlotUi);
 
 				SetupSlotVisual(
 					_campfireFuelSlotUi,
 					1,
 					_activeProcessingContainer.FuelSlot,
-					_hoveredSlotUi == _campfireFuelSlotUi);
+					_dragController.HoveredSlotUi == _campfireFuelSlotUi);
 
 				SetupSlotVisual(
 					_campfireOutputSlotUi,
 					2,
 					_activeProcessingContainer.OutputSlot,
-					_hoveredSlotUi == _campfireOutputSlotUi);
+					_dragController.HoveredSlotUi == _campfireOutputSlotUi);
 			}
 
 			if (_furnacePanel.Visible)
@@ -625,601 +503,39 @@ public partial class BackpackUI : Control
 					_furnaceInputSlotUi,
 					0,
 					_activeProcessingContainer.InputSlot,
-					_hoveredSlotUi == _furnaceInputSlotUi);
+					_dragController.HoveredSlotUi == _furnaceInputSlotUi);
 
 				SetupSlotVisual(
 					_furnaceFuelSlotUi,
 					1,
 					_activeProcessingContainer.FuelSlot,
-					_hoveredSlotUi == _furnaceFuelSlotUi);
+					_dragController.HoveredSlotUi == _furnaceFuelSlotUi);
 
 				SetupSlotVisual(
 					_furnaceOutputSlotUi,
 					2,
 					_activeProcessingContainer.OutputSlot,
-					_hoveredSlotUi == _furnaceOutputSlotUi);
+					_dragController.HoveredSlotUi == _furnaceOutputSlotUi);
 			}
 		}
 
-		UpdateDraggedLabel();
+		_dragController.UpdateDraggedLabel();
 	}
+
 
 	private void OnSlotPressed(InventorySlotUI slotUi)
 	{
-		if (HasHeldStack())
-			return;
-
-		_pressedSlotUi = slotUi;
-		_pressedSlotIndex = slotUi.SlotIndex;
-		_pressMousePosition = GetGlobalMousePosition();
+		_dragController.OnSlotPressed(slotUi);
 	}
 
 	private void OnSlotHovered(InventorySlotUI slotUi)
 	{
-		_hoveredSlotUi = slotUi;
-		_hoveredSlotIndex = slotUi.SlotIndex;
-
-		if (_isDragging)
-			Refresh();
+		_dragController.OnSlotHovered(slotUi);
 	}
 
 	private void OnSlotUnhovered(InventorySlotUI slotUi)
 	{
-		if (_hoveredSlotUi == slotUi)
-		{
-			_hoveredSlotUi = null;
-			_hoveredSlotIndex = -1;
-		}
-
-		if (_isDragging)
-			Refresh();
-	}
-
-	private void StartDrag()
-	{
-		if (_pressedSlotUi == null || HasHeldStack())
-			return;
-
-		switch (_pressedSlotUi.Role)
-		{
-			case InventorySlotUI.SlotRole.Inventory:
-				StartDragFromInventorySlot(_pressedSlotUi.SlotIndex);
-				break;
-
-			case InventorySlotUI.SlotRole.CraftingInput:
-				StartDragFromCraftingInput(_pressedSlotUi.CraftingSlotIndex);
-				break;
-
-			case InventorySlotUI.SlotRole.CraftingOutput:
-				StartDragFromCraftingOutput();
-				break;
-				
-			case InventorySlotUI.SlotRole.ChestStorage:
-				StartDragFromChestSlot(_pressedSlotUi.SlotIndex);
-				break;
-				
-			case InventorySlotUI.SlotRole.ProcessingInput:
-				StartDragFromProcessingSlot(_activeProcessingContainer?.InputSlot, InventorySlotUI.SlotRole.ProcessingInput);
-				break;
-
-			case InventorySlotUI.SlotRole.ProcessingFuel:
-				StartDragFromProcessingSlot(_activeProcessingContainer?.FuelSlot, InventorySlotUI.SlotRole.ProcessingFuel);
-				break;
-
-			case InventorySlotUI.SlotRole.ProcessingOutput:
-				StartDragFromProcessingSlot(_activeProcessingContainer?.OutputSlot, InventorySlotUI.SlotRole.ProcessingOutput);
-				break;
-		}
-	}
-	
-	private void StartDragFromCraftingInput(int craftIndex)
-	{
-		if (_craftingContainer == null)
-			return;
-			
-		_heldSourceRole = InventorySlotUI.SlotRole.CraftingInput;
-		_heldSourceCraftIndex = craftIndex;
-
-		var slot = _craftingContainer.GetInputSlot(craftIndex);
-		if (slot == null || slot.IsEmpty || slot.Item == null)
-			return;
-
-		bool shiftHeld = Input.IsKeyPressed(Key.Shift);
-		bool ctrlHeld = Input.IsKeyPressed(Key.Ctrl);
-
-		_dragMode = ctrlHeld ? DragMode.SingleItem :
-					shiftHeld ? DragMode.HalfStack :
-					DragMode.FullStack;
-
-		int amountToTake = slot.Count;
-
-		if (_dragMode == DragMode.SingleItem)
-			amountToTake = 1;
-		else if (_dragMode == DragMode.HalfStack)
-			amountToTake = Mathf.CeilToInt(slot.Count / 2.0f);
-
-		ItemDefinition item = slot.Item;
-		int removed = slot.RemoveAmount(amountToTake);
-
-		if (removed <= 0)
-			return;
-
-		_heldItem = item;
-		_heldCount = removed;
-		_heldSourceSlotIndex = craftIndex;
-
-		_craftingContainer.RefreshOutput();
-
-		_pressedSlotIndex = -1;
-		_isDragging = true;
-
-		Refresh();
-	}
-
-	
-	private void StartDragFromInventorySlot(int slotIndex)
-	{
-		if (_inventory == null)
-			return;
-			
-		_heldSourceRole = InventorySlotUI.SlotRole.Inventory;
-		_heldSourceCraftIndex = -1;
-
-		var slot = _inventory.GetSlot(slotIndex);
-		if (slot == null || slot.IsEmpty || slot.Item == null)
-			return;
-
-		bool shiftHeld = Input.IsKeyPressed(Key.Shift);
-		bool ctrlHeld = Input.IsKeyPressed(Key.Ctrl);
-
-		_dragMode = ctrlHeld ? DragMode.SingleItem :
-					shiftHeld ? DragMode.HalfStack :
-					DragMode.FullStack;
-
-		int amountToTake = slot.Count;
-
-		if (_dragMode == DragMode.SingleItem)
-			amountToTake = 1;
-		else if (_dragMode == DragMode.HalfStack)
-			amountToTake = Mathf.CeilToInt(slot.Count / 2.0f);
-
-		ItemDefinition item = slot.Item;
-		int removed = slot.RemoveAmount(amountToTake);
-
-		if (removed <= 0)
-			return;
-
-		_heldItem = item;
-		_heldCount = removed;
-		_heldSourceSlotIndex = slotIndex;
-
-		_pressedSlotIndex = -1;
-		_isDragging = true;
-
-		Refresh();
-	}
-	
-	private void StartDragFromCraftingOutput()
-	{
-		if (_craftingContainer == null || !_craftingContainer.HasValidRecipe())
-			return;
-
-		var output = _craftingContainer.OutputPreviewSlot;
-		if (output == null || output.IsEmpty || output.Item == null)
-			return;
-
-		_dragMode = DragMode.FullStack;
-		_heldItem = output.Item;
-		_heldCount = output.Count;
-
-		_heldSourceRole = InventorySlotUI.SlotRole.CraftingOutput;
-		_heldSourceSlotIndex = -1;
-		_heldSourceCraftIndex = -1;
-
-		_pressedSlotIndex = -1;
-		_isDragging = true;
-
-		Refresh();
-	}
-
-
-	private void FinishDrag()
-	{
-		if (!_isDragging)
-			return;
-
-		if (_hoveredSlotUi == null)
-		{
-			CancelDragAndReturnHeldStack();
-			return;
-		}
-
-		switch (_hoveredSlotUi.Role)
-		{
-			case InventorySlotUI.SlotRole.Inventory:
-				TryPlaceHeldIntoInventorySlot(_hoveredSlotUi.SlotIndex);
-				break;
-
-			case InventorySlotUI.SlotRole.CraftingInput:
-				TryPlaceHeldIntoCraftingInput(_hoveredSlotUi.CraftingSlotIndex);
-				break;
-				
-			case InventorySlotUI.SlotRole.ChestStorage:
-				TryPlaceHeldIntoChestSlot(_hoveredSlotUi.SlotIndex);
-				break;
-
-			case InventorySlotUI.SlotRole.CraftingOutput:
-				CancelDragAndReturnHeldStack();
-				break;
-
-			case InventorySlotUI.SlotRole.ProcessingInput:
-				TryPlaceHeldIntoProcessingInput();
-				break;
-
-			case InventorySlotUI.SlotRole.ProcessingFuel:
-				TryPlaceHeldIntoProcessingFuel();
-				break;
-
-			case InventorySlotUI.SlotRole.ProcessingOutput:
-				TryTakeProcessingOutput();
-				break;
-
-			default:
-				CancelDragAndReturnHeldStack();
-				break;
-		}
-
-		if (_heldCount <= 0)
-			ClearHeldStackState();
-
-		_isMouseHeld = false;
-		_isDragging = false;
-		_pressedSlotIndex = -1;
-		_hoveredSlotIndex = -1;
-		_pressedSlotUi = null;
-		_hoveredSlotUi = null;
-
-		Refresh();
-	}
-	
-	private void TryPlaceHeldIntoCraftingInput(int craftIndex)
-	{
-		if (!HasHeldStack() || _craftingContainer == null)
-			return;
-
-		// crafted output cannot be placed back into crafting grid
-		if (IsHoldingCraftOutput())
-		{
-			CancelCraftOutputDrag();
-			return;
-		}
-
-		var target = _craftingContainer.GetInputSlot(craftIndex);
-		if (target == null)
-			return;
-
-		if (target.IsEmpty)
-		{
-			target.SetItem(_heldItem, _heldCount);
-			_heldCount = 0;
-			_craftingContainer.RefreshOutput();
-			return;
-		}
-
-		if (target.CanStackWith(_heldItem))
-		{
-			int maxStack = target.Item.MaxStackSize;
-			int spaceLeft = maxStack - target.Count;
-			int toMove = Mathf.Min(spaceLeft, _heldCount);
-
-			if (toMove > 0)
-			{
-				target.Count += toMove;
-				_heldCount -= toMove;
-			}
-
-			_craftingContainer.RefreshOutput();
-
-			if (_heldCount <= 0)
-				return;
-		}
-
-		if (_dragMode == DragMode.FullStack)
-		{
-			var tempItem = target.Item;
-			int tempCount = target.Count;
-
-			target.SetItem(_heldItem, _heldCount);
-
-			// if source was inventory, restore swapped item there
-			// if source was crafting input, restore there
-			RestoreSwapToSource(tempItem, tempCount);
-
-			_heldCount = 0;
-			_craftingContainer.RefreshOutput();
-			return;
-		}
-
-		ReturnHeldStackToSource();
-	}
-
-	private void ReturnHeldStackToSource()
-	{
-		if (!HasHeldStack())
-			return;
-
-		if (_heldSourceRole == InventorySlotUI.SlotRole.Inventory)
-		{
-			if (_inventory == null || _heldSourceSlotIndex < 0)
-				return;
-
-			var source = _inventory.GetSlot(_heldSourceSlotIndex);
-			if (source == null)
-				return;
-
-			if (source.IsEmpty)
-				source.SetItem(_heldItem, _heldCount);
-			else if (source.CanStackWith(_heldItem))
-				source.Count += _heldCount;
-		}
-		else if (_heldSourceRole == InventorySlotUI.SlotRole.CraftingInput)
-		{
-			if (_craftingContainer == null || _heldSourceCraftIndex < 0)
-				return;
-
-			var source = _craftingContainer.GetInputSlot(_heldSourceCraftIndex);
-			if (source == null)
-				return;
-
-			if (source.IsEmpty)
-				source.SetItem(_heldItem, _heldCount);
-			else if (source.CanStackWith(_heldItem))
-				source.Count += _heldCount;
-
-			_craftingContainer.RefreshOutput();
-		}
-		else if (_heldSourceRole == InventorySlotUI.SlotRole.ProcessingInput)
-		{
-			var source = _activeProcessingContainer?.InputSlot;
-			if (source != null)
-			{
-				if (source.IsEmpty)
-					source.SetItem(_heldItem, _heldCount);
-				else if (source.CanStackWith(_heldItem))
-					source.Count += _heldCount;
-			}
-		}
-		else if (_heldSourceRole == InventorySlotUI.SlotRole.ProcessingFuel)
-		{
-			var source = _activeProcessingContainer?.FuelSlot;
-			if (source != null)
-			{
-				if (source.IsEmpty)
-					source.SetItem(_heldItem, _heldCount);
-				else if (source.CanStackWith(_heldItem))
-					source.Count += _heldCount;
-			}
-		}
-		else if (_heldSourceRole == InventorySlotUI.SlotRole.ProcessingOutput)
-		{
-			var source = _activeProcessingContainer?.OutputSlot;
-			if (source != null)
-			{
-				if (source.IsEmpty)
-					source.SetItem(_heldItem, _heldCount);
-				else if (source.CanStackWith(_heldItem))
-					source.Count += _heldCount;
-			}
-		}
-		else if (_heldSourceRole == InventorySlotUI.SlotRole.ChestStorage)
-		{
-			if (_activeStorageContainer == null || _heldSourceSlotIndex < 0)
-				return;
-
-			var source = _activeStorageContainer.GetSlot(_heldSourceSlotIndex);
-			if (source == null)
-				return;
-
-			if (source.IsEmpty)
-				source.SetItem(_heldItem, _heldCount);
-			else if (source.CanStackWith(_heldItem))
-				source.Count += _heldCount;
-
-			_activeStorageContainer.EmitSignal(StorageContainer.SignalName.StorageChanged);
-		}
-
-		ClearHeldStackState();
-	}
-
-	private void CancelDragAndReturnHeldStack()
-	{
-		ReturnHeldStackToSource();
-
-		_pressedSlotIndex = -1;
-		_hoveredSlotIndex = -1;
-		_isMouseHeld = false;
-		_isDragging = false;
-
-		UpdateDraggedLabel();
-		Refresh();
-	}
-
-	private void ClearPressedState()
-	{
-		_pressedSlotIndex = -1;
-		_pressedSlotUi = null;
-	}
-
-	private bool HasHeldStack()
-	{
-		return _heldItem != null && _heldCount > 0;
-	}
-
-	private void ClearHeldStackState()
-	{
-		_heldItem = null;
-		_heldCount = 0;
-		_heldSourceSlotIndex = -1;
-		_heldSourceCraftIndex = -1;
-		_heldSourceRole = InventorySlotUI.SlotRole.Inventory;
-		_dragMode = DragMode.None;
-	}
-	
-	private void RestoreSwapToSource(ItemDefinition item, int count)
-	{
-		if (item == null || count <= 0)
-			return;
-
-		if (_heldSourceRole == InventorySlotUI.SlotRole.Inventory)
-		{
-			var source = _inventory?.GetSlot(_heldSourceSlotIndex);
-			if (source != null)
-				source.SetItem(item, count);
-		}
-		else if (_heldSourceRole == InventorySlotUI.SlotRole.CraftingInput)
-		{
-			var source = _craftingContainer?.GetInputSlot(_heldSourceCraftIndex);
-			if (source != null)
-				source.SetItem(item, count);
-
-			_craftingContainer?.RefreshOutput();
-		}
-		else if (_heldSourceRole == InventorySlotUI.SlotRole.ChestStorage)
-		{
-			var source = _activeStorageContainer?.GetSlot(_heldSourceSlotIndex);
-			if (source != null)
-			{
-				source.SetItem(item, count);
-				_activeStorageContainer.EmitSignal(StorageContainer.SignalName.StorageChanged);
-			}
-		}
-	}
-
-	private void UpdateDraggedLabel()
-	{
-		if (_draggedItemLabel == null || _draggedItemPreview == null || _draggedItemIcon == null || _draggedItemCountLabel == null)
-			return;
-
-		if (!HasHeldStack())
-		{
-			_draggedItemPreview.Visible = false;
-			_draggedItemLabel.Visible = false;
-
-			_draggedItemLabel.Text = "";
-			_draggedItemIcon.Texture = null;
-			_draggedItemCountLabel.Text = "";
-			return;
-		}
-
-		Texture2D icon = GetItemIcon(_heldItem.ItemId);
-		bool hasIcon = icon != null;
-
-		if (hasIcon)
-		{
-			_draggedItemPreview.Visible = true;
-			_draggedItemLabel.Visible = false;
-
-			_draggedItemIcon.Texture = icon;
-			_draggedItemCountLabel.Text = _heldCount > 1 ? $"x{_heldCount}" : "";
-		}
-		else
-		{
-			_draggedItemPreview.Visible = false;
-			_draggedItemLabel.Visible = true;
-			_draggedItemLabel.Text = $"{_heldItem.DisplayName} x{_heldCount}";
-		}
-	}
-	
-	private void TryPlaceHeldIntoInventorySlot(int slotIndex)
-	{
-		if (!HasHeldStack() || _inventory == null)
-			return;
-
-		var target = _inventory.GetSlot(slotIndex);
-		if (target == null)
-			return;
-
-		// Crafted output: only place into empty inventory slot, no swapping, no stacking.
-		if (IsHoldingCraftOutput())
-		{
-			if (!target.IsEmpty)
-			{
-				CancelCraftOutputDrag();
-				return;
-			}
-
-			target.SetItem(_heldItem, _heldCount);
-
-			bool committed = _craftingContainer != null && _craftingContainer.TryCommitCraft();
-			if (!committed)
-			{
-				target.Clear();
-				CancelCraftOutputDrag();
-				return;
-			}
-
-			ClearHeldStackState();
-			return;
-		}
-
-		// Normal inventory behavior
-		if (target.IsEmpty)
-		{
-			target.SetItem(_heldItem, _heldCount);
-			_heldCount = 0;
-			return;
-		}
-
-		if (target.CanStackWith(_heldItem))
-		{
-			int maxStack = target.Item.MaxStackSize;
-			int spaceLeft = maxStack - target.Count;
-			int toMove = Mathf.Min(spaceLeft, _heldCount);
-
-			if (toMove > 0)
-			{
-				target.Count += toMove;
-				_heldCount -= toMove;
-			}
-
-			if (_heldCount <= 0)
-				return;
-		}
-
-		if (_dragMode == DragMode.FullStack)
-		{
-			var tempItem = target.Item;
-			int tempCount = target.Count;
-
-			target.SetItem(_heldItem, _heldCount);
-			RestoreSwapToSource(tempItem, tempCount);
-
-			_heldCount = 0;
-			return;
-		}
-
-		ReturnHeldStackToSource();
-	}
-
-	private bool IsHoldingCraftOutput()
-	{
-		return _heldSourceRole == InventorySlotUI.SlotRole.CraftingOutput;
-	}
-
-	private void CancelCraftOutputDrag()
-	{
-		ClearHeldStackState();
-		_isDragging = false;
-		_isMouseHeld = false;
-		Refresh();
-	}
-	
-	private bool IsHeldFromCraftingInput()
-	{
-		return _heldSourceSlotIndex >= 0 &&
-			   _heldSourceSlotIndex < _craftingContainer.InputSlots.Length &&
-			   _pressedSlotUi != null &&
-			   _pressedSlotUi.Role == InventorySlotUI.SlotRole.CraftingInput;
+		_dragController.OnSlotUnhovered(slotUi);
 	}
 	
 
@@ -1235,377 +551,42 @@ public partial class BackpackUI : Control
 		_itemIcons["pickaxe"] = GD.Load<Texture2D>("res://Materials/Backpack/Equip/ICON-PICKAXE.png");
 	}
 
-	private Texture2D GetItemIcon(string itemId)
+	public Texture2D GetItemIcon(string itemId)
 	{
 		return _itemIcons.TryGetValue(itemId, out var icon) ? icon : null;
 	}
 	
+
+	public void OpenBackpack()
+	{
+		_modeController.OpenBackpack();
+	}
+
+	public void OpenWorkbench()
+	{
+		_modeController.OpenWorkbench();
+	}
+
 	public void OpenCampfire(ProcessingContainer container)
 	{
-		OpenUI();
-		OpenCampfireMode(container);
+		_modeController.OpenCampfire(container);
 	}
 
 	public void OpenFurnace(ProcessingContainer container)
 	{
-		OpenUI();
-		OpenFurnaceMode(container);
+		_modeController.OpenFurnace(container);
 	}
 
-	private void OpenCampfireMode(ProcessingContainer container)
-	{
-		CloseActiveChestIfAny();
-		_currentMode = UiMode.CampfireProcessing;
-		_activeProcessingContainer = container;
-		_craftingContainer = null;
-
-		SubscribeToProcessingContainer(container);
-
-		_backpackCraftingPanel.Visible = false;
-		_workbenchCraftingPanel.Visible = false;
-		_campfirePanel.Visible = true;
-		_furnacePanel.Visible = false;
-		UnsubscribeFromStorageContainer();
-		_chestGrid.Visible = false;
-
-		Refresh();
-	}
-
-	private void OpenFurnaceMode(ProcessingContainer container)
-	{
-		CloseActiveChestIfAny();
-		_currentMode = UiMode.FurnaceProcessing;
-		_activeProcessingContainer = container;
-		_craftingContainer = null;
-
-		SubscribeToProcessingContainer(container);
-		UnsubscribeFromStorageContainer();
-		_chestGrid.Visible = false;
-		_backpackCraftingPanel.Visible = false;
-		_workbenchCraftingPanel.Visible = false;
-		_campfirePanel.Visible = false;
-		_furnacePanel.Visible = true;
-
-		Refresh();
-	}
-	
-	private void StartDragFromProcessingSlot(InventorySlot slot, InventorySlotUI.SlotRole sourceRole)
-	{
-		if (_activeProcessingContainer == null || slot == null || slot.IsEmpty || slot.Item == null)
-			return;
-
-		_heldSourceRole = sourceRole;
-		_heldSourceCraftIndex = -1;
-
-		bool shiftHeld = Input.IsKeyPressed(Key.Shift);
-		bool ctrlHeld = Input.IsKeyPressed(Key.Ctrl);
-
-		_dragMode = ctrlHeld ? DragMode.SingleItem :
-					shiftHeld ? DragMode.HalfStack :
-					DragMode.FullStack;
-
-		int amountToTake = slot.Count;
-
-		if (_dragMode == DragMode.SingleItem)
-			amountToTake = 1;
-		else if (_dragMode == DragMode.HalfStack)
-			amountToTake = Mathf.CeilToInt(slot.Count / 2.0f);
-
-		ItemDefinition item = slot.Item;
-		int removed = slot.RemoveAmount(amountToTake);
-
-		if (removed <= 0)
-			return;
-
-		_heldItem = item;
-		_heldCount = removed;
-		_heldSourceSlotIndex = -1;
-		_pressedSlotIndex = -1;
-		_isDragging = true;
-
-		Refresh();
-	}
-	
-	private void TryPlaceHeldIntoProcessingInput()
-	{
-		if (!HasHeldStack() || _activeProcessingContainer == null || _heldItem == null)
-			return;
-
-		// Must be valid for this station.
-		if (!_activeProcessingContainer.CanAcceptInput(_heldItem))
-		{
-			ReturnHeldStackToSource();
-			return;
-		}
-
-		var target = _activeProcessingContainer.InputSlot;
-		if (target == null)
-		{
-			ReturnHeldStackToSource();
-			return;
-		}
-
-		if (target.IsEmpty)
-		{
-			target.SetItem(_heldItem, _heldCount);
-			_heldCount = 0;
-			return;
-		}
-
-		if (target.CanStackWith(_heldItem))
-		{
-			int maxStack = target.Item.MaxStackSize;
-			int spaceLeft = maxStack - target.Count;
-			int toMove = Mathf.Min(spaceLeft, _heldCount);
-
-			if (toMove > 0)
-			{
-				target.Count += toMove;
-				_heldCount -= toMove;
-			}
-
-			if (_heldCount <= 0)
-				return;
-		}
-
-		ReturnHeldStackToSource();
-	}
-
-	private void TryPlaceHeldIntoProcessingFuel()
-	{
-		if (!HasHeldStack() || _activeProcessingContainer == null || _heldItem == null)
-			return;
-
-		if (!_activeProcessingContainer.CanAcceptFuel(_heldItem))
-		{
-			ReturnHeldStackToSource();
-			return;
-		}
-
-		var target = _activeProcessingContainer.FuelSlot;
-		if (target == null)
-		{
-			ReturnHeldStackToSource();
-			return;
-		}
-
-		if (target.IsEmpty)
-		{
-			target.SetItem(_heldItem, _heldCount);
-			_heldCount = 0;
-			return;
-		}
-
-		if (target.CanStackWith(_heldItem))
-		{
-			int maxStack = target.Item.MaxStackSize;
-			int spaceLeft = maxStack - target.Count;
-			int toMove = Mathf.Min(spaceLeft, _heldCount);
-
-			if (toMove > 0)
-			{
-				target.Count += toMove;
-				_heldCount -= toMove;
-			}
-
-			if (_heldCount <= 0)
-				return;
-		}
-
-		ReturnHeldStackToSource();
-	}
-
-	private void TryTakeProcessingOutput()
-	{
-		if (_activeProcessingContainer == null)
-		{
-			CancelDragAndReturnHeldStack();
-			return;
-		}
-
-		// Never allow dropping held items into output.
-		if (HasHeldStack())
-		{
-			CancelDragAndReturnHeldStack();
-			return;
-		}
-
-		if (_activeProcessingContainer.OutputSlot == null || _activeProcessingContainer.OutputSlot.IsEmpty)
-			return;
-
-		StartDragFromProcessingSlot(
-			_activeProcessingContainer.OutputSlot,
-			InventorySlotUI.SlotRole.ProcessingOutput
-		);
-	}
-	
-	private void SubscribeToProcessingContainer(ProcessingContainer container)
-	{
-		if (_subscribedProcessingContainer != null &&
-			IsInstanceValid(_subscribedProcessingContainer))
-		{
-			_subscribedProcessingContainer.ProcessingChanged -= Refresh;
-		}
-
-		_subscribedProcessingContainer = container;
-
-		if (_subscribedProcessingContainer != null)
-			_subscribedProcessingContainer.ProcessingChanged += Refresh;
-	}
-
-	private void UnsubscribeFromProcessingContainer()
-	{
-		if (_subscribedProcessingContainer != null &&
-			IsInstanceValid(_subscribedProcessingContainer))
-		{
-			_subscribedProcessingContainer.ProcessingChanged -= Refresh;
-		}
-
-		_subscribedProcessingContainer = null;
-	}
-	
 	public void OpenChest(Chest chest, StorageContainer container)
 	{
-		if (container == null || chest == null)
-			return;
+		_modeController.OpenChest(chest, container);
+	}
 
-		OpenUI();
-
-		UnsubscribeFromProcessingContainer();
-		UnsubscribeFromStorageContainer();
-
-		_currentMode = UiMode.ChestStorage;
-		_activeProcessingContainer = null;
-		_craftingContainer = null;
-
-		_activeChest = chest;
-		_activeStorageContainer = container;
-
-		_chestGrid.Visible = true;
-		_backpackCraftingPanel.Visible = false;
-		_workbenchCraftingPanel.Visible = false;
-		_campfirePanel.Visible = false;
-		_furnacePanel.Visible = false;
-
-		_activeStorageContainer.StorageChanged += Refresh;
-
-		Refresh();
+	public void CloseBackpack()
+	{
+		_modeController.Close();
 	}
 	
-	private void UnsubscribeFromStorageContainer()
-	{
-		if (_activeStorageContainer != null && IsInstanceValid(_activeStorageContainer))
-			_activeStorageContainer.StorageChanged -= Refresh;
-
-		_activeStorageContainer = null;
-	}
 	
-	private void StartDragFromChestSlot(int slotIndex)
-	{
-		if (_activeStorageContainer == null)
-			return;
-
-		_heldSourceRole = InventorySlotUI.SlotRole.ChestStorage;
-		_heldSourceCraftIndex = -1;
-
-		var slot = _activeStorageContainer.GetSlot(slotIndex);
-		if (slot == null || slot.IsEmpty || slot.Item == null)
-			return;
-
-		bool shiftHeld = Input.IsKeyPressed(Key.Shift);
-		bool ctrlHeld = Input.IsKeyPressed(Key.Ctrl);
-
-		_dragMode = ctrlHeld ? DragMode.SingleItem :
-					shiftHeld ? DragMode.HalfStack :
-					DragMode.FullStack;
-
-		int amountToTake = slot.Count;
-
-		if (_dragMode == DragMode.SingleItem)
-			amountToTake = 1;
-		else if (_dragMode == DragMode.HalfStack)
-			amountToTake = Mathf.CeilToInt(slot.Count / 2.0f);
-
-		ItemDefinition item = slot.Item;
-		int removed = slot.RemoveAmount(amountToTake);
-
-		if (removed <= 0)
-			return;
-
-		_heldItem = item;
-		_heldCount = removed;
-		_heldSourceSlotIndex = slotIndex;
-
-		_pressedSlotIndex = -1;
-		_isDragging = true;
-
-		Refresh();
-	}
 	
-	private void TryPlaceHeldIntoChestSlot(int slotIndex)
-	{
-		if (!HasHeldStack() || _activeStorageContainer == null)
-			return;
-
-		if (IsHoldingCraftOutput())
-		{
-			CancelCraftOutputDrag();
-			return;
-		}
-
-		var target = _activeStorageContainer.GetSlot(slotIndex);
-		if (target == null)
-			return;
-
-		if (target.IsEmpty)
-		{
-			target.SetItem(_heldItem, _heldCount);
-			_heldCount = 0;
-			_activeStorageContainer.EmitSignal(StorageContainer.SignalName.StorageChanged);
-			return;
-		}
-
-		if (target.CanStackWith(_heldItem))
-		{
-			int maxStack = target.Item.MaxStackSize;
-			int spaceLeft = maxStack - target.Count;
-			int toMove = Mathf.Min(spaceLeft, _heldCount);
-
-			if (toMove > 0)
-			{
-				target.Count += toMove;
-				_heldCount -= toMove;
-			}
-
-			_activeStorageContainer.EmitSignal(StorageContainer.SignalName.StorageChanged);
-
-			if (_heldCount <= 0)
-				return;
-		}
-
-		if (_dragMode == DragMode.FullStack)
-		{
-			var tempItem = target.Item;
-			int tempCount = target.Count;
-
-			target.SetItem(_heldItem, _heldCount);
-			RestoreSwapToSource(tempItem, tempCount);
-
-			_heldCount = 0;
-			_activeStorageContainer.EmitSignal(StorageContainer.SignalName.StorageChanged);
-			return;
-		}
-
-		ReturnHeldStackToSource();
-	}
-	
-	private void CloseActiveChestIfAny()
-	{
-		if (_activeChest != null && IsInstanceValid(_activeChest))
-		{
-			_activeChest.CloseChestVisual();
-			_activeChest = null;
-		}
-	}
-
 }

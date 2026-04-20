@@ -17,6 +17,8 @@ public partial class ItemDefinition : Resource
 	[Export] public Texture2D TopTexture;
 	[Export] public Texture2D SideTexture;
 	[Export] public Texture2D BottomTexture;
+	[Export] public Texture2D Icon;
+	
 
 	public bool HasBlockTextures =>
 		TopTexture != null || SideTexture != null || BottomTexture != null;

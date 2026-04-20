@@ -96,47 +96,47 @@ columns = 3
 
 [node name="WorkbenchCraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=298774881 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 0
 
 [node name="WorkbenchCraftSlot2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=264897823 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 1
 
 [node name="WorkbenchCraftSlot3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1739826117 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 2
 
 [node name="WorkbenchCraftSlot4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1727387480 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 3
 
 [node name="WorkbenchCraftSlot5" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=984155823 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 4
 
 [node name="WorkbenchCraftSlot6" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1158272170 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 5
 
 [node name="WorkbenchCraftSlot7" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1447941387 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 6
 
 [node name="WorkbenchCraftSlot8" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=71177021 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 7
 
 [node name="WorkbenchCraftSlot9" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1097936511 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 8
 
 [node name="WorkbenchCraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel" unique_id=1607713152]
@@ -147,7 +147,7 @@ alignment = 2
 
 [node name="WorkbenchCraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingOutput" unique_id=29914131 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 2
+Role = 3
 
 [node name="FurnaceCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=447576796]
 layout_mode = 2
@@ -161,12 +161,12 @@ size_flags_vertical = 3
 
 [node name="FurnaceCraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid" unique_id=542369523 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 3
+Role = 4
 CraftingSlotIndex = 0
 
 [node name="FurnaceFuelSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid" unique_id=1058481792 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 4
+Role = 5
 CraftingSlotIndex = 1
 
 [node name="FurnaceCraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel" unique_id=499617908]
@@ -177,7 +177,7 @@ alignment = 2
 
 [node name="FuranceCraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingOutput" unique_id=847701096 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 5
+Role = 6
 
 [node name="CampfireCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1103788579]
 layout_mode = 2
@@ -191,12 +191,12 @@ size_flags_vertical = 3
 
 [node name="CampfireCraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid" unique_id=679731801 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 3
+Role = 2
 CraftingSlotIndex = 0
 
 [node name="CampfireFuelSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid" unique_id=1952869296 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 4
+Role = 2
 CraftingSlotIndex = 1
 
 [node name="CampfireCraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel" unique_id=427454702]
@@ -207,7 +207,7 @@ alignment = 2
 
 [node name="CampfireCraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingOutput" unique_id=1211672916 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 5
+Role = 3
 
 [node name="BackpackCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1816742573]
 layout_mode = 2
@@ -222,22 +222,22 @@ columns = 2
 
 [node name="CraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1821207642 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 0
 
 [node name="CraftSlot2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=61395279 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 1
 
 [node name="CraftSlot3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1512803032 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 2
 
 [node name="CraftSlot4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1882599769 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 1
+Role = 2
 CraftingSlotIndex = 3
 
 [node name="CraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel" unique_id=220296968]
@@ -248,7 +248,7 @@ alignment = 2
 
 [node name="CraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingOutput" unique_id=451841635 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
-Role = 2
+Role = 3
 
 [node name="Backpack" type="Label" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1463355829]
 layout_mode = 2

@@ -99,8 +99,8 @@ public partial class Player : CharacterBody3D
 		_worldCraftPreview.Visible = false;
 		
 		_backpackUi = GetNode<BackpackUI>("../../../../CanvasLayer/BackpackUI (Control)");
-		_backpackUi.Initialize(_inventory);
-
+		_backpackUi.CallDeferred(nameof(BackpackUI.Initialize), _inventory);
+		
 		_inventory.AddItem("stone", 32);
 		_inventory.AddItem("torch", 16);
 		
