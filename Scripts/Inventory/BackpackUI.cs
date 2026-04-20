@@ -208,8 +208,8 @@ public partial class BackpackUI : Control
 
 		ui.SetItemVisual(itemId, count, icon);
 		
-		if (!string.IsNullOrEmpty(itemId))
-			GD.Print($"slot={slotIndex}, item={itemId}, iconFound={icon != null}, uiName={ui.Name}");
+		//if (!string.IsNullOrEmpty(itemId))
+			//GD.Print($"slot={slotIndex}, item={itemId}, iconFound={icon != null}, uiName={ui.Name}");
 		// Keep your highlight/selection visuals
 		ui.ButtonPressed = highlighted;
 	}

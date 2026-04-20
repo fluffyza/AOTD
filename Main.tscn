@@ -321,7 +321,7 @@ CameraPath = NodePath("../Head/Camera3D")
 
 [node name="WorldCraftingManager" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=1520499744]
 script = ExtResource("15_5mkgo")
-Recipes = Array[ExtResource("23_gdb40")]([ExtResource("24_8h1yq"), ExtResource("25_fykug"), ExtResource("26_wrbn1"), ExtResource("27_cfjnh")])
+Recipes = Array[ExtResource("23_gdb40")]([ExtResource("25_fykug"), ExtResource("26_wrbn1"), ExtResource("27_cfjnh"), ExtResource("24_8h1yq")])
 
 [node name="WindManager" type="Node3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=1639072271]
 script = ExtResource("16_3ccbu")
@@ -480,6 +480,7 @@ ChestGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/Ch
 
 [node name="WorkbenchCraftingContainer" type="Node" parent="CanvasLayer/BackpackUI (Control)" unique_id=1457826599]
 script = ExtResource("23_y1tbi")
+StationTier = 1
 InputSlotCount = 9
 
 [node name="BackpackCraftingContainer" type="Node" parent="CanvasLayer/BackpackUI (Control)" unique_id=998710843]

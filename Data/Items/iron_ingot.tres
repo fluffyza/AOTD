@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://cntegiu3od26h"]
+
+[ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="1_g4jsb"]
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_wfi1v"]
+
+[resource]
+script = ExtResource("1_wfi1v")
+ItemId = "iron_ingot"
+DisplayName = "Iron Ingot"
+IsBlock = true
+CanPlaceInWorld = true
+WorldScene = ExtResource("1_g4jsb")
+BlockColor = Color(1, 0.37915954, 0.47080415, 1)
+UseBlockColor = true
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

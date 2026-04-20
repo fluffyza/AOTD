@@ -11,6 +11,7 @@ OutputScene = ExtResource("1_7irtb")
 Layer0 = Array[String](["WW"])
 Layer1 = Array[String](["SS"])
 KeyMap = Dictionary[String, String]({
+"S": "stone",
 "W": "wood"
 })
 metadata/_custom_type_script = "uid://0ss8ho28jawt"

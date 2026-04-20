@@ -4,13 +4,15 @@
 [ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="2_u7x8y"]
 [ext_resource type="Resource" uid="uid://cl8k74yfonxch" path="res://Data/Items/coal.tres" id="3_xoeog"]
 [ext_resource type="Resource" uid="uid://cxkk418qup7hy" path="res://Data/Items/dirt.tres" id="4_rr3rk"]
-[ext_resource type="Resource" uid="uid://di4opd6xangsn" path="res://Data/Items/iron.tres" id="5_ltidp"]
+[ext_resource type="Resource" uid="uid://di4opd6xangsn" path="res://Data/Items/iron_ore.tres" id="5_ltidp"]
 [ext_resource type="Resource" uid="uid://cvsja17sfsbd8" path="res://Data/Items/wood.tres" id="6_yg41x"]
 [ext_resource type="Resource" uid="uid://c4xfwahorgrwh" path="res://Data/Items/acorn.tres" id="7_f2h6k"]
 [ext_resource type="Resource" uid="uid://bc5q543p31rht" path="res://Data/Items/stone.tres" id="8_kac13"]
 [ext_resource type="Resource" uid="uid://dcsf6myamqkcu" path="res://Data/Items/torch.tres" id="9_geov3"]
 [ext_resource type="Resource" uid="uid://bujn4xcbrjii4" path="res://Data/Items/pickaxe.tres" id="10_3pr20"]
+[ext_resource type="Resource" uid="uid://m24a5qghd31i" path="res://Data/Items/stick.tres" id="11_xoeog"]
+[ext_resource type="Resource" uid="uid://cntegiu3od26h" path="res://Data/Items/iron_ingot.tres" id="12_rr3rk"]
 
 [node name="ItemDatabase" type="Node" unique_id=410087564]
 script = ExtResource("1_08nis")
-Items = Array[ExtResource("2_u7x8y")]([ExtResource("3_xoeog"), ExtResource("4_rr3rk"), ExtResource("5_ltidp"), ExtResource("6_yg41x"), ExtResource("7_f2h6k"), ExtResource("8_kac13"), ExtResource("9_geov3"), ExtResource("10_3pr20")])
+Items = Array[ExtResource("2_u7x8y")]([ExtResource("3_xoeog"), ExtResource("4_rr3rk"), ExtResource("5_ltidp"), ExtResource("6_yg41x"), ExtResource("7_f2h6k"), ExtResource("8_kac13"), ExtResource("9_geov3"), ExtResource("11_xoeog"), ExtResource("10_3pr20"), ExtResource("12_rr3rk")])

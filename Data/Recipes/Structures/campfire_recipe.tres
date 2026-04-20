@@ -12,6 +12,7 @@ Layer0 = Array[String](["W"])
 Layer1 = Array[String](["C"])
 Layer2 = Array[String](["W"])
 KeyMap = Dictionary[String, String]({
+"C": "coal",
 "W": "wood"
 })
 metadata/_custom_type_script = "uid://0ss8ho28jawt"

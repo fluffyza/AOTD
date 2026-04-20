@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://di4opd6xangsn"]
+
+[ext_resource type="Texture2D" uid="uid://bg7tp7b70aodp" path="res://Materials/Mineable/Blocks/IRON-TEXTURE.png" id="1_4ra1n"]
+[ext_resource type="Texture2D" uid="uid://x38eaku3t6eu" path="res://Materials/Backpack/ICON-BLOCK-IRON.png" id="2_8mp1q"]
+[ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="3_rgahx"]
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="4_ivh4b"]
+
+[resource]
+script = ExtResource("4_ivh4b")
+ItemId = "iron_ore"
+DisplayName = "Iron Ore"
+Icon = ExtResource("2_8mp1q")
+IsBlock = true
+WorldScene = ExtResource("3_rgahx")
+TopTexture = ExtResource("1_4ra1n")
+SideTexture = ExtResource("1_4ra1n")
+BottomTexture = ExtResource("1_4ra1n")
+BlockColor = Color(0.8239909, 0.6553184, 0.6201452, 1)
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

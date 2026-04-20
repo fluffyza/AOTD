@@ -12,6 +12,7 @@ Layer0 = Array[String](["SSS", "SCS", "SSS"])
 Layer1 = Array[String](["S.S", "...", "S.S"])
 Layer2 = Array[String](["SSS", "SSS", "SSS"])
 KeyMap = Dictionary[String, String]({
+"C": "campfire",
 "S": "stone"
 })
 metadata/_custom_type_script = "uid://0ss8ho28jawt"
