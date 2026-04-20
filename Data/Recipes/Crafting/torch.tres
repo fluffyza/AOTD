@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" format=3 uid="uid://cl7ka6l7bk88b"]
+
+[ext_resource type="Script" uid="uid://evrsl300vuld" path="res://Scripts/Crafting/RecipeIngredient.cs" id="1_38uiv"]
+[ext_resource type="Script" uid="uid://b1kxam6mg5nmc" path="res://Scripts/Crafting/CraftingRecipe.cs" id="2_12fh4"]
+
+[sub_resource type="Resource" id="Resource_38uiv"]
+script = ExtResource("1_38uiv")
+ItemId = "stick"
+metadata/_custom_type_script = "uid://evrsl300vuld"
+
+[sub_resource type="Resource" id="Resource_12fh4"]
+script = ExtResource("1_38uiv")
+ItemId = "coal"
+metadata/_custom_type_script = "uid://evrsl300vuld"
+
+[resource]
+script = ExtResource("2_12fh4")
+RecipeId = "torch"
+IsShapeless = false
+OutputItemId = "torch"
+Ingredients = Array[ExtResource("1_38uiv")]([SubResource("Resource_38uiv"), SubResource("Resource_12fh4")])
+PatternRows = Array[String](["C", "S"])
+PatternKey = Dictionary[String, String]({
+"C": "coal"
+})
+metadata/_custom_type_script = "uid://b1kxam6mg5nmc"

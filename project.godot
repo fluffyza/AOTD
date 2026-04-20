@@ -18,8 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 ItemDatabase="*uid://ccrchclhmdn63"
-ProcessingManager="*uid://dny2akg04u6mk"
-CraftingManager="*uid://cnbfsoickx7mm"
+ProcessingManager="*uid://rtrgmif3lrj1"
+CraftingManager="*uid://dlj7v8yc27n3r"
 
 [dotnet]
 

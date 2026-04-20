@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://c4xfwahorgrwh"]
+
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_ak3qo"]
+[ext_resource type="Texture2D" uid="uid://br4xqrw7ha4y2" path="res://Materials/Backpack/ICON-ACORN.png" id="1_giyx7"]
+
+[resource]
+script = ExtResource("1_ak3qo")
+ItemId = "acorn"
+DisplayName = "Acorn"
+IsPlaceable = false
+Icon = ExtResource("1_giyx7")
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

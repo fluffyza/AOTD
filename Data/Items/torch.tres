@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://dcsf6myamqkcu"]
+
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_3p766"]
+[ext_resource type="Texture2D" uid="uid://cma37rf7gh645" path="res://Materials/Backpack/ICON-TORCH.png" id="1_a0syn"]
+[ext_resource type="PackedScene" uid="uid://cf02bt86p5je3" path="res://torch.tscn" id="2_uci1p"]
+
+[resource]
+script = ExtResource("1_3p766")
+ItemId = "torch"
+DisplayName = "Torch"
+WorldScene = ExtResource("2_uci1p")
+Icon = ExtResource("1_a0syn")
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

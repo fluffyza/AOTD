@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://rtrgmif3lrj1"]
+
+[ext_resource type="Script" uid="uid://dny2akg04u6mk" path="res://Scripts/Crafting/Structure/Processing/ProcessingManager.cs" id="1_y8rqc"]
+
+[node name="ProcessingManager" type="Node" unique_id=863981392]
+script = ExtResource("1_y8rqc")

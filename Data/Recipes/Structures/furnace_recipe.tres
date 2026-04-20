@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WorldStructureRecipe" format=3 uid="uid://qt5dkm4okgrb"]
+
+[ext_resource type="PackedScene" uid="uid://bi3uwlcqx230c" path="res://Scenes/Towers/placeable_furnace.tscn" id="1_uhaal"]
+[ext_resource type="Script" uid="uid://0ss8ho28jawt" path="res://Scripts/Crafting/Structure/WorldStructureRecipe.cs" id="1_ya6ta"]
+
+[resource]
+script = ExtResource("1_ya6ta")
+RecipeId = "furnace_recipe"
+OutputItemId = "furnace"
+OutputScene = ExtResource("1_uhaal")
+Layer0 = Array[String](["SSS", "SCS", "SSS"])
+Layer1 = Array[String](["S.S", "...", "S.S"])
+Layer2 = Array[String](["SSS", "SSS", "SSS"])
+KeyMap = Dictionary[String, String]({
+"S": "stone"
+})
+metadata/_custom_type_script = "uid://0ss8ho28jawt"

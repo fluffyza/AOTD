@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://bc5q543p31rht"]
+
+[ext_resource type="Texture2D" uid="uid://b2uqlwxrjeald" path="res://Materials/Mineable/Blocks/STONE-TEXTURE3.png" id="1_3qwqr"]
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_qowgh"]
+[ext_resource type="Texture2D" uid="uid://c8r2d6e4306o1" path="res://Materials/Backpack/ICON-BLOCK-STONE.png" id="2_kn5w4"]
+[ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="3_24j1l"]
+
+[resource]
+script = ExtResource("1_qowgh")
+ItemId = "stone"
+DisplayName = "Stone"
+WorldScene = ExtResource("3_24j1l")
+IsBlock = true
+HasBlockColor = true
+TopTexture = ExtResource("1_3qwqr")
+SideTexture = ExtResource("1_3qwqr")
+BottomTexture = ExtResource("1_3qwqr")
+Icon = ExtResource("2_kn5w4")
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

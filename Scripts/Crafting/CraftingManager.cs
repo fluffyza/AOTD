@@ -4,11 +4,13 @@ using System.Linq;
 
 public partial class CraftingManager : Node
 {
+	[Export] public Godot.Collections.Array<CraftingRecipe> Recipes = new();
+	
 	private ItemDatabase _itemDatabase;
 	private readonly List<CraftingRecipe> _recipes = new();
 	private int _lastShapeOffsetX = 0;
 	private int _lastShapeOffsetY = 0;
-	
+
 	public override void _Ready()
 	{
 		_itemDatabase = GetNodeOrNull<ItemDatabase>("/root/ItemDatabase");
@@ -19,110 +21,19 @@ public partial class CraftingManager : Node
 			return;
 		}
 
-		BuildStarterRecipes();
-	}
-
-	private void BuildStarterRecipes()
-	{
 		_recipes.Clear();
 
-		_recipes.Add(new CraftingRecipe
+		foreach (var recipe in Recipes)
 		{
-			RecipeId = "wood_to_sticks",
-			StationType = "Backpack",
-			IsShapeless = true,
-			OutputItemId = "stick",
-			OutputAmount = 4,
-			Ingredients = new Godot.Collections.Array<RecipeIngredient>
-			{
-				new RecipeIngredient
-				{
-					ItemId = "wood",
-					Amount = 1
-				}
-			}
-		});
-		
-		_recipes.Add(new CraftingRecipe
-		{
-			RecipeId = "wood_to_stick_workbench",
-			StationType = "Workbench",
-			IsShapeless = false,
-			OutputItemId = "stick",
-			OutputAmount = 4,
-			PatternRows = new Godot.Collections.Array<string>
-			{
-				"W"
-			},
-			PatternKey = new Godot.Collections.Dictionary<string, string>
-			{
-				{ "W", "wood" }
-			}
-		});
+			if (recipe == null)
+				continue;
 
-		_recipes.Add(new CraftingRecipe
-		{
-			RecipeId = "coal_stick_to_torch",
-			StationType = "Backpack",
-			IsShapeless = false,
-			OutputItemId = "torch",
-			OutputAmount = 4,
-			PatternRows = new Godot.Collections.Array<string>
-			{
-				"C",
-				"S"
-			},
-			PatternKey = new Godot.Collections.Dictionary<string, string>
-			{
-				{ "C", "coal" },
-				{ "S", "stick" }
-			}
-		});
-		
-		_recipes.Add(new CraftingRecipe
-		{
-			RecipeId = "coal_stick_to_torch_workbench",
-			StationType = "Workbench",
-			IsShapeless = false,
-			OutputItemId = "torch",
-			OutputAmount = 4,
-			PatternRows = new Godot.Collections.Array<string>
-			{
-				"C",
-				"S"
-			},
-			PatternKey = new Godot.Collections.Dictionary<string, string>
-			{
-				{ "C", "coal" },
-				{ "S", "stick" }
-			}
-		});
-		
-		_recipes.Add(new CraftingRecipe
-		{
-			RecipeId = "stone_pickaxe",
-			StationType = "Workbench",
-			IsShapeless = false,
-			OutputItemId = "pickaxe",
-			OutputAmount = 1,
-			PatternRows = new Godot.Collections.Array<string>
-			{
-				"SSS",
-				".T.",
-				".T."
-			},
-			PatternKey = new Godot.Collections.Dictionary<string, string>
-			{
-				{ "S", "stone" },
-				{ "T", "stick" }
-			}
-		});
-
-
+			_recipes.Add(recipe);
+		}
 	}
 
 	public bool TryGetCraftingResult(
-		string stationType,
+		CraftingRecipe.CraftingStationTier stationTier,
 		InventorySlot[] inputSlots,
 		out CraftingRecipe recipe,
 		out int craftCount,
@@ -139,7 +50,7 @@ public partial class CraftingManager : Node
 
 		foreach (var candidate in _recipes)
 		{
-			if (candidate == null || candidate.StationType != stationType)
+			if (candidate == null || candidate.MinimumStation > stationTier)
 				continue;
 
 			int matchedCraftCount;

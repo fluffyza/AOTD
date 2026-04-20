@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://cxkk418qup7hy"]
+
+[ext_resource type="Texture2D" uid="uid://dxwpra7hedvff" path="res://Materials/Mineable/Blocks/DIRT-TEXTURE.png" id="1_0e50f"]
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_3w4pg"]
+[ext_resource type="Texture2D" uid="uid://qt6nhobv2n7i" path="res://Materials/Backpack/ICON-BLOCK-DIRT.png" id="2_4gthd"]
+[ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="3_6g5kh"]
+
+[resource]
+script = ExtResource("1_3w4pg")
+ItemId = "dirt"
+DisplayName = "Dirt"
+WorldScene = ExtResource("3_6g5kh")
+IsBlock = true
+HasBlockColor = true
+BlockColor = Color(0.56524175, 0.263269, 0.12508675, 1)
+TopTexture = ExtResource("1_0e50f")
+SideTexture = ExtResource("1_0e50f")
+BottomTexture = ExtResource("1_0e50f")
+Icon = ExtResource("2_4gthd")
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

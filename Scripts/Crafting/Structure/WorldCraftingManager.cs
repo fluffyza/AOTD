@@ -3,11 +3,20 @@ using System.Collections.Generic;
 
 public partial class WorldCraftingManager : Node
 {
+	[Export] public Godot.Collections.Array<WorldStructureRecipe> Recipes = new();
 	private readonly List<WorldStructureRecipe> _recipes = new();
 
 	public override void _Ready()
 	{
-		BuildWorldRecipes();
+		_recipes.Clear();
+
+		foreach (var recipe in Recipes)
+		{
+			if (recipe == null)
+				continue;
+
+			_recipes.Add(recipe);
+		}
 	}
 
 	public bool TryGetPreviewCellsAtAnchor(
@@ -32,110 +41,6 @@ public partial class WorldCraftingManager : Node
 		}
 
 		return false;
-	}
-
-	private void BuildWorldRecipes()
-	{
-		_recipes.Clear();
-
-		_recipes.Add(new WorldStructureRecipe
-		{
-			RecipeId = "log_stone_to_workbench",
-			OutputItemId = "workbench",
-			OutputScene = GD.Load<PackedScene>("res://Scenes/Towers/placeable_workbench.tscn"),
-			Layer0 = new Godot.Collections.Array<string>
-			{
-				"WW",
-				"WW"
-			},
-			Layer1 = new Godot.Collections.Array<string>
-			{
-				"SS",
-				".."
-			},
-			Layer2 = new Godot.Collections.Array<string>(),
-			KeyMap = new Godot.Collections.Dictionary<string, string>
-			{
-				{ "W", "wood" },
-				{ "S", "stone" }
-			}
-		});
-
-		_recipes.Add(new WorldStructureRecipe
-		{
-			RecipeId = "campfire_recipe",
-			OutputItemId = "campfire",
-			OutputScene = GD.Load<PackedScene>("res://Scenes/Towers/placeable_campfire.tscn"),
-			Layer0 = new Godot.Collections.Array<string>
-			{
-				"W"
-			},
-			Layer1 = new Godot.Collections.Array<string>
-			{
-				"C"
-			},
-			Layer2 = new Godot.Collections.Array<string>
-			{
-				"W"
-			},
-			KeyMap = new Godot.Collections.Dictionary<string, string>
-			{
-				{ "W", "wood" },
-				{ "C", "coal" }
-			}
-		});
-
-		_recipes.Add(new WorldStructureRecipe
-		{
-			RecipeId = "furnace_recipe",
-			OutputItemId = "furnace",
-			OutputScene = GD.Load<PackedScene>("res://Scenes/Towers/placeable_furnace.tscn"),
-			Layer0 = new Godot.Collections.Array<string>
-			{
-				"SSS",
-				"SCS",
-				"SSS"
-			},
-			Layer1 = new Godot.Collections.Array<string>
-			{
-				"S.S",
-				"...",
-				"S.S"
-			},
-			Layer2 = new Godot.Collections.Array<string>
-			{
-				"SSS",
-				"SSS",
-				"SSS"
-			},
-			KeyMap = new Godot.Collections.Dictionary<string, string>
-			{
-				{ "S", "stone" },
-				{ "C", "campfire" }
-			}
-		});
-		
-		_recipes.Add(new WorldStructureRecipe
-		{
-			RecipeId = "chest_recipe",
-			OutputItemId = "chest",
-			OutputScene = GD.Load<PackedScene>("res://Scenes/Towers/placeable_chest.tscn"),
-			Layer0 = new Godot.Collections.Array<string>
-			{
-		        "WW"
-			},
-			Layer1 = new Godot.Collections.Array<string>
-			{
-		        "SS"
-			},
-			Layer2 = new Godot.Collections.Array<string>(),
-			KeyMap =  new Godot.Collections.Dictionary<string, string>
-			{
-				{ "W", "wood" },
-				{ "S", "stone" }
-			}
-		});
-		
 	}
 
 	public bool TryCraftAtAnchor(

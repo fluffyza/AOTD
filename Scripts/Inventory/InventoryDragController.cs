@@ -525,7 +525,7 @@ public class InventoryDragController
 			return;
 		}
 
-		Texture2D icon = _ui.GetItemIcon(_heldItem.ItemId);
+		Texture2D icon = _heldItem.Icon;
 		bool hasIcon = icon != null;
 
 		if (hasIcon)

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://cvsja17sfsbd8"]
+
+[ext_resource type="Texture2D" uid="uid://cliv015ng6g6y" path="res://Materials/Backpack/ICON-BLOCK-WOOD.png" id="1_gf6x1"]
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_vx67u"]
+[ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="2_c4eiu"]
+
+[resource]
+script = ExtResource("1_vx67u")
+ItemId = "wood"
+DisplayName = "Wood"
+Icon = ExtResource("1_gf6x1")
+IsBlock = true
+WorldScene = ExtResource("2_c4eiu")
+CanBeFuel = true
+FuelBurnTimeSeconds = 5.0
+BlockColor = Color(0.47745472, 0.41982648, 0.3180705, 1)
+UseBlockColor = true
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

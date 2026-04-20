@@ -114,8 +114,6 @@ public partial class BackpackUI : Control
 
 	public override void _Ready()
 	{
-		LoadItemIcons();
-
 		_backpackGrid = GetNode<GridContainer>(BackpackGridPath);
 		_hotbarRow = GetNode<HBoxContainer>(HotbarRowPath);
 		_draggedItemLabel = GetNode<Label>(DraggedItemLabelPath);
@@ -205,7 +203,7 @@ public partial class BackpackUI : Control
 		{
 			itemId = slot.Item.ItemId;
 			count = slot.Count;
-			icon = GetItemIcon(itemId);
+			icon = slot.Item.Icon;
 		}
 
 		ui.SetItemVisual(itemId, count, icon);
@@ -537,25 +535,12 @@ public partial class BackpackUI : Control
 	{
 		_dragController.OnSlotUnhovered(slotUi);
 	}
-	
-
-	private void LoadItemIcons()
-	{
-		_itemIcons["acorn"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-ACORN.png");
-		_itemIcons["coal"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-BLOCK-COAL.png");
-		_itemIcons["dirt"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-BLOCK-DIRT.png");
-		_itemIcons["iron"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-BLOCK-IRON.png");
-		_itemIcons["stone"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-BLOCK-STONE.png");
-		_itemIcons["wood"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-BLOCK-WOOD.png");
-		_itemIcons["torch"] = GD.Load<Texture2D>("res://Materials/Backpack/ICON-TORCH.png");
-		_itemIcons["pickaxe"] = GD.Load<Texture2D>("res://Materials/Backpack/Equip/ICON-PICKAXE.png");
-	}
 
 	public Texture2D GetItemIcon(string itemId)
 	{
-		return _itemIcons.TryGetValue(itemId, out var icon) ? icon : null;
+		var item = _inventory?.GetNodeOrNull<ItemDatabase>("/root/ItemDatabase")?.GetItem(itemId);
+		return item?.Icon;
 	}
-	
 
 	public void OpenBackpack()
 	{

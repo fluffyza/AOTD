@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ProcessingRecipe" format=3 uid="uid://b3irka0ffpptt"]
+
+[ext_resource type="Script" uid="uid://dphpxogogmnae" path="res://Scripts/Crafting/Structure/Processing/ProcessingRecipe.cs" id="1_udu8w"]
+
+[resource]
+script = ExtResource("1_udu8w")
+InputItemId = "iron_ore"
+OutputItemId = "iron_ingot"
+metadata/_custom_type_script = "uid://dphpxogogmnae"

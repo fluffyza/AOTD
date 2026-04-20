@@ -3,72 +3,29 @@ using System.Collections.Generic;
 
 public partial class ItemDatabase : Node
 {
-	[Export] public PackedScene BlockScene;
-	[Export] public PackedScene TorchScene;
+	[Export] public Godot.Collections.Array<ItemDefinition> Items = new();
 
-	[Export] public Texture2D DirtTopTexture;
-	[Export] public Texture2D DirtSideTexture;
-	[Export] public Texture2D DirtBottomTexture;
-
-	private readonly Dictionary<string, ItemDefinition> _items = new();
+	private readonly Dictionary<string, ItemDefinition> _itemsById = new();
 
 	public override void _Ready()
 	{
-		RegisterStarterItems();
-	}
+		_itemsById.Clear();
 
-	private void RegisterStarterItems()
-	{
-		Register(new ItemDefinition("wood", "Wood", true, 99, BlockScene, true, true, new Color(0.45f, 0.28f, 0.14f)));
-		Register(new ItemDefinition("coal", "Coal", true, 99, BlockScene, true, true, new Color(0.1f, 0.1f, 0.1f)));
-		Register(new ItemDefinition("stone", "Stone", true, 99, BlockScene, true, true, new Color(0.85f, 0.85f, 0.85f)));
-		Register(new ItemDefinition("pickaxe", "Stone Pickaxe", false, 1, null, false, false, null));
-		
-		Register(new ItemDefinition(
-			"dirt",
-			"Dirt",
-			true,
-			99,
-			BlockScene,
-			true,
-			false,
-			null,
-			DirtTopTexture,
-			DirtSideTexture ?? DirtTopTexture,
-			DirtBottomTexture ?? DirtTopTexture
-		));
-
-		Register(new ItemDefinition("stick", "Stick", false, 99, null, false, false, null));
-		Register(new ItemDefinition("torch", "Torch", true, 99, TorchScene, false, false, null));
-		Register(new ItemDefinition("acorn", "Acorn", false, 99, null, false, false, null));
-		Register(new ItemDefinition("iron_ore", "Iron Ore", true, 99, BlockScene, true, true, new Color(0.75f, 0.2f, 0.2f)));
-		Register(new ItemDefinition("iron_ingot", "Iron Ingot", true, 99, BlockScene, true, true, new Color(0.2f, 0.8f, 0.25f)));
-		
-		Register(new ItemDefinition("workbench", "Workbench", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_workbench.tscn"), false, false, null));
-		Register(new ItemDefinition("campfire", "Campfire", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_campfire.tscn"), false, false, null));
-		Register(new ItemDefinition("furnace", "Furnace", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_furnace.tscn"), false, false, null));
-		Register(new ItemDefinition("chest", "Chest", true, 1, GD.Load<PackedScene>("res://Scenes/Towers/placeable_chest.tscn"), false, false, null));
-
-
-	}
-
-	private void Register(ItemDefinition item)
-	{
-		if (item == null || string.IsNullOrWhiteSpace(item.ItemId))
+		foreach (var item in Items)
 		{
-			GD.PrintErr("ItemDatabase: Tried to register null or invalid item.");
-			return;
+			if (item == null || string.IsNullOrWhiteSpace(item.ItemId))
+				continue;
+
+			string id = item.ItemId.Trim().ToLower();
+
+			if (_itemsById.ContainsKey(id))
+			{
+				GD.PrintErr($"Duplicate item id in ItemDatabase: {id}");
+				continue;
+			}
+
+			_itemsById[id] = item;
 		}
-
-		string key = NormalizeItemId(item.ItemId);
-
-		if (_items.ContainsKey(key))
-		{
-			GD.PrintErr($"ItemDatabase: Duplicate item id '{key}'");
-			return;
-		}
-
-		_items[key] = item;
 	}
 
 	public ItemDefinition GetItem(string itemId)
@@ -76,27 +33,12 @@ public partial class ItemDatabase : Node
 		if (string.IsNullOrWhiteSpace(itemId))
 			return null;
 
-		string key = NormalizeItemId(itemId);
-
-		if (_items.TryGetValue(key, out var item))
-			return item;
-
-		GD.PrintErr($"ItemDatabase: Item '{itemId}' was not found.");
-		return null;
+		itemId = itemId.Trim().ToLower();
+		return _itemsById.TryGetValue(itemId, out var item) ? item : null;
 	}
 
-	public bool HasItem(string itemId)
+	public IEnumerable<ItemDefinition> GetAllItems()
 	{
-		if (string.IsNullOrWhiteSpace(itemId))
-			return false;
-
-		return _items.ContainsKey(NormalizeItemId(itemId));
-	}
-
-	private string NormalizeItemId(string itemId)
-	{
-		return string.IsNullOrWhiteSpace(itemId)
-			? ""
-			: itemId.Trim().ToLower();
+		return _itemsById.Values;
 	}
 }

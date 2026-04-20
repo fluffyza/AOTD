@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://di4opd6xangsn"]
+
+[ext_resource type="Texture2D" uid="uid://bg7tp7b70aodp" path="res://Materials/Mineable/Blocks/IRON-TEXTURE.png" id="1_a3nms"]
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_jd65o"]
+[ext_resource type="Texture2D" uid="uid://x38eaku3t6eu" path="res://Materials/Backpack/ICON-BLOCK-IRON.png" id="2_eja83"]
+[ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="3_mvygs"]
+
+[resource]
+script = ExtResource("1_jd65o")
+ItemId = "iron"
+DisplayName = "Iron"
+WorldScene = ExtResource("3_mvygs")
+IsBlock = true
+HasBlockColor = true
+BlockColor = Color(0.8239909, 0.6553184, 0.6201452, 1)
+TopTexture = ExtResource("1_a3nms")
+SideTexture = ExtResource("1_a3nms")
+BottomTexture = ExtResource("1_a3nms")
+Icon = ExtResource("2_eja83")
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

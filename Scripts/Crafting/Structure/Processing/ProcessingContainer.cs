@@ -5,7 +5,8 @@ public partial class ProcessingContainer : Node
 	[Signal]
 	public delegate void ProcessingChangedEventHandler();
 
-	[Export] public string StationType = "Furnace";
+	[Export] public ProcessingRecipe.ProcessingStationType StationType
+		= ProcessingRecipe.ProcessingStationType.Furnace;
 
 	public InventorySlot InputSlot { get; private set; }
 	public InventorySlot FuelSlot { get; private set; }

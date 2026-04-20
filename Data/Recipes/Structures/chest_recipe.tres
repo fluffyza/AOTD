@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WorldStructureRecipe" format=3 uid="uid://dabhivklr8560"]
+
+[ext_resource type="PackedScene" uid="uid://crs0tko0kb6ie" path="res://Scenes/Towers/placeable_chest.tscn" id="1_7irtb"]
+[ext_resource type="Script" uid="uid://0ss8ho28jawt" path="res://Scripts/Crafting/Structure/WorldStructureRecipe.cs" id="1_bhr2g"]
+
+[resource]
+script = ExtResource("1_bhr2g")
+RecipeId = "chest_recipe"
+OutputItemId = "chest"
+OutputScene = ExtResource("1_7irtb")
+Layer0 = Array[String](["WW"])
+Layer1 = Array[String](["SS"])
+KeyMap = Dictionary[String, String]({
+"W": "wood"
+})
+metadata/_custom_type_script = "uid://0ss8ho28jawt"

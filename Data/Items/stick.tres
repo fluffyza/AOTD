@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://m24a5qghd31i"]
+
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_wppyv"]
+
+[resource]
+script = ExtResource("1_wppyv")
+ItemId = "stick"
+DisplayName = "Stick"
+CanBeFuel = true
+FuelBurnTimeSeconds = 2.0
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

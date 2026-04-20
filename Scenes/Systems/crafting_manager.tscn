@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dlj7v8yc27n3r"]
+
+[ext_resource type="Script" uid="uid://cnbfsoickx7mm" path="res://Scripts/Crafting/CraftingManager.cs" id="1_e8k6a"]
+[ext_resource type="Script" uid="uid://b1kxam6mg5nmc" path="res://Scripts/Crafting/CraftingRecipe.cs" id="2_sdwn0"]
+[ext_resource type="Resource" uid="uid://cl7ka6l7bk88b" path="res://Data/Recipes/Crafting/torch.tres" id="3_ekd8v"]
+[ext_resource type="Resource" uid="uid://bremv07b0d4wk" path="res://Data/Recipes/Crafting/stone_pickaxe.tres" id="4_jigej"]
+[ext_resource type="Resource" uid="uid://dyw44igsttaln" path="res://Data/Recipes/Crafting/wood_to_stick.tres" id="5_yc4aj"]
+
+[node name="CratingManager" type="Node" unique_id=466805423]
+script = ExtResource("1_e8k6a")
+Recipes = Array[ExtResource("2_sdwn0")]([ExtResource("3_ekd8v"), ExtResource("4_jigej"), ExtResource("5_yc4aj")])

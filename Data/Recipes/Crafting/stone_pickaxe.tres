@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" format=3 uid="uid://bremv07b0d4wk"]
+
+[ext_resource type="Script" uid="uid://evrsl300vuld" path="res://Scripts/Crafting/RecipeIngredient.cs" id="1_v7ic1"]
+[ext_resource type="Script" uid="uid://b1kxam6mg5nmc" path="res://Scripts/Crafting/CraftingRecipe.cs" id="2_bc1pg"]
+
+[resource]
+script = ExtResource("2_bc1pg")
+RecipeId = "stone_pickaxe"
+MinimumStation = 1
+IsShapeless = false
+OutputItemId = "pickaxe"
+PatternRows = Array[String](["SSS", ".T.", ".T."])
+PatternKey = Dictionary[String, String]({
+"S": "stone"
+})
+metadata/_custom_type_script = "uid://b1kxam6mg5nmc"

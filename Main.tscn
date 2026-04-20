@@ -30,8 +30,13 @@
 [ext_resource type="Script" uid="uid://b4sq5p6hwiygg" path="res://Scripts/Hotbar/HotbarUI.cs" id="20_gngx1"]
 [ext_resource type="PackedScene" uid="uid://dwv2kxm5c43yh" path="res://HotbarSlot.tscn" id="21_jt61w"]
 [ext_resource type="PackedScene" uid="uid://bjmvlf4s8kve1" path="res://backpack_ui.tscn" id="22_v8qla"]
+[ext_resource type="Script" uid="uid://0ss8ho28jawt" path="res://Scripts/Crafting/Structure/WorldStructureRecipe.cs" id="23_gdb40"]
 [ext_resource type="Script" uid="uid://bw3asi1r0raq2" path="res://Scripts/Crafting/CraftingContainer.cs" id="23_y1tbi"]
+[ext_resource type="Resource" uid="uid://dabhivklr8560" path="res://Data/Recipes/Structures/chest_recipe.tres" id="24_8h1yq"]
 [ext_resource type="PackedScene" uid="uid://1gfropwtqfbn" path="res://GodotSky/GodotSky.tscn" id="25_ek63v"]
+[ext_resource type="Resource" uid="uid://qt5dkm4okgrb" path="res://Data/Recipes/Structures/furnace_recipe.tres" id="25_fykug"]
+[ext_resource type="Resource" uid="uid://d1p1i14qh4eeg" path="res://Data/Recipes/Structures/campfire_recipe.tres" id="26_wrbn1"]
+[ext_resource type="Resource" uid="uid://kxx1xgjn4o1w" path="res://Data/Recipes/Structures/workbench_recipe.tres" id="27_cfjnh"]
 [ext_resource type="Texture2D" uid="uid://qtmvq8aswd6c" path="res://Materials/Character/Equip/Hands/FistPunch/1.png" id="28_v8qla"]
 [ext_resource type="Texture2D" uid="uid://d2egwsyjbkysf" path="res://Materials/Character/Equip/Hands/FistPunch/2.png" id="29_y1tbi"]
 [ext_resource type="Texture2D" uid="uid://df766tf4fouxh" path="res://Materials/Character/Equip/Hands/FistPunch/3.png" id="30_c2s76"]
@@ -316,6 +321,7 @@ CameraPath = NodePath("../Head/Camera3D")
 
 [node name="WorldCraftingManager" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=1520499744]
 script = ExtResource("15_5mkgo")
+Recipes = Array[ExtResource("23_gdb40")]([ExtResource("24_8h1yq"), ExtResource("25_fykug"), ExtResource("26_wrbn1"), ExtResource("27_cfjnh")])
 
 [node name="WindManager" type="Node3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=1639072271]
 script = ExtResource("16_3ccbu")
@@ -474,7 +480,6 @@ ChestGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/Ch
 
 [node name="WorkbenchCraftingContainer" type="Node" parent="CanvasLayer/BackpackUI (Control)" unique_id=1457826599]
 script = ExtResource("23_y1tbi")
-StationType = "Workbench"
 InputSlotCount = 9
 
 [node name="BackpackCraftingContainer" type="Node" parent="CanvasLayer/BackpackUI (Control)" unique_id=998710843]

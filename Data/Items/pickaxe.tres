@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://bujn4xcbrjii4"]
+
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_4mmmj"]
+[ext_resource type="Texture2D" uid="uid://bx8o4hk338gol" path="res://Materials/Backpack/Equip/ICON-PICKAXE.png" id="1_qt01j"]
+
+[resource]
+script = ExtResource("1_4mmmj")
+ItemId = "pickaxe"
+DisplayName = "PickAxe"
+IsPlaceable = false
+MaxStackSize = 1
+Icon = ExtResource("1_qt01j")
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

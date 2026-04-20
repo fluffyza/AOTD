@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WorldStructureRecipe" format=3 uid="uid://kxx1xgjn4o1w"]
+
+[ext_resource type="Script" uid="uid://0ss8ho28jawt" path="res://Scripts/Crafting/Structure/WorldStructureRecipe.cs" id="1_0dfmg"]
+[ext_resource type="PackedScene" uid="uid://bl0jjkypocqcj" path="res://Scenes/Towers/placeable_workbench.tscn" id="1_h8yc1"]
+
+[resource]
+script = ExtResource("1_0dfmg")
+RecipeId = "log_stone_to_workbench"
+OutputItemId = "workbench"
+OutputScene = ExtResource("1_h8yc1")
+Layer0 = Array[String](["WW", "WW"])
+Layer1 = Array[String](["SS", ".."])
+KeyMap = Dictionary[String, String]({
+"W": "wood"
+})
+metadata/_custom_type_script = "uid://0ss8ho28jawt"

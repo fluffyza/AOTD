@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WorldStructureRecipe" format=3 uid="uid://d1p1i14qh4eeg"]
+
+[ext_resource type="Script" uid="uid://0ss8ho28jawt" path="res://Scripts/Crafting/Structure/WorldStructureRecipe.cs" id="1_8vfau"]
+[ext_resource type="PackedScene" uid="uid://b511esw4lc8sq" path="res://Scenes/Towers/placeable_campfire.tscn" id="1_ypikm"]
+
+[resource]
+script = ExtResource("1_8vfau")
+RecipeId = "campfire_recipe"
+OutputItemId = "campfire"
+OutputScene = ExtResource("1_ypikm")
+Layer0 = Array[String](["W"])
+Layer1 = Array[String](["C"])
+Layer2 = Array[String](["W"])
+KeyMap = Dictionary[String, String]({
+"W": "wood"
+})
+metadata/_custom_type_script = "uid://0ss8ho28jawt"

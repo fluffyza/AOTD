@@ -5,7 +5,7 @@ public partial class CraftingContainer : Node
 	[Signal]
 	public delegate void CraftingChangedEventHandler();
 
-	[Export] public string StationType = "Backpack";
+	[Export] public CraftingRecipe.CraftingStationTier StationTier = CraftingRecipe.CraftingStationTier.Backpack;
 	[Export] public int InputSlotCount = 4;
 
 	public InventorySlot[] InputSlots { get; private set; }
@@ -54,7 +54,7 @@ public partial class CraftingContainer : Node
 		}
 
 		if (_craftingManager.TryGetCraftingResult(
-			StationType,
+			StationTier,
 			InputSlots,
 			out CraftingRecipe recipe,
 			out int craftCount,
