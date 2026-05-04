@@ -87,7 +87,7 @@ public partial class MineManager : Node
 		HashSet<Vector3I> caveShell = new();
 		HashSet<Vector3I> blockedShellCells = new();
 
-		Vector3I chamberCenterCell = shaftBottomCenter + new Vector3I(0, -7, 0);
+		Vector3I chamberCenterCell = shaftBottomCenter + new Vector3I(0, -5, 0);
 		Vector3 chamberCenter = new Vector3(
 			chamberCenterCell.X,
 			chamberCenterCell.Y,
@@ -697,7 +697,7 @@ public partial class MineManager : Node
 			if (caveInterior.Contains(cell))
 				continue;
 
-			PlaceMineBlock(cell, false);
+			PlaceMineBlock(cell, true);
 		}
 	}
 
@@ -733,7 +733,7 @@ public partial class MineManager : Node
 					}
 					else
 					{
-						PlaceMineBlock(cell, false);
+						PlaceMineBlock(cell, true);
 					}
 				}
 			}
