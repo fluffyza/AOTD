@@ -33,6 +33,8 @@ public partial class MineManager : Node
 	[Export] public float ChamberRadiusMin = 4.0f;
 	[Export] public float ChamberRadiusMax = 6.5f;
 	[Export] public float ChamberOffsetRadius = 3.5f;
+	
+	public HashSet<Vector3I> ProtectedEntranceCells { get; } = new();
 
 	private WorldManager _worldManager;
 	private BlockManager _blockManager;
@@ -64,6 +66,8 @@ public partial class MineManager : Node
 
 	public void GenerateMine(Vector3I entranceCenter)
 	{
+		MarkProtectedMineEntrance(entranceCenter);
+
 		int shaftDepth = _rng.RandiRange(MinShaftDepth, MaxShaftDepth);
 		GenerateVerticalShaftMine(entranceCenter, shaftDepth);
 	}
@@ -135,10 +139,34 @@ public partial class MineManager : Node
 		RunWorm(sideWormB, caveInterior, createChamberAtEnd: false);
 
 		BuildShellFromInterior(caveInterior, caveShell, blockedShellCells, CaveWallThickness);
-		ApplyCaveToWorld(caveInterior, caveShell);
 
-		// Final safety pass so the shaft definitely enters the chamber.
+		// Place only the unbreakable shell first.
+		ApplyCaveShellToWorld(caveInterior, caveShell);
+
+		// Do any clearing/opening BEFORE filling.
 		OpenShaftBottomIntoChamber(shaftBottomCenter);
+
+		// Fill the cave/worm/shaft interior LAST.
+		FillCaveInteriorWithRandomBlocks(caveInterior);
+	}
+	
+	private void ApplyCaveShellToWorld(HashSet<Vector3I> caveInterior, HashSet<Vector3I> caveShell)
+	{
+		foreach (Vector3I cell in caveShell)
+		{
+			if (caveInterior.Contains(cell))
+				continue;
+
+			PlaceMineBlock(cell, true);
+		}
+	}
+	
+	private void FillCaveInteriorWithRandomBlocks(HashSet<Vector3I> caveInterior)
+	{
+		foreach (Vector3I cell in caveInterior)
+		{
+			PlaceRandomMineBlock(cell);
+		}
 	}
 	
 	private void MarkProtectedShaftEntranceZone(Vector3I shaftBottomCenter, HashSet<Vector3I> blockedShellCells)
@@ -687,11 +715,13 @@ public partial class MineManager : Node
 
 	private void ApplyCaveToWorld(HashSet<Vector3I> caveInterior, HashSet<Vector3I> caveShell)
 	{
-		// Clear all cave air/interior.
+		// 1. Fill the inside of the worms/caverns with random breakable mine blocks.
 		foreach (Vector3I cell in caveInterior)
-			_worldManager.RemoveBlockIfExists(cell);
+		{
+			PlaceRandomMineBlock(cell);
+		}
 
-		// Place unbreakable cave walls around the interior.
+		// 2. Place unbreakable shell around the worms/caverns.
 		foreach (Vector3I cell in caveShell)
 		{
 			if (caveInterior.Contains(cell))
@@ -699,6 +729,38 @@ public partial class MineManager : Node
 
 			PlaceMineBlock(cell, true);
 		}
+	}
+	
+	private void PlaceRandomMineBlock(Vector3I cell)
+	{
+		_worldManager.RemoveBlockIfExists(cell);
+
+		string blockId = GetRandomMineBlockId(cell.Y);
+
+		var block = _blockManager.CreateMineBlock(
+			GridUtils.CellToWorld(cell),
+			false // random blocks are breakable
+		);
+
+		if (block == null)
+			return;
+
+		_worldManager.AddPlacedNode(cell, block);
+	}
+	
+	private string GetRandomMineBlockId(int y)
+	{
+		float roll = GD.Randf();
+
+		if (y > 0)
+			return "dirt";
+
+		if (roll < 0.6f)
+			return "stone";
+		if (roll < 0.8f)
+			return "coal";
+
+		return "iron_ore";
 	}
 
 	private Vector3 RandomHorizontalDirection()
@@ -729,7 +791,7 @@ public partial class MineManager : Node
 
 					if (insideShaft)
 					{
-						_worldManager.RemoveBlockIfExists(cell);
+						PlaceRandomMineBlock(cell);
 					}
 					else
 					{
@@ -755,7 +817,25 @@ public partial class MineManager : Node
 					entranceCenter.Z + z
 				);
 
+				ProtectedEntranceCells.Add(cell);
 				_worldManager.RemoveBlockIfExists(cell);
+			}
+		}
+	}
+	
+	private void MarkProtectedMineEntrance(Vector3I entranceCenter)
+	{
+		int radius = 2; // 5x5
+
+		for (int x = -radius; x <= radius; x++)
+		{
+			for (int z = -radius; z <= radius; z++)
+			{
+				ProtectedEntranceCells.Add(new Vector3I(
+					entranceCenter.X + x,
+					entranceCenter.Y,
+					entranceCenter.Z + z
+				));
 			}
 		}
 	}

@@ -298,6 +298,7 @@ BlockManagerPath = NodePath("../BlockManager")
 [node name="WorldManager" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=2082777558]
 script = ExtResource("9_oye8v")
 BlockManagerPath = NodePath("../BlockManager")
+MineManagerPath = NodePath("../MineManager")
 TreeScene = ExtResource("10_40n85")
 GrassClumpScene = ExtResource("12_5mvff")
 RockOneScene = ExtResource("13_oye8v")

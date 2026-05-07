@@ -19,7 +19,7 @@ public partial class GameBootstrap : Node
 
 	private void Bootstrap()
 	{
-		_worldManager.GenerateSurfaceFloor(FloorSize, FloorY);
 		_mineManager.GenerateMine(MineStartCell);
+		_worldManager.GenerateSurfaceFloor(FloorSize, FloorY);
 	}
 }

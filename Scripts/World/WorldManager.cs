@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public partial class WorldManager : Node
 {
 	[Export] public NodePath BlockManagerPath;
+	[Export] public NodePath MineManagerPath;
 	[Export] public PackedScene TreeScene;
 	[Export] public float TreeSpawnChance = 0.1f;//0f;
 	[Export] public PackedScene GrassClumpScene;
@@ -19,6 +20,7 @@ public partial class WorldManager : Node
 	
 	private WorldCraftingManager _worldCraftingManager;
 	private BlockManager _blockManager;
+	private MineManager _mineManager;
 	private int _nextPlacementOrder = 0;
 	
 
@@ -27,6 +29,7 @@ public partial class WorldManager : Node
 	public override void _Ready()
 	{
 		_blockManager = GetNode<BlockManager>(BlockManagerPath);
+		_mineManager = GetNode<MineManager>(MineManagerPath);
 		_worldCraftingManager = GetNode<WorldCraftingManager>("../WorldCraftingManager");
 	}
 
@@ -132,6 +135,9 @@ public partial class WorldManager : Node
 			{
 				Vector3I cell = new Vector3I(x, yLevel, z);
 
+				if (_mineManager.ProtectedEntranceCells.Contains(cell))
+					continue;
+					
 				if (_placedItems.ContainsKey(cell))
 					continue;
 
@@ -152,6 +158,9 @@ public partial class WorldManager : Node
 
 				AddPlacedNode(cell, tile);
 				
+				if (_mineManager.ProtectedEntranceCells.Contains(cell))
+					continue;
+					
 				var decorAnchor = tile.GetNodeOrNull<Marker3D>("DecorAnchor");
 				Vector3 decorPos = decorAnchor != null ? decorAnchor.GlobalPosition : tile.GlobalPosition;
 
