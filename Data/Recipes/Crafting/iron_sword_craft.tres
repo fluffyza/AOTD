@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" format=3 uid="uid://b03y6teoeoc7l"]
+
+[ext_resource type="Script" uid="uid://evrsl300vuld" path="res://Scripts/Crafting/RecipeIngredient.cs" id="1_vmvah"]
+[ext_resource type="Script" uid="uid://b1kxam6mg5nmc" path="res://Scripts/Crafting/CraftingRecipe.cs" id="2_ty8o2"]
+
+[resource]
+script = ExtResource("2_ty8o2")
+RecipeId = "iron_sword_craft"
+MinimumStation = 1
+IsShapeless = false
+OutputItemId = "iron_sword"
+PatternRows = Array[String]([".I.", "ZIZ", "W", ""])
+PatternKey = Dictionary[String, String]({
+"I": "iron_blade",
+"W": "wooden_handle",
+"Z": "iron_ingot"
+})
+metadata/_custom_type_script = "uid://b1kxam6mg5nmc"

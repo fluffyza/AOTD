@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" format=3 uid="uid://r6vtkajkwtfh"]
+
+[ext_resource type="Script" uid="uid://evrsl300vuld" path="res://Scripts/Crafting/RecipeIngredient.cs" id="1_axsui"]
+[ext_resource type="Script" uid="uid://b1kxam6mg5nmc" path="res://Scripts/Crafting/CraftingRecipe.cs" id="2_xl1wc"]
+
+[resource]
+script = ExtResource("2_xl1wc")
+RecipeId = "wooden_handle_craft"
+MinimumStation = 1
+IsShapeless = false
+OutputItemId = "wooden_handle"
+PatternRows = Array[String](["T.T", "WWW", "T.T"])
+PatternKey = Dictionary[String, String]({
+"T": "stick",
+"W": "wood"
+})
+metadata/_custom_type_script = "uid://b1kxam6mg5nmc"

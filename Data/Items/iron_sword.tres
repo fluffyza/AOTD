@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://cox3r0tltc61h"]
+
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_6dktw"]
+
+[resource]
+script = ExtResource("1_6dktw")
+ItemId = "iron_sword"
+DisplayName = "Iron Sword"
+MaxStackSize = 1
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"
