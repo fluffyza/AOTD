@@ -9,7 +9,7 @@ RecipeId = "iron_sword_craft"
 MinimumStation = 1
 IsShapeless = false
 OutputItemId = "iron_sword"
-PatternRows = Array[String]([".I.", "ZIZ", "W", ""])
+PatternRows = Array[String]([".I.", "ZIZ", ".W."])
 PatternKey = Dictionary[String, String]({
 "I": "iron_blade",
 "W": "wooden_handle",

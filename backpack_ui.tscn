@@ -16,11 +16,11 @@ script = ExtResource("1_nao8u")
 DraggedItemPreviewPath = NodePath("DraggedItemPreview")
 DraggedItemIconPath = NodePath("DraggedItemPreview/DraggedItemIcon")
 DraggedItemCountLabelPath = NodePath("DraggedItemPreview/DraggedItemCountLabel")
-BackpackCraftingPanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel")
-BackpackCraftingGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid")
-BackpackCraftingOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingOutput/CraftOutputSlot")
-BackpackGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid")
-HotbarRowPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow")
+BackpackCraftingPanelPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel")
+BackpackCraftingGridPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid")
+BackpackCraftingOutputSlotPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingOutput/CraftOutputSlot")
+BackpackGridPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid")
+HotbarRowPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/HotbarRow")
 DraggedItemLabelPath = NodePath("DraggedItemLabel")
 
 [node name="Dimmer (ColorRect)" type="ColorRect" parent="." unique_id=1800962817]
@@ -46,303 +46,317 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="Panel" unique_id=629054693]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel" unique_id=1984040652]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -304.0
-offset_top = -127.0
-offset_right = 304.0
-offset_bottom = 127.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/CenterContainer" unique_id=1538862166]
+[node name="AdminItemPanelPath" type="Panel" parent="Panel/HBoxContainer" unique_id=1874946878]
+custom_minimum_size = Vector2(100, 500)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/CenterContainer/MarginContainer" unique_id=367967689]
+[node name="VScrollBar" type="VScrollBar" parent="Panel/HBoxContainer/AdminItemPanelPath" unique_id=110254703]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="AdminItemGridPath" type="GridContainer" parent="Panel/HBoxContainer/AdminItemPanelPath/VScrollBar" unique_id=1132294957]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+columns = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel/HBoxContainer" unique_id=629054693]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/HBoxContainer/CenterContainer" unique_id=1538862166]
 layout_mode = 2
 
-[node name="ChestGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=736260502]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer" unique_id=367967689]
+layout_mode = 2
+
+[node name="ChestGrid" type="GridContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer" unique_id=736260502]
 layout_mode = 2
 size_flags_vertical = 3
 columns = 3
 
-[node name="ChestSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/ChestGrid" unique_id=2127815516 instance=ExtResource("3_dy8yp")]
+[node name="ChestSlot" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/ChestGrid" unique_id=2127815516 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 1
 
-[node name="ChestSlot2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/ChestGrid" unique_id=419664719 instance=ExtResource("3_dy8yp")]
+[node name="ChestSlot2" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/ChestGrid" unique_id=419664719 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 1
 
-[node name="ChestSlot3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/ChestGrid" unique_id=2147129027 instance=ExtResource("3_dy8yp")]
+[node name="ChestSlot3" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/ChestGrid" unique_id=2147129027 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 1
 
-[node name="WorkbenchCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=954892367]
+[node name="WorkbenchCraftingPanel" type="HBoxContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer" unique_id=954892367]
 layout_mode = 2
 alignment = 2
 
-[node name="WorkbenchCraftingGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel" unique_id=1079088277]
+[node name="WorkbenchCraftingGrid" type="GridContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel" unique_id=1079088277]
 layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 columns = 3
 
-[node name="WorkbenchCraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=298774881 instance=ExtResource("3_dy8yp")]
+[node name="WorkbenchCraftSlot1" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=298774881 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 0
 
-[node name="WorkbenchCraftSlot2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=264897823 instance=ExtResource("3_dy8yp")]
+[node name="WorkbenchCraftSlot2" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=264897823 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 1
 
-[node name="WorkbenchCraftSlot3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1739826117 instance=ExtResource("3_dy8yp")]
+[node name="WorkbenchCraftSlot3" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1739826117 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 2
 
-[node name="WorkbenchCraftSlot4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1727387480 instance=ExtResource("3_dy8yp")]
+[node name="WorkbenchCraftSlot4" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1727387480 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 3
 
-[node name="WorkbenchCraftSlot5" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=984155823 instance=ExtResource("3_dy8yp")]
+[node name="WorkbenchCraftSlot5" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=984155823 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 4
 
-[node name="WorkbenchCraftSlot6" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1158272170 instance=ExtResource("3_dy8yp")]
+[node name="WorkbenchCraftSlot6" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1158272170 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 5
 
-[node name="WorkbenchCraftSlot7" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1447941387 instance=ExtResource("3_dy8yp")]
+[node name="WorkbenchCraftSlot7" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1447941387 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 6
 
-[node name="WorkbenchCraftSlot8" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=71177021 instance=ExtResource("3_dy8yp")]
+[node name="WorkbenchCraftSlot8" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=71177021 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 7
 
-[node name="WorkbenchCraftSlot9" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1097936511 instance=ExtResource("3_dy8yp")]
+[node name="WorkbenchCraftSlot9" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid" unique_id=1097936511 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 8
 
-[node name="WorkbenchCraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel" unique_id=1607713152]
+[node name="WorkbenchCraftingOutput" type="HBoxContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel" unique_id=1607713152]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 2
 
-[node name="WorkbenchCraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingOutput" unique_id=29914131 instance=ExtResource("3_dy8yp")]
+[node name="WorkbenchCraftOutputSlot" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingOutput" unique_id=29914131 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 3
 
-[node name="FurnaceCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=447576796]
+[node name="FurnaceCraftingPanel" type="HBoxContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer" unique_id=447576796]
 layout_mode = 2
 alignment = 2
 
-[node name="FurnaceCraftingGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel" unique_id=2111943954]
+[node name="FurnaceCraftingGrid" type="GridContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel" unique_id=2111943954]
 layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 
-[node name="FurnaceCraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid" unique_id=542369523 instance=ExtResource("3_dy8yp")]
+[node name="FurnaceCraftSlot1" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid" unique_id=542369523 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 4
 CraftingSlotIndex = 0
 
-[node name="FurnaceFuelSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid" unique_id=1058481792 instance=ExtResource("3_dy8yp")]
+[node name="FurnaceFuelSlot1" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid" unique_id=1058481792 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 5
 CraftingSlotIndex = 1
 
-[node name="FurnaceCraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel" unique_id=499617908]
+[node name="FurnaceCraftingOutput" type="HBoxContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel" unique_id=499617908]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 2
 
-[node name="FuranceCraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingOutput" unique_id=847701096 instance=ExtResource("3_dy8yp")]
+[node name="FuranceCraftOutputSlot" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingOutput" unique_id=847701096 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 6
 
-[node name="CampfireCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1103788579]
+[node name="CampfireCraftingPanel" type="HBoxContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer" unique_id=1103788579]
 layout_mode = 2
 alignment = 2
 
-[node name="CampfireCraftingGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel" unique_id=1176090638]
+[node name="CampfireCraftingGrid" type="GridContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel" unique_id=1176090638]
 layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 
-[node name="CampfireCraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid" unique_id=679731801 instance=ExtResource("3_dy8yp")]
+[node name="CampfireCraftSlot1" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid" unique_id=679731801 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 0
 
-[node name="CampfireFuelSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid" unique_id=1952869296 instance=ExtResource("3_dy8yp")]
+[node name="CampfireFuelSlot1" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid" unique_id=1952869296 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 1
 
-[node name="CampfireCraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel" unique_id=427454702]
+[node name="CampfireCraftingOutput" type="HBoxContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel" unique_id=427454702]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 2
 
-[node name="CampfireCraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingOutput" unique_id=1211672916 instance=ExtResource("3_dy8yp")]
+[node name="CampfireCraftOutputSlot" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingOutput" unique_id=1211672916 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 3
 
-[node name="BackpackCraftingPanel" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1816742573]
+[node name="BackpackCraftingPanel" type="HBoxContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer" unique_id=1816742573]
 layout_mode = 2
 alignment = 2
 
-[node name="CraftingGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel" unique_id=78725719]
+[node name="CraftingGrid" type="GridContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel" unique_id=78725719]
 layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 columns = 2
 
-[node name="CraftSlot1" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1821207642 instance=ExtResource("3_dy8yp")]
+[node name="CraftSlot1" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1821207642 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 0
 
-[node name="CraftSlot2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=61395279 instance=ExtResource("3_dy8yp")]
+[node name="CraftSlot2" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=61395279 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 1
 
-[node name="CraftSlot3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1512803032 instance=ExtResource("3_dy8yp")]
+[node name="CraftSlot3" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1512803032 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 2
 
-[node name="CraftSlot4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1882599769 instance=ExtResource("3_dy8yp")]
+[node name="CraftSlot4" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingGrid" unique_id=1882599769 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 2
 CraftingSlotIndex = 3
 
-[node name="CraftingOutput" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel" unique_id=220296968]
+[node name="CraftingOutput" type="HBoxContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel" unique_id=220296968]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 2
 
-[node name="CraftOutputSlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingOutput" unique_id=451841635 instance=ExtResource("3_dy8yp")]
+[node name="CraftOutputSlot" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackCraftingPanel/CraftingOutput" unique_id=451841635 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 Role = 3
 
-[node name="Backpack" type="Label" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1463355829]
+[node name="Backpack" type="Label" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer" unique_id=1463355829]
 layout_mode = 2
 
-[node name="BackpackGrid" type="GridContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=210088242]
+[node name="BackpackGrid" type="GridContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer" unique_id=210088242]
 layout_mode = 2
 size_flags_vertical = 3
 columns = 9
 
-[node name="InventorySlot" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=614508990 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=614508990 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=193734920 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot2" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=193734920 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=2128262113 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot3" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=2128262113 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1313401536 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot4" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1313401536 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot5" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=334081910 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot5" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=334081910 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot6" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1307712553 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot6" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1307712553 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot7" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=663967474 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot7" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=663967474 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot8" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=69836041 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot8" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=69836041 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot9" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=561716732 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot9" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=561716732 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot10" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1449383352 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot10" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1449383352 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot11" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1299036354 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot11" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1299036354 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot12" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=824114970 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot12" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=824114970 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot13" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1317940656 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot13" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1317940656 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot14" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=329950129 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot14" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=329950129 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot15" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1491601606 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot15" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1491601606 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot16" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1509851332 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot16" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=1509851332 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot17" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=199779498 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot17" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=199779498 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlot18" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=2145043117 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlot18" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/BackpackGrid" unique_id=2145043117 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=1172851162]
+[node name="Label2" type="Label" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer" unique_id=1172851162]
 layout_mode = 2
 
-[node name="HotbarRow" type="HBoxContainer" parent="Panel/CenterContainer/MarginContainer/VBoxContainer" unique_id=592258711]
+[node name="HotbarRow" type="HBoxContainer" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer" unique_id=592258711]
 layout_mode = 2
 
-[node name="InventorySlotHotbar" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=378846215 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlotHotbar" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=378846215 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlotHotbar2" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1020401342 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlotHotbar2" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1020401342 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlotHotbar3" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=135482903 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlotHotbar3" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=135482903 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlotHotbar4" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=592462469 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlotHotbar4" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=592462469 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlotHotbar5" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1962283544 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlotHotbar5" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1962283544 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlotHotbar6" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=716243491 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlotHotbar6" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=716243491 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlotHotbar7" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1504897976 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlotHotbar7" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1504897976 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlotHotbar8" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1814080913 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlotHotbar8" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1814080913 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
-[node name="InventorySlotHotbar9" parent="Panel/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1192974276 instance=ExtResource("3_dy8yp")]
+[node name="InventorySlotHotbar9" parent="Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/HotbarRow" unique_id=1192974276 instance=ExtResource("3_dy8yp")]
 layout_mode = 2
 
 [node name="DraggedItemLabel" type="Label" parent="." unique_id=1658139821]

@@ -41,6 +41,7 @@
 [ext_resource type="Texture2D" uid="uid://d2egwsyjbkysf" path="res://Materials/Character/Equip/Hands/FistPunch/2.png" id="29_y1tbi"]
 [ext_resource type="Texture2D" uid="uid://df766tf4fouxh" path="res://Materials/Character/Equip/Hands/FistPunch/3.png" id="30_c2s76"]
 [ext_resource type="Texture2D" uid="uid://dasca5h8cprpt" path="res://Materials/Character/Equip/Hands/FistPunch/4.png" id="31_f4ese"]
+[ext_resource type="Texture2D" uid="uid://b7cypt1ta277h" path="res://Materials/Character/Equip/Hands/sword hand.png" id="31_fykug"]
 [ext_resource type="Texture2D" uid="uid://coklk5suja3kv" path="res://Materials/Character/Equip/Hands/FistPunch/5.png" id="32_rchyr"]
 [ext_resource type="Texture2D" uid="uid://dxaygnwoa38y6" path="res://Materials/Character/Equip/Hands/FistPunch/6.png" id="33_pljue"]
 [ext_resource type="Texture2D" uid="uid://bwako2l1yyldb" path="res://Materials/Character/Equip/Hands/FistPunch/7.png" id="34_nx4yo"]
@@ -64,6 +65,7 @@
 [ext_resource type="Texture2D" uid="uid://8fl0253llj6b" path="res://Materials/Character/Equip/Hands/Action Left hand/11.png" id="51_cfjnh"]
 [ext_resource type="Texture2D" uid="uid://bj1o6fgohjsvy" path="res://Materials/Character/Equip/Hands/Action Left hand/12.png" id="52_mplfx"]
 [ext_resource type="Texture2D" uid="uid://c5o72w1lelq66" path="res://Materials/Character/Equip/Hands/Action Left hand/13.png" id="53_gyych"]
+[ext_resource type="PackedScene" uid="uid://bp1ojfia5c1jm" path="res://inventory_slot.tscn" id="64_8h1yq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_noarx"]
 radius = 0.4
@@ -233,13 +235,14 @@ render_target_update_mode = 4
 visible = false
 light_energy = 0.208
 
-[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController")]
+[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_ironSwordHandRightUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3724365, 0)
 script = ExtResource("1_bg4s2")
 _handRoot = NodePath("../../../../CanvasLayer/HandRoot")
 _handsLeftUi = NodePath("../../../../CanvasLayer/HandRoot/LeftHand")
 _handsRightUi = NodePath("../../../../CanvasLayer/HandRoot/RightHand")
 _pickaxeHandUi = NodePath("../../../../CanvasLayer/HandRoot/PickaxeHand")
+_ironSwordHandRightUi = NodePath("../../../../CanvasLayer/HandRoot/IronSwordHandRight")
 _heldItemRoot = NodePath("Head/Camera3D/HeldItemRoot")
 _heldTorchRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldTorchRoot")
 _heldBlockRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldBlockRoot")
@@ -332,7 +335,7 @@ WindGustScene = ExtResource("17_hhcpw")
 [node name="WorldCraftPreview" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=731278336 instance=ExtResource("18_mxvw5")]
 
 [node name="GodotSky" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=270944954 instance=ExtResource("25_ek63v")]
-timeOfDay = 94.86
+timeOfDay = 1153.04
 skyRotation = 145.9
 cloudCoverage = 0.444
 
@@ -363,6 +366,22 @@ offset_bottom = 648.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
+
+[node name="IronSwordHandRight" type="TextureRect" parent="CanvasLayer/HandRoot" unique_id=952104892]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -145.0
+offset_top = -573.0
+offset_right = 3571.0
+offset_bottom = 2003.0
+grow_vertical = 0
+scale = Vector2(0.25, 0.25)
+mouse_filter = 2
+texture = ExtResource("31_fykug")
+stretch_mode = 5
 
 [node name="LeftHand" type="TextureRect" parent="CanvasLayer/HandRoot" unique_id=2026448271]
 layout_mode = 1
@@ -464,20 +483,24 @@ mouse_filter = 2
 [node name="BackpackUI (Control)" parent="CanvasLayer" unique_id=490715253 instance=ExtResource("22_v8qla")]
 visible = false
 mouse_filter = 2
+AdminItemPanelPath = NodePath("Panel/HBoxContainer/AdminItemPanelPath")
+AdminItemGridPath = NodePath("Panel/HBoxContainer/AdminItemPanelPath/VScrollBar/AdminItemGridPath")
+InventorySlotScene = ExtResource("64_8h1yq")
+ItemDatabasePath = NodePath("/root/ItemDatabase")
 BackpackCraftingContainerPath = NodePath("BackpackCraftingContainer")
-WorkbenchCraftingPanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel")
-WorkbenchCraftingGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid")
-WorkbenchCraftingOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingOutput/WorkbenchCraftOutputSlot")
+WorkbenchCraftingPanelPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel")
+WorkbenchCraftingGridPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingGrid")
+WorkbenchCraftingOutputSlotPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/WorkbenchCraftingPanel/WorkbenchCraftingOutput/WorkbenchCraftOutputSlot")
 WorkbenchCraftingContainerPath = NodePath("WorkbenchCraftingContainer")
-CampfirePanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel")
-CampfireInputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid/CampfireCraftSlot1")
-CampfireFuelSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid/CampfireFuelSlot1")
-CampfireOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingOutput/CampfireCraftOutputSlot")
-FurnacePanelPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel")
-FurnaceInputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid/FurnaceCraftSlot1")
-FurnaceFuelSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid/FurnaceFuelSlot1")
-FurnaceOutputSlotPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingOutput/FuranceCraftOutputSlot")
-ChestGridPath = NodePath("Panel/CenterContainer/MarginContainer/VBoxContainer/ChestGrid")
+CampfirePanelPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel")
+CampfireInputSlotPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid/CampfireCraftSlot1")
+CampfireFuelSlotPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingGrid/CampfireFuelSlot1")
+CampfireOutputSlotPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/CampfireCraftingPanel/CampfireCraftingOutput/CampfireCraftOutputSlot")
+FurnacePanelPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel")
+FurnaceInputSlotPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid/FurnaceCraftSlot1")
+FurnaceFuelSlotPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingGrid/FurnaceFuelSlot1")
+FurnaceOutputSlotPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/FurnaceCraftingPanel/FurnaceCraftingOutput/FuranceCraftOutputSlot")
+ChestGridPath = NodePath("Panel/HBoxContainer/CenterContainer/MarginContainer/VBoxContainer/ChestGrid")
 
 [node name="WorkbenchCraftingContainer" type="Node" parent="CanvasLayer/BackpackUI (Control)" unique_id=1457826599]
 script = ExtResource("23_y1tbi")

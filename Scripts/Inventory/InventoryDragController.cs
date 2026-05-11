@@ -85,9 +85,43 @@ public class InventoryDragController
 		}
 	}
 	
+	private void StartDraggingAdminItem(ItemDefinition item, int amount)
+	{
+		_heldItem = item;
+		_heldCount = amount;
+
+		_heldSourceRole = InventorySlotUI.SlotRole.None;
+		_heldSourceSlotIndex = -1;
+		_heldSourceCraftIndex = -1;
+
+		_dragMode = BackpackUI.DragMode.FullStack;
+		_pressedSlotIndex = -1;
+		_pressedSlotUi = null;
+
+		_isMouseHeld = true;
+		_isDragging = true;
+
+		UpdateDraggedLabel();
+		_ui.Refresh();
+	}
+
 	
 	public void OnSlotPressed(InventorySlotUI slotUi)
 	{
+		if (slotUi.Role == InventorySlotUI.SlotRole.None &&
+			slotUi.HasMeta("admin_item_id"))
+		{
+			string itemId = slotUi.GetMeta("admin_item_id").AsString();
+			int amount = slotUi.GetMeta("admin_item_amount").AsInt32();
+
+			var item = _ui._itemDatabase.GetItem(itemId);
+			if (item == null)
+				return;
+
+			StartDraggingAdminItem(item, amount);
+			return;
+		}
+
 		if (HasHeldStack())
 			return;
 

@@ -33,6 +33,7 @@ public partial class Player : CharacterBody3D
 	[Export] public TextureRect _handsLeftUi;
 	[Export] public TextureRect _handsRightUi;
 	[Export] public TextureRect _pickaxeHandUi;
+	[Export] public TextureRect _ironSwordHandRightUi;
 
 	[Export] public Node3D _heldItemRoot;
 	[Export] public Node3D _heldTorchRoot;
@@ -289,6 +290,7 @@ public partial class Player : CharacterBody3D
 		bool any2DVisible =
 			(_handsLeftUi != null && _handsLeftUi.Visible) ||
 			(_handsRightUi != null && _handsRightUi.Visible) ||
+			(_ironSwordHandRightUi != null && _ironSwordHandRightUi.Visible) ||
 			(_pickaxeHandUi != null && _pickaxeHandUi.Visible);
 
 		bool any3DVisible =
@@ -728,6 +730,9 @@ public partial class Player : CharacterBody3D
 
 		if (_pickaxeHandUi != null)
 			_pickaxeHandUi.Visible = false;
+			
+		if (_ironSwordHandRightUi != null)
+			_ironSwordHandRightUi.Visible = false;
 
 		if (_heldTorchRoot != null)
 			_heldTorchRoot.Visible = false;
@@ -767,6 +772,14 @@ public partial class Player : CharacterBody3D
 		{
 			if (_pickaxeHandUi != null)
 				_pickaxeHandUi.Visible = true;
+
+			return;
+		}
+		
+		if (itemId == "iron_sword")
+		{
+			if (_ironSwordHandRightUi != null)
+				_ironSwordHandRightUi.Visible = true;
 
 			return;
 		}
@@ -884,6 +897,9 @@ public partial class Player : CharacterBody3D
 
 		if (_pickaxeHandUi != null)
 			_pickaxeHandUi.Modulate = handTint;
+			
+		if (_ironSwordHandRightUi != null)
+			_ironSwordHandRightUi.Modulate = handTint;
 
 		if (_fistPunchController != null)
 		{

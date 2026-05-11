@@ -4,7 +4,21 @@ using System.Collections.Generic;
 public partial class BackpackUI : Control
 {
 	
-	
+	private bool _adminMode = false;
+
+	[Export] public NodePath AdminItemPanelPath;
+	[Export] public NodePath AdminItemGridPath;
+	[Export] public PackedScene InventorySlotScene;
+	[Export] public NodePath ItemDatabasePath;
+	[Export] public int AdminColumns = 3;
+	[Export] public int AdminPanelPadding = 12;
+	[Export] public int AdminSlotSpacing = 6;
+	[Export] public int AdminBottomMargin = 120; // keeps it above hotbar
+	[Export] public int AdminTopMargin = 20;
+
+	private Control _adminItemPanel;
+	private GridContainer _adminItemGrid;
+	public ItemDatabase _itemDatabase;
 	
 	[Export] public NodePath DraggedItemPreviewPath;
 	[Export] public NodePath DraggedItemIconPath;
@@ -114,6 +128,14 @@ public partial class BackpackUI : Control
 
 	public override void _Ready()
 	{
+		_adminItemPanel = GetNode<Control>(AdminItemPanelPath);
+		_adminItemGrid = GetNode<GridContainer>(AdminItemGridPath);
+		_itemDatabase = GetNode<ItemDatabase>(ItemDatabasePath);
+		_adminItemGrid.Columns = AdminColumns;
+		_adminItemGrid.AddThemeConstantOverride("h_separation", AdminSlotSpacing);
+		_adminItemGrid.AddThemeConstantOverride("v_separation", AdminSlotSpacing);
+		_adminItemPanel.Visible = false;
+			
 		_backpackGrid = GetNode<GridContainer>(BackpackGridPath);
 		_hotbarRow = GetNode<HBoxContainer>(HotbarRowPath);
 		_draggedItemLabel = GetNode<Label>(DraggedItemLabelPath);
@@ -222,9 +244,35 @@ public partial class BackpackUI : Control
 		_dragController.Process(delta);
 	
 	}
+	
+	private void UpdateAdminPanelVisibility()
+	{
+		bool shouldShow =
+			_adminMode &&
+			Visible &&
+			_currentMode == UiMode.BackpackCrafting;
+
+		if (_adminItemPanel != null)
+			_adminItemPanel.Visible = shouldShow;
+
+		if (shouldShow && _adminItemGrid.GetChildCount() == 0)
+			RefreshAdminItemPanel();
+	}
 
 	public override void _Input(InputEvent @event)
 	{
+		if (@event.IsActionPressed("admin_toggle"))
+		{
+			_adminMode = !_adminMode;
+
+			GD.Print(_adminMode ? "Admin enabled" : "Admin disabled");
+
+			UpdateAdminPanelVisibility();
+
+			GetViewport().SetInputAsHandled();
+			return;
+		}
+
 		if (!Visible)
 			return;
 
@@ -244,6 +292,8 @@ public partial class BackpackUI : Control
 			_modeController.Close();
 		else
 			_modeController.OpenBackpack();
+			
+		UpdateAdminPanelVisibility();
 	}
 
 	
@@ -388,6 +438,7 @@ public partial class BackpackUI : Control
 
 	public void Refresh()
 	{
+		
 		if (_inventory == null)
 			return;
 
@@ -550,21 +601,25 @@ public partial class BackpackUI : Control
 	public void OpenWorkbench()
 	{
 		_modeController.OpenWorkbench();
+		UpdateAdminPanelVisibility();
 	}
 
 	public void OpenCampfire(ProcessingContainer container)
 	{
 		_modeController.OpenCampfire(container);
+		UpdateAdminPanelVisibility();
 	}
 
 	public void OpenFurnace(ProcessingContainer container)
 	{
 		_modeController.OpenFurnace(container);
+		UpdateAdminPanelVisibility();
 	}
 
 	public void OpenChest(Chest chest, StorageContainer container)
 	{
 		_modeController.OpenChest(chest, container);
+		UpdateAdminPanelVisibility();
 	}
 
 	public void CloseBackpack()
@@ -572,6 +627,87 @@ public partial class BackpackUI : Control
 		_modeController.Close();
 	}
 	
+	private void RefreshAdminItemPanel()
+	{
+		if (_adminItemGrid == null || _itemDatabase == null || InventorySlotScene == null)
+			return;
+
+		foreach (Node child in _adminItemGrid.GetChildren())
+			child.QueueFree();
+
+		var items = new List<ItemDefinition>(_itemDatabase.GetAllItems());
+
+		items.Sort((a, b) =>
+			string.Compare(a.ItemId, b.ItemId, System.StringComparison.OrdinalIgnoreCase)
+		);
+
+		foreach (var item in items)
+		{
+			if (item == null || string.IsNullOrWhiteSpace(item.ItemId))
+				continue;
+
+			var slot = InventorySlotScene.Instantiate<InventorySlotUI>();
+
+			int amount = Mathf.Max(1, item.MaxStackSize);
+
+			slot.Role = InventorySlotUI.SlotRole.None;
+			slot.SetMeta("admin_item_id", item.ItemId);
+			slot.SetMeta("admin_item_amount", amount);
+
+			slot.SlotPressed += OnSlotPressed;
+			slot.SlotHovered += OnSlotHovered;
+			slot.SlotUnhovered += OnSlotUnhovered;
+
+			_adminItemGrid.AddChild(slot);
+
+			slot.CallDeferred(
+				nameof(InventorySlotUI.SetItemVisual),
+				item.ItemId,
+				amount,
+				item.Icon
+			);
+		}
+		ResizeAdminPanelToContent(items.Count);
+	}
 	
+	private void ResizeAdminPanelToContent(int itemCount)
+	{
+		if (_adminItemPanel == null || _adminItemGrid == null)
+			return;
+
+		_adminItemGrid.Columns = AdminColumns;
+
+		Vector2 slotSize = new Vector2(64, 64);
+
+		if (_adminItemGrid.GetChildCount() > 0 &&
+			_adminItemGrid.GetChild(0) is Control firstSlot)
+		{
+			slotSize = firstSlot.Size;
+
+			if (slotSize.X <= 0 || slotSize.Y <= 0)
+				slotSize = firstSlot.CustomMinimumSize;
+
+			if (slotSize.X <= 0 || slotSize.Y <= 0)
+				slotSize = new Vector2(64, 64);
+		}
+
+		int rows = Mathf.CeilToInt(itemCount / (float)AdminColumns);
+
+		float width =
+			AdminPanelPadding * 2 +
+			(AdminColumns * slotSize.X) +
+			((AdminColumns - 1) * AdminSlotSpacing);
+
+		float contentHeight =
+			AdminPanelPadding * 2 +
+			(rows * slotSize.Y) +
+			(Mathf.Max(0, rows - 1) * AdminSlotSpacing);
+
+		float maxHeight = GetViewportRect().Size.Y - AdminTopMargin - AdminBottomMargin;
+		float finalHeight = Mathf.Min(contentHeight, maxHeight);
+
+		_adminItemPanel.CustomMinimumSize = new Vector2(width, finalHeight);
+		_adminItemPanel.Size = new Vector2(width, finalHeight);
+	}
 	
 }

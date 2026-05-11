@@ -7,7 +7,8 @@
 [ext_resource type="Resource" uid="uid://dyw44igsttaln" path="res://Data/Recipes/Crafting/wood_to_stick.tres" id="5_yc4aj"]
 [ext_resource type="Resource" uid="uid://r6vtkajkwtfh" path="res://Data/Recipes/Crafting/wooden_handle_craft.tres" id="6_ekd8v"]
 [ext_resource type="Resource" uid="uid://dt8th7owcqtbx" path="res://Data/Recipes/Crafting/iron_blade_craft.tres" id="7_jigej"]
+[ext_resource type="Resource" uid="uid://b03y6teoeoc7l" path="res://Data/Recipes/Crafting/iron_sword_craft.tres" id="8_yc4aj"]
 
 [node name="CratingManager" type="Node" unique_id=466805423]
 script = ExtResource("1_e8k6a")
-Recipes = Array[ExtResource("2_sdwn0")]([ExtResource("3_ekd8v"), ExtResource("4_jigej"), ExtResource("5_yc4aj"), ExtResource("6_ekd8v"), ExtResource("7_jigej")])
+Recipes = Array[ExtResource("2_sdwn0")]([ExtResource("3_ekd8v"), ExtResource("4_jigej"), ExtResource("5_yc4aj"), ExtResource("6_ekd8v"), ExtResource("7_jigej"), ExtResource("8_yc4aj")])

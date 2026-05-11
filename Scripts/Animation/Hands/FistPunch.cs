@@ -6,6 +6,7 @@ public partial class FistPunch : Node2D
 	[Export] public CanvasItem LeftHand;
 	[Export] public CanvasItem RightHand;
 	[Export] public CanvasItem PickaxeHand;
+	[Export] public CanvasItem IronSwordHandRight;
 
 	[Export] public AnimatedSprite2D RightPunch;
 	[Export] public AnimatedSprite2D LeftPunch;
@@ -42,6 +43,7 @@ public partial class FistPunch : Node2D
 		if (LeftHand != null) LeftHand.Visible = false;
 		if (RightHand != null) RightHand.Visible = false;
 		if (PickaxeHand != null) PickaxeHand.Visible = false;
+		if (IronSwordHandRight != null) IronSwordHandRight.Visible = false;
 
 		if (RightPunch != null)
 		{
