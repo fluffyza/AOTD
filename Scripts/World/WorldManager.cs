@@ -6,11 +6,17 @@ public partial class WorldManager : Node
 	[Export] public NodePath BlockManagerPath;
 	[Export] public NodePath MineManagerPath;
 	[Export] public PackedScene TreeScene;
-	[Export] public float TreeSpawnChance = 0.1f;//0f;
+	[Export] public float TreeSpawnChance = 0.1f;//0.1f
 	[Export] public PackedScene GrassClumpScene;
 	[Export] public PackedScene RockOneScene;
 	[Export] public PackedScene RockTwoScene;
 	[Export] public PackedScene RockThreeScene;
+	
+	[Export] public float ForestNoiseFrequency = 0.08f;
+	[Export] public float ForestThreshold = 0.45f;
+	[Export] public int MineTreeClearRadius = 6;
+
+	private FastNoiseLite _forestNoise;
 
 	[Export] public float GrassSpawnChance = 0.6f;
 	[Export] public float RockSpawnChance = 0.08f;
@@ -31,6 +37,11 @@ public partial class WorldManager : Node
 		_blockManager = GetNode<BlockManager>(BlockManagerPath);
 		_mineManager = GetNode<MineManager>(MineManagerPath);
 		_worldCraftingManager = GetNode<WorldCraftingManager>("../WorldCraftingManager");
+		
+		_forestNoise = new FastNoiseLite();
+		_forestNoise.Seed = (int)GD.Randi();
+		_forestNoise.NoiseType = FastNoiseLite.NoiseTypeEnum.Perlin;
+		_forestNoise.Frequency = ForestNoiseFrequency;
 	}
 
 	public bool HasBlock(Vector3I cell)
@@ -219,11 +230,38 @@ public partial class WorldManager : Node
 		return true;
 	}
 	
+	private bool IsNearMineEntrance(int x, int z, int radius)
+	{
+		if (_mineManager == null)
+			return false;
+
+		foreach (Vector3I protectedCell in _mineManager.ProtectedEntranceCells)
+		{
+			int dx = x - protectedCell.X;
+			int dz = z - protectedCell.Z;
+
+			if ((dx * dx) + (dz * dz) <= radius * radius)
+				return true;
+		}
+
+		return false;
+	}
+	
 	private void TrySpawnTree(Vector3 worldPosition, int x, int z)
 	{
 		if (TreeScene == null)
 			return;
 
+		if (IsNearMineEntrance(x, z, MineTreeClearRadius))
+			return;
+
+		float noise = (_forestNoise.GetNoise2D(x, z) + 1f) * 0.5f;
+
+		// Only allow trees in forest patches.
+		if (noise < ForestThreshold)
+			return;
+
+		// Still thin them out inside forest patches.
 		if (GD.Randf() > TreeSpawnChance)
 			return;
 

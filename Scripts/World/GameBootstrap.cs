@@ -8,11 +8,13 @@ public partial class GameBootstrap : Node
 
 	private WorldManager _worldManager;
 	private MineManager _mineManager;
+	private MobSpawner _mobSpawner;
 
 	public override void _Ready()
 	{
 		_worldManager = GetNode<WorldManager>("../WorldManager");
 		_mineManager = GetNode<MineManager>("../MineManager");
+		_mobSpawner = GetNode<MobSpawner>("../MobSpawner");
 
 		CallDeferred(nameof(Bootstrap));
 	}
@@ -21,5 +23,6 @@ public partial class GameBootstrap : Node
 	{
 		_mineManager.GenerateMine(MineStartCell);
 		_worldManager.GenerateSurfaceFloor(FloorSize, FloorY);
+		_mobSpawner.SpawnMobs();
 	}
 }

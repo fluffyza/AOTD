@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://c67sp55mgk7iv"]
+
+[ext_resource type="Script" uid="uid://c4jkysytccd7c" path="res://Scripts/Mobs/Mob.cs" id="1_0i4n7"]
+[ext_resource type="Texture2D" uid="uid://dy08ywf0h3ltd" path="res://Materials/Mobs/MOB_ONE.png" id="1_8irb2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0i4n7"]
+
+[node name="MobOne" type="CharacterBody3D" unique_id=1405245442 node_paths=PackedStringArray("Sprite")]
+script = ExtResource("1_0i4n7")
+Sprite = NodePath("Sprite3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=350207441]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9019114, 0)
+shape = SubResource("BoxShape3D_0i4n7")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1082705987]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0.7323433, 0)
+billboard = 2
+texture = ExtResource("1_8irb2")
+
+[node name="GroundRay" type="RayCast3D" parent="." unique_id=375741157]
+target_position = Vector3(0, -2, 0)
