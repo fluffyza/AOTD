@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://b4cnngdqr14jl"]
 
 [ext_resource type="PackedScene" uid="uid://dpwhn6xscgwfa" path="res://Models/World/Rocks2.glb" id="1_jkn2j"]
+[ext_resource type="Script" uid="uid://4ujf4e240i0w" path="res://Scripts/World/SurfaceRock.cs" id="1_yd38c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yd38c"]
 
 [node name="RockTwo" type="Node3D" unique_id=587375219]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47793067, 0)
+script = ExtResource("1_yd38c")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=974904299]
 

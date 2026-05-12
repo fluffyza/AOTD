@@ -75,6 +75,8 @@ public partial class Player : CharacterBody3D
 	[Export] public PackedScene WorldCraftPreviewScene;
 	[Export] public PackedScene PlacementPreviewScene;
 	[Export] public PackedScene BlockOutlineScene;
+	
+	[Export] public PickaxeSwing PickaxeSwing;
 
 	public override void _Ready()
 	{
@@ -131,13 +133,23 @@ public partial class Player : CharacterBody3D
 		{
 			UpdateHeldVisual();
 		}
+		
+		if (PickaxeSwing != null)
+		{
+			PickaxeSwing.PickaxeImpact += OnPickaxeImpact;
+		}
+	}
+	
+	private void OnPickaxeImpact()
+	{
+		DoPickaxeImpact();
 	}
 	
 	private void OnFistPunchImpact()
 	{
 		if (!IsEmptyHanded())
 			return;
-
+		
 		TryRemoveItem();
 	}
 	
@@ -220,6 +232,17 @@ public partial class Player : CharacterBody3D
 					_fistPunchController?.StartPunch();
 					return;
 				}
+				
+				if (IsHoldingPickaxe())
+				{
+					PickaxeSwing?.SetHeld(true);
+
+					if (PickaxeSwing != null && !PickaxeSwing.IsSwinging)
+						PickaxeSwing.StartSwing();
+
+					return;
+				}
+				
 				if (IsUsing3DHeldItem())
 				{
 					_isHeldItemHeld = true;
@@ -229,7 +252,7 @@ public partial class Player : CharacterBody3D
 
 					return;
 				}
-
+				
 				TryRemoveItem();
 				
 				if (_isHeldItemHitting)
@@ -253,6 +276,12 @@ public partial class Player : CharacterBody3D
 				if (IsUsing3DHeldItem())
 				{
 					_isHeldItemHeld = false;
+					return;
+				}
+				
+				if (IsHoldingPickaxe())
+				{
+					PickaxeSwing?.SetHeld(false);
 					return;
 				}
 			}
@@ -551,9 +580,57 @@ public partial class Player : CharacterBody3D
 		string label = slot.IsEmpty ? "Empty" : $"{slot.Item.ItemId} x{slot.Count}";
 		GD.Print($"Placed item. Slot now: {label}");
 	}
+	
+	private void DoPickaxeImpact()
+	{
+		var lookedAtNode = _targetting.LookedAtNode;
+
+		if (lookedAtNode != null)
+		{
+			var rock = FindSurfaceRock(lookedAtNode);
+			if (rock != null)
+			{
+				rock.Mine(this);
+				return;
+			}
+
+			var tree = FindTreeResource(lookedAtNode);
+			if (tree != null)
+			{
+				tree.Mine(this);
+				return;
+			}
+		}
+
+		if (!_targetting.IsLookingAtPlacedItem)
+			return;
+
+		if (!_worldManager.TryGetBlock(_targetting.LookedAtCell, out Node3D placedNode) || placedNode == null)
+			return;
+
+		string lookedAtItemId = _blockManager.GetDroppedItemId(placedNode);
+
+		if (lookedAtItemId == "iron_ore" && !IsHoldingPickaxe())
+		{
+			GD.Print("You need a pickaxe to mine iron ore.");
+			return;
+		}
+
+		if (!_worldManager.TryRemoveBreakableBlock(_targetting.LookedAtCell, out string itemId))
+		{
+			GD.Print("This block cannot be mined.");
+			return;
+		}
+
+		_inventory.AddItem(itemId, 1);
+		UpdateHeldVisual();
+
+		GD.Print($"Picked up: {itemId}");
+	}
 
 	private void TryRemoveItem()
 	{
+		
 		var lookedAtNode = _targetting.LookedAtNode;
 		if (lookedAtNode != null)
 		{
@@ -640,14 +717,20 @@ public partial class Player : CharacterBody3D
 
 	private bool IsHoldingPickaxe()
 	{
-		if (_inventory == null)
-			return false;
+		return IsHoldingItem("pickaxe");
+	}
+	
+	private SurfaceRock FindSurfaceRock(Node node)
+	{
+		while (node != null)
+		{
+			if (node is SurfaceRock rock)
+				return rock;
 
-		var selectedSlot = _inventory.GetSelectedSlot();
-		return selectedSlot != null &&
-			   !selectedSlot.IsEmpty &&
-			   selectedSlot.Item != null &&
-			   selectedSlot.Item.ItemId == "pickaxe";
+			node = node.GetParent();
+		}
+
+		return null;
 	}
 
 	private void SelectHotbarSlot(int index)
@@ -750,6 +833,9 @@ public partial class Player : CharacterBody3D
 	private void UpdateHeldVisual()
 	{
 		if (_inventory == null)
+			return;
+			
+		if (PickaxeSwing != null && PickaxeSwing.IsSwinging)
 			return;
 		
 		HideAllHeldVisuals();
@@ -1009,6 +1095,13 @@ public partial class Player : CharacterBody3D
 			if (!_heldItemHitApplied && forwardT >= 0.85f)
 			{
 				_heldItemHitApplied = true;
+				if (IsHoldingPickaxe())
+				{
+					if (PickaxeSwing != null)
+						PickaxeSwing.StartSwing();
+
+					return;
+				}
 				TryRemoveItem();
 			}
 		}
@@ -1067,6 +1160,25 @@ public partial class Player : CharacterBody3D
 			if (_isHeldItemHeld && IsUsing3DHeldItem())
 				StartHeldItemHit();
 		}
+	}
+	
+	public bool IsHoldingItem(string itemId)
+	{
+		if (_inventory == null)
+			return false;
+
+		var selectedSlot = _inventory.GetSelectedSlot();
+
+		return selectedSlot != null &&
+			   !selectedSlot.IsEmpty &&
+			   selectedSlot.Item != null &&
+			   selectedSlot.Item.ItemId == itemId;
+	}
+
+	public void AddItemToInventory(string itemId, int amount)
+	{
+		_inventory.AddItem(itemId, amount);
+		UpdateHeldVisual();
 	}
 
 	

@@ -26,7 +26,6 @@
 [ext_resource type="Texture2D" uid="uid://b6bend8f1axur" path="res://Materials/Character/left-hand.png" id="17_ny7u2"]
 [ext_resource type="PackedScene" uid="uid://b0dqqf4ewgaea" path="res://Scenes/World/world_craft_preview.tscn" id="18_mxvw5"]
 [ext_resource type="Texture2D" uid="uid://bh2i5l5pije4a" path="res://Materials/Character/right-hand.png" id="18_x3yn0"]
-[ext_resource type="Texture2D" uid="uid://ckuglbdu0oc21" path="res://Materials/Character/Equip/HAND-WITH-PICKAXE.png" id="19_1w2xm"]
 [ext_resource type="Script" uid="uid://b4sq5p6hwiygg" path="res://Scripts/Hotbar/HotbarUI.cs" id="20_gngx1"]
 [ext_resource type="PackedScene" uid="uid://dwv2kxm5c43yh" path="res://HotbarSlot.tscn" id="21_jt61w"]
 [ext_resource type="PackedScene" uid="uid://bjmvlf4s8kve1" path="res://backpack_ui.tscn" id="22_v8qla"]
@@ -49,6 +48,7 @@
 [ext_resource type="Texture2D" uid="uid://bwako2l1yyldb" path="res://Materials/Character/Equip/Hands/FistPunch/7.png" id="34_nx4yo"]
 [ext_resource type="Texture2D" uid="uid://cpp4h6wilmng6" path="res://Materials/Character/Equip/Hands/FistPunch/8.png" id="35_5tfui"]
 [ext_resource type="Texture2D" uid="uid://b0hkf6wxqsawv" path="res://Materials/Character/Equip/Hands/FistPunch/9.png" id="36_38apo"]
+[ext_resource type="Texture2D" uid="uid://byp0qa55p04i2" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES00.png" id="36_cxcit"]
 [ext_resource type="Texture2D" uid="uid://4d0l7yfsat4r" path="res://Materials/Character/Equip/Hands/FistPunch/10.png" id="37_khphd"]
 [ext_resource type="Texture2D" uid="uid://ciaunxw3x0hed" path="res://Materials/Character/Equip/Hands/FistPunch/11.png" id="38_g4yo4"]
 [ext_resource type="Texture2D" uid="uid://cc0002s33iwaq" path="res://Materials/Character/Equip/Hands/FistPunch/12.png" id="39_im7ls"]
@@ -68,6 +68,42 @@
 [ext_resource type="Texture2D" uid="uid://bj1o6fgohjsvy" path="res://Materials/Character/Equip/Hands/Action Left hand/12.png" id="52_mplfx"]
 [ext_resource type="Texture2D" uid="uid://c5o72w1lelq66" path="res://Materials/Character/Equip/Hands/Action Left hand/13.png" id="53_gyych"]
 [ext_resource type="PackedScene" uid="uid://bp1ojfia5c1jm" path="res://inventory_slot.tscn" id="64_8h1yq"]
+[ext_resource type="Texture2D" uid="uid://c7xot0twxtj4b" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES01.png" id="64_b1va2"]
+[ext_resource type="Texture2D" uid="uid://dlcysyo2lbnk6" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES02.png" id="65_8gn08"]
+[ext_resource type="Texture2D" uid="uid://ct8kymmgg1f7c" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES03.png" id="66_llcqu"]
+[ext_resource type="Texture2D" uid="uid://dl7sv7ffh3poq" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES04.png" id="67_al55t"]
+[ext_resource type="Texture2D" uid="uid://cffkv6tjhxg32" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES05.png" id="68_hln0y"]
+[ext_resource type="Texture2D" uid="uid://cv70cqevf56ry" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES06.png" id="69_6nglk"]
+[ext_resource type="Texture2D" uid="uid://cylyngo35dl15" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES07.png" id="70_dsf7v"]
+[ext_resource type="Texture2D" uid="uid://jl148r4fehl7" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES08.png" id="71_xbxht"]
+[ext_resource type="Texture2D" uid="uid://c63xtyrtxnc4a" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES09.png" id="72_cptku"]
+[ext_resource type="Texture2D" uid="uid://dnumu30fsn7d7" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES10.png" id="73_67x5q"]
+[ext_resource type="Texture2D" uid="uid://bobxu6e2wk2hu" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES11.png" id="74_yaiuy"]
+[ext_resource type="Texture2D" uid="uid://b8tlftf5v3lpk" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES12.png" id="75_ucq2w"]
+[ext_resource type="Texture2D" uid="uid://ct5hlpm58jxp0" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES13.png" id="76_i4gpc"]
+[ext_resource type="Texture2D" uid="uid://dka7lb3mjely3" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES14.png" id="77_md2r7"]
+[ext_resource type="Texture2D" uid="uid://cdmq7k5mheyoh" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES15.png" id="78_gbxmp"]
+[ext_resource type="Texture2D" uid="uid://dwx487315vdkm" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES16.png" id="79_a7p2d"]
+[ext_resource type="Texture2D" uid="uid://d4ii6xf2fc5w0" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES17.png" id="80_fbvi6"]
+[ext_resource type="Texture2D" uid="uid://cqvyd4u4ay81n" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES18.png" id="81_h0r08"]
+[ext_resource type="Texture2D" uid="uid://xgrsm8axabjf" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES19.png" id="82_uecmj"]
+[ext_resource type="Texture2D" uid="uid://dyc6qxcnj3yk5" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES20.png" id="83_rkgid"]
+[ext_resource type="Texture2D" uid="uid://cu84sjgl07tlr" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES21.png" id="84_y5qkn"]
+[ext_resource type="Texture2D" uid="uid://c6ljd00v37q3t" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES22.png" id="85_08030"]
+[ext_resource type="Texture2D" uid="uid://bp5tnifugwxb4" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES23.png" id="86_vybqf"]
+[ext_resource type="Texture2D" uid="uid://dlr0bn8q8ub6l" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES24.png" id="87_marsu"]
+[ext_resource type="Texture2D" uid="uid://vna3wer7gpml" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES25.png" id="88_imbc2"]
+[ext_resource type="Texture2D" uid="uid://bcxmesfcwtc4m" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES26.png" id="89_6xmvy"]
+[ext_resource type="Texture2D" uid="uid://dawk6btngm00k" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES27.png" id="90_xkfyu"]
+[ext_resource type="Texture2D" uid="uid://c3mg38oss4mcb" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES28.png" id="91_ep5lf"]
+[ext_resource type="Texture2D" uid="uid://cmgaudo47hfga" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES29.png" id="92_sh8xt"]
+[ext_resource type="Texture2D" uid="uid://3o0n223xuti8" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES30.png" id="93_h7qxs"]
+[ext_resource type="Texture2D" uid="uid://c0j40prl6y1ch" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES31.png" id="94_vq823"]
+[ext_resource type="Texture2D" uid="uid://dh1qg87bwmcek" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES32.png" id="95_eho1g"]
+[ext_resource type="Texture2D" uid="uid://cspcfk8ea0upa" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES33.png" id="96_gi3ub"]
+[ext_resource type="Texture2D" uid="uid://b352ht6vsqf7b" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES34.png" id="97_evvf3"]
+[ext_resource type="Texture2D" uid="uid://b4idujg04rs1c" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES35.png" id="98_xk7tw"]
+[ext_resource type="Script" uid="uid://1c2rcn1rhr6l" path="res://Scripts/Animation/Stone Pickaxe/PickaxeSwing.cs" id="99_b1va2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_noarx"]
 radius = 0.4
@@ -198,6 +234,122 @@ animations = [{
 "speed": 35.0
 }]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_qyhqv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("36_cxcit")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_b1va2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_8gn08")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_llcqu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_al55t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_hln0y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_6nglk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_dsf7v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_xbxht")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_cptku")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_67x5q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_yaiuy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_ucq2w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_i4gpc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_md2r7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_gbxmp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_a7p2d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_fbvi6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_h0r08")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_uecmj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_rkgid")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_y5qkn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_08030")
+}, {
+"duration": 1.0,
+"texture": ExtResource("86_vybqf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_marsu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_imbc2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("89_6xmvy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_xkfyu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_ep5lf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("92_sh8xt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_h7qxs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_vq823")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_eho1g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("96_gi3ub")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_evvf3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("98_xk7tw")
+}],
+"loop": false,
+"name": &"stone_pickaxe_swing",
+"speed": 45.0
+}]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_oye8v"]
 shader = ExtResource("7_oye8v")
 shader_parameter/enable_color_limitation = true
@@ -237,7 +389,7 @@ render_target_update_mode = 4
 visible = false
 light_energy = 0.208
 
-[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_ironSwordHandRightUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController")]
+[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_ironSwordHandRightUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController", "PickaxeSwing")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3724365, 0)
 script = ExtResource("1_bg4s2")
 _handRoot = NodePath("../../../../CanvasLayer/HandRoot")
@@ -253,6 +405,7 @@ _fistPunchController = NodePath("../../../../CanvasLayer/HandRoot/PunchControlle
 WorldCraftPreviewScene = ExtResource("18_mxvw5")
 PlacementPreviewScene = ExtResource("2_hhcpw")
 BlockOutlineScene = ExtResource("3_mxvw5")
+PickaxeSwing = NodePath("../../../../CanvasLayer/HandRoot/StonePickaxeController")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=691915729]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -422,18 +575,18 @@ texture = ExtResource("18_x3yn0")
 stretch_mode = 5
 
 [node name="PickaxeHand" type="TextureRect" parent="CanvasLayer/HandRoot" unique_id=1419250010]
-visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = -16.0
-offset_top = -218.0
-offset_right = 2252.0
-offset_bottom = 1190.0
+offset_left = -355.0
+offset_top = -533.0
+offset_right = 4169.0
+offset_bottom = 2195.0
 grow_vertical = 0
 scale = Vector2(0.25, 0.25)
-texture = ExtResource("19_1w2xm")
+mouse_filter = 2
+texture = ExtResource("36_cxcit")
 stretch_mode = 5
 
 [node name="RightPunch" type="AnimatedSprite2D" parent="CanvasLayer/HandRoot" unique_id=327013064]
@@ -457,6 +610,23 @@ RightHand = NodePath("../RightHand")
 PickaxeHand = NodePath("../PickaxeHand")
 RightPunch = NodePath("../RightPunch")
 LeftPunch = NodePath("../LeftPunch")
+
+[node name="StonePickaxeHand" type="AnimatedSprite2D" parent="CanvasLayer/HandRoot" unique_id=305407860]
+position = Vector2(229.00002, -149.00002)
+scale = Vector2(0.60517573, 0.5873264)
+sprite_frames = SubResource("SpriteFrames_qyhqv")
+animation = &"stone_pickaxe_swing"
+frame = 35
+frame_progress = 1.0
+
+[node name="StonePickaxeController" type="Node2D" parent="CanvasLayer/HandRoot" unique_id=1092082835 node_paths=PackedStringArray("LeftHand", "RightHand", "PickaxeHand", "IronSwordHandRight", "PickaxeSwingSprite")]
+script = ExtResource("99_b1va2")
+LeftHand = NodePath("../LeftHand")
+RightHand = NodePath("../RightHand")
+PickaxeHand = NodePath("../PickaxeHand")
+IronSwordHandRight = NodePath("../IronSwordHandRight")
+PickaxeSwingSprite = NodePath("../StonePickaxeHand")
+ImpactFrame = 15
 
 [node name="Hotbar" type="Control" parent="CanvasLayer" unique_id=1204465899]
 layout_mode = 3

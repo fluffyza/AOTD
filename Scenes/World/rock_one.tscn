@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://ctdw5pwovv47u"]
 
+[ext_resource type="Script" uid="uid://4ujf4e240i0w" path="res://Scripts/World/SurfaceRock.cs" id="1_kof5d"]
 [ext_resource type="PackedScene" uid="uid://cclreracmtrs0" path="res://Models/World/Rocks1.glb" id="1_lephw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kof5d"]
 
 [node name="RockOne" type="Node3D" unique_id=1472580682]
+script = ExtResource("1_kof5d")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=398488642]
 
