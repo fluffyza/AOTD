@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bsc2ojqcal568"]
+
+[ext_resource type="Texture2D" uid="uid://lms3qc7vb6fx" path="res://Materials/Weapon/slash.png" id="1_br2e3"]
+[ext_resource type="Script" uid="uid://dquxtmdq6ys07" path="res://Scripts/Weapons/SwordSlashArea.cs" id="1_cpjxe"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cpjxe"]
+
+[node name="SwordSlashArea" type="Area3D" unique_id=30783776 node_paths=PackedStringArray("SlashSprite")]
+script = ExtResource("1_cpjxe")
+SlashSprite = NodePath("Sprite3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=872053131]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+shape = SubResource("SphereShape3D_cpjxe")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=289015422]
+transform = Transform3D(-1.3113417e-08, -0.3, 1.3113417e-08, 0, -1.3113417e-08, -0.3, 0.3, -1.3113417e-08, 5.7320567e-16, 0, 0, 0)
+texture = ExtResource("1_br2e3")

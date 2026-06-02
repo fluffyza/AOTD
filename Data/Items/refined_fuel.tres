@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://b6e5xk3n0mx8s"]
+
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_o4e7g"]
+
+[resource]
+script = ExtResource("1_o4e7g")
+ItemId = "refined_fuel"
+DisplayName = "Refined Fuel"
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

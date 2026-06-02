@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" format=3 uid="uid://cwsu57lq67jqu"]
+
+[ext_resource type="Script" uid="uid://evrsl300vuld" path="res://Scripts/Crafting/RecipeIngredient.cs" id="1_lcj4t"]
+[ext_resource type="Script" uid="uid://b1kxam6mg5nmc" path="res://Scripts/Crafting/CraftingRecipe.cs" id="2_d0qte"]
+
+[resource]
+script = ExtResource("2_d0qte")
+RecipeId = "strone_sharpened_craft"
+MinimumStation = 1
+IsShapeless = false
+OutputItemId = "sharpened_stone"
+OutputAmount = 8
+PatternRows = Array[String](["S", "I"])
+PatternKey = Dictionary[String, String]({
+"I": "iron_blade",
+"S": "stone"
+})
+metadata/_custom_type_script = "uid://b1kxam6mg5nmc"

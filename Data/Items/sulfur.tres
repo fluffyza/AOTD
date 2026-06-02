@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://xe86p374idky"]
+
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_y3162"]
+
+[resource]
+script = ExtResource("1_y3162")
+ItemId = "sulfur"
+DisplayName = "Sulfur"
+IsBlock = true
+BlockColor = Color(0.22376983, 1, 1, 1)
+UseBlockColor = true
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

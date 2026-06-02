@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ProcessingRecipe" format=3 uid="uid://b5i5jf0g840po"]
+
+[ext_resource type="Script" uid="uid://dphpxogogmnae" path="res://Scripts/Crafting/Structure/Processing/ProcessingRecipe.cs" id="1_xmo12"]
+
+[resource]
+script = ExtResource("1_xmo12")
+InputItemId = "sulfur"
+OutputItemId = "refined_fuel"
+metadata/_custom_type_script = "uid://dphpxogogmnae"

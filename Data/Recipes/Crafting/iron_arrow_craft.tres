@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" format=3 uid="uid://b1vfq54kbd203"]
+
+[ext_resource type="Script" uid="uid://evrsl300vuld" path="res://Scripts/Crafting/RecipeIngredient.cs" id="1_iem5p"]
+[ext_resource type="Script" uid="uid://b1kxam6mg5nmc" path="res://Scripts/Crafting/CraftingRecipe.cs" id="2_42mno"]
+
+[resource]
+script = ExtResource("2_42mno")
+RecipeId = "iron_arrow_craft"
+MinimumStation = 1
+IsShapeless = false
+OutputItemId = "iron_arrow"
+OutputAmount = 4
+PatternRows = Array[String]([".I.", ".T.", ".F."])
+PatternKey = Dictionary[String, String]({
+"F": "refined_fabric",
+"I": "iron_blade",
+"T": "stick"
+})
+metadata/_custom_type_script = "uid://b1kxam6mg5nmc"

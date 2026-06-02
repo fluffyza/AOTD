@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://b6b7b54y3pmu4"]
+
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_v0lpx"]
+
+[resource]
+script = ExtResource("1_v0lpx")
+ItemId = "torn_fabric"
+DisplayName = "Torn Fabric"
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

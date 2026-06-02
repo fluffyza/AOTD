@@ -754,6 +754,9 @@ public partial class MineManager : Node
 
 		if (y > 0)
 			return "dirt";
+			
+		if (roll < 0.2f)
+			return "sulfur";
 
 		if (roll < 0.6f)
 			return "stone";

@@ -2,6 +2,11 @@ using Godot;
 
 public partial class Mob : CharacterBody3D
 {
+	
+	[Export] public int MaxLife = 10;
+	private int _life;
+	private Vector3 _knockbackVelocity = Vector3.Zero;
+
 	[Export] public Sprite3D Sprite;
 	[Export] public float LightDetectionRange = 20f;
 	[Export] public float DarkBrightness = 0.15f;
@@ -44,8 +49,29 @@ public partial class Mob : CharacterBody3D
 
 		_spawnPosition = GlobalPosition;
 		_sprite = GetNodeOrNull<Sprite3D>("Sprite3D");
-
+		
+		_life = MaxLife;
+		GD.Print($"Mob spawned with {_life} life.");
+		
 		StartIdle();
+	}
+	
+	public void TakeHit(Player player)
+	{
+		int damage = 1;
+
+		if (player != null && player.IsHoldingItem("iron_sword"))
+			damage = 2;
+
+		_life -= damage;
+
+		GD.Print($"Mob hit for {damage}. Life: {_life}/{MaxLife}");
+
+		if (_life <= 0)
+		{
+			GD.Print("Mob died.");
+			QueueFree();
+		}
 	}
 	
 	public void SetWanderBounds(float minX, float maxX, float minZ, float maxZ)
@@ -54,6 +80,24 @@ public partial class Mob : CharacterBody3D
 		_maxX = maxX;
 		_minZ = minZ;
 		_maxZ = maxZ;
+	}
+	
+	public void TakeDamage(int damage)
+	{
+		_life -= damage;
+
+		GD.Print($"Mob hit for {damage}. Life: {_life}/{MaxLife}");
+
+		if (_life <= 0)
+		{
+			GD.Print("Mob died.");
+			QueueFree();
+		}
+	}
+
+	public void ApplyKnockback(Vector3 force)
+	{
+		_knockbackVelocity = force;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -85,7 +129,10 @@ public partial class Mob : CharacterBody3D
 			velocity = _moveDirection * MoveSpeed;
 		}
 
+		velocity += _knockbackVelocity;
+		_knockbackVelocity = _knockbackVelocity.Lerp(Vector3.Zero, dt * 8f);
 		Velocity = velocity;
+		
 		MoveAndSlide();
 		ClampToBounds();
 		UpdateFloating();

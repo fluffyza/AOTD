@@ -2,6 +2,10 @@ using Godot;
 
 public partial class Player : CharacterBody3D
 {
+	
+	[Export] public WeaponSwing SwordSwing;
+	[Export] public PackedScene SwordSlashAreaScene;
+	
 	private Inventory _inventory;
 	private WorldManager _worldManager;
 	private TreeResource _highlightedTree;
@@ -138,6 +142,43 @@ public partial class Player : CharacterBody3D
 		{
 			PickaxeSwing.PickaxeImpact += OnPickaxeImpact;
 		}
+		
+		if (SwordSwing != null)
+			SwordSwing.Impact += OnSwordImpact;
+	}
+	
+	private void OnSwordImpact()
+	{
+		SpawnSwordSlashArea();
+	}
+	
+	private void SpawnSwordSlashArea()
+	{
+		if (SwordSlashAreaScene == null)
+			return;
+
+		var slash = SwordSlashAreaScene.Instantiate<SwordSlashArea>();
+		GetTree().CurrentScene.AddChild(slash);
+
+		Vector3 forward = -GlobalTransform.Basis.Z;
+
+		slash.GlobalPosition = GlobalPosition + forward * 1.3f + Vector3.Up * 1.1f;
+		slash.GlobalRotation = GlobalRotation;
+		
+		slash.Setup(this, 2, forward);
+	}
+
+	private Mob FindMob(Node node)
+	{
+		while (node != null)
+		{
+			if (node is Mob mob)
+				return mob;
+
+			node = node.GetParent();
+		}
+
+		return null;
 	}
 	
 	private void OnPickaxeImpact()
@@ -243,6 +284,16 @@ public partial class Player : CharacterBody3D
 					return;
 				}
 				
+				if (IsHoldingItem("iron_sword"))
+				{
+					SwordSwing?.SetHeld(true);
+
+					if (SwordSwing != null && !SwordSwing.IsSwinging)
+						SwordSwing.StartSwing();
+
+					return;
+				}
+				
 				if (IsUsing3DHeldItem())
 				{
 					_isHeldItemHeld = true;
@@ -282,6 +333,12 @@ public partial class Player : CharacterBody3D
 				if (IsHoldingPickaxe())
 				{
 					PickaxeSwing?.SetHeld(false);
+					return;
+				}
+				
+				if (IsHoldingItem("iron_sword"))
+				{
+					SwordSwing?.SetHeld(false);
 					return;
 				}
 			}

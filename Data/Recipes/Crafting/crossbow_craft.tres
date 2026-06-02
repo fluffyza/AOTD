@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" format=3 uid="uid://bflx0mc0i8jn7"]
+
+[ext_resource type="Script" uid="uid://evrsl300vuld" path="res://Scripts/Crafting/RecipeIngredient.cs" id="1_cve3p"]
+[ext_resource type="Script" uid="uid://b1kxam6mg5nmc" path="res://Scripts/Crafting/CraftingRecipe.cs" id="2_0gbvg"]
+
+[resource]
+script = ExtResource("2_0gbvg")
+RecipeId = "crossbow_craft"
+MinimumStation = 1
+IsShapeless = false
+OutputItemId = "crossbow"
+PatternRows = Array[String](["SPS", "THT", ".O."])
+PatternKey = Dictionary[String, String]({
+"H": "wooden_handle",
+"O": "trigger_system",
+"P": "pulley_system",
+"S": "string",
+"T": "stick"
+})
+metadata/_custom_type_script = "uid://b1kxam6mg5nmc"

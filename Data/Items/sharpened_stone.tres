@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://cp3b6b1pjcois"]
+
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_v378g"]
+
+[resource]
+script = ExtResource("1_v378g")
+ItemId = "sharpened_stone"
+DisplayName = "Sharpened Stone"
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

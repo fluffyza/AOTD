@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" format=3 uid="uid://bl3bepyxo2jcc"]
+
+[ext_resource type="Script" uid="uid://evrsl300vuld" path="res://Scripts/Crafting/RecipeIngredient.cs" id="1_o33wd"]
+[ext_resource type="Script" uid="uid://b1kxam6mg5nmc" path="res://Scripts/Crafting/CraftingRecipe.cs" id="2_fcnta"]
+
+[resource]
+script = ExtResource("2_fcnta")
+RecipeId = "pulley_system_craft"
+IsShapeless = false
+OutputItemId = "pulley_system"
+PatternRows = Array[String]([".I.", "SWS", ".I."])
+PatternKey = Dictionary[String, String]({
+"I": "iron_ingot",
+"S": "string",
+"W": "stick"
+})
+metadata/_custom_type_script = "uid://b1kxam6mg5nmc"

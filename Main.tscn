@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dfvkkylpy5if8" path="res://Scripts/Player/Player.cs" id="1_bg4s2"]
 [ext_resource type="PackedScene" uid="uid://da3pqlaros3by" path="res://placement_preview.tscn" id="2_hhcpw"]
+[ext_resource type="PackedScene" uid="uid://bsc2ojqcal568" path="res://Scenes/Weapons/Sword/SwordSlashArea.tscn" id="2_llcqu"]
 [ext_resource type="PackedScene" uid="uid://cjp7ys7ujh0kp" path="res://block_outline.tscn" id="3_mxvw5"]
 [ext_resource type="PackedScene" uid="uid://b1g8ehimink8q" path="res://placeable_block.tscn" id="4_xrxkg"]
 [ext_resource type="PackedScene" uid="uid://cf02bt86p5je3" path="res://torch.tscn" id="5_sqvbp"]
@@ -104,6 +105,7 @@
 [ext_resource type="Texture2D" uid="uid://b352ht6vsqf7b" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES34.png" id="97_evvf3"]
 [ext_resource type="Texture2D" uid="uid://b4idujg04rs1c" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES35.png" id="98_xk7tw"]
 [ext_resource type="Script" uid="uid://1c2rcn1rhr6l" path="res://Scripts/Animation/Stone Pickaxe/PickaxeSwing.cs" id="99_b1va2"]
+[ext_resource type="Script" uid="uid://prmpaetdi4kk" path="res://Scripts/Weapons/WeaponSwing.cs" id="100_8gn08"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_noarx"]
 radius = 0.4
@@ -389,9 +391,11 @@ render_target_update_mode = 4
 visible = false
 light_energy = 0.208
 
-[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_ironSwordHandRightUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController", "PickaxeSwing")]
+[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("SwordSwing", "_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_ironSwordHandRightUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController", "PickaxeSwing")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3724365, 0)
 script = ExtResource("1_bg4s2")
+SwordSwing = NodePath("../../../../CanvasLayer/HandRoot/StoneSwordController")
+SwordSlashAreaScene = ExtResource("2_llcqu")
 _handRoot = NodePath("../../../../CanvasLayer/HandRoot")
 _handsLeftUi = NodePath("../../../../CanvasLayer/HandRoot/LeftHand")
 _handsRightUi = NodePath("../../../../CanvasLayer/HandRoot/RightHand")
@@ -627,6 +631,10 @@ PickaxeHand = NodePath("../PickaxeHand")
 IronSwordHandRight = NodePath("../IronSwordHandRight")
 PickaxeSwingSprite = NodePath("../StonePickaxeHand")
 ImpactFrame = 15
+
+[node name="StoneSwordController" type="Node2D" parent="CanvasLayer/HandRoot" unique_id=791293569 node_paths=PackedStringArray("WeaponHand")]
+script = ExtResource("100_8gn08")
+WeaponHand = NodePath("../IronSwordHandRight")
 
 [node name="Hotbar" type="Control" parent="CanvasLayer" unique_id=1204465899]
 layout_mode = 3

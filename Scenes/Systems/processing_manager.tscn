@@ -3,7 +3,8 @@
 [ext_resource type="Script" uid="uid://dny2akg04u6mk" path="res://Scripts/Crafting/Structure/Processing/ProcessingManager.cs" id="1_y8rqc"]
 [ext_resource type="Script" uid="uid://dphpxogogmnae" path="res://Scripts/Crafting/Structure/Processing/ProcessingRecipe.cs" id="2_3qhcv"]
 [ext_resource type="Resource" uid="uid://b3irka0ffpptt" path="res://Data/Recipes/Processing/furnace_iron_ore_to_iron_ingot.tres" id="3_crrkk"]
+[ext_resource type="Resource" uid="uid://b5i5jf0g840po" path="res://Data/Recipes/Processing/furnace_sulfur_to_refined_fuel.tres" id="4_crrkk"]
 
 [node name="ProcessingManager" type="Node" unique_id=863981392]
 script = ExtResource("1_y8rqc")
-Recipes = Array[ExtResource("2_3qhcv")]([ExtResource("3_crrkk")])
+Recipes = Array[ExtResource("2_3qhcv")]([ExtResource("3_crrkk"), ExtResource("4_crrkk")])

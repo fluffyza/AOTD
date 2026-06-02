@@ -15,7 +15,18 @@
 [ext_resource type="Resource" uid="uid://da08juc4b6cw7" path="res://Data/Items/wooden_handle.tres" id="13_ltidp"]
 [ext_resource type="Resource" uid="uid://dqk7aaigkdesr" path="res://Data/Items/iron_blade.tres" id="14_yg41x"]
 [ext_resource type="Resource" uid="uid://cox3r0tltc61h" path="res://Data/Items/iron_sword.tres" id="15_f2h6k"]
+[ext_resource type="Resource" uid="uid://xe86p374idky" path="res://Data/Items/sulfur.tres" id="16_geov3"]
+[ext_resource type="Resource" uid="uid://b6e5xk3n0mx8s" path="res://Data/Items/refined_fuel.tres" id="17_3pr20"]
+[ext_resource type="Resource" uid="uid://cgql6s0xwjueg" path="res://Data/Items/string.tres" id="18_3f1fn"]
+[ext_resource type="Resource" uid="uid://b6b7b54y3pmu4" path="res://Data/Items/torn_fabric.tres" id="19_gsivd"]
+[ext_resource type="Resource" uid="uid://ba8tve8c5em2w" path="res://Data/Items/refined_fabric.tres" id="20_246jf"]
+[ext_resource type="Resource" uid="uid://d0gqy17r02gnp" path="res://Data/Items/pulley_system.tres" id="21_b8p3x"]
+[ext_resource type="Resource" uid="uid://db4d50x5460w" path="res://Data/Items/trigger_system.tres" id="22_2mkxs"]
+[ext_resource type="Resource" uid="uid://cp3b6b1pjcois" path="res://Data/Items/sharpened_stone.tres" id="23_3fndj"]
+[ext_resource type="Resource" uid="uid://brs54dr7hjciu" path="res://Data/Items/crossbow.tres" id="24_gsivd"]
+[ext_resource type="Resource" uid="uid://d0moddu3o8mo5" path="res://Data/Items/iron_arrow.tres" id="25_b8p3x"]
+[ext_resource type="Resource" uid="uid://enpy8h2iym58" path="res://Data/Items/stone_arrow.tres" id="26_2mkxs"]
 
 [node name="ItemDatabase" type="Node" unique_id=410087564]
 script = ExtResource("1_08nis")
-Items = Array[ExtResource("2_u7x8y")]([ExtResource("3_xoeog"), ExtResource("4_rr3rk"), ExtResource("5_ltidp"), ExtResource("6_yg41x"), ExtResource("7_f2h6k"), ExtResource("8_kac13"), ExtResource("9_geov3"), ExtResource("11_xoeog"), ExtResource("10_3pr20"), ExtResource("12_rr3rk"), ExtResource("13_ltidp"), ExtResource("14_yg41x"), ExtResource("15_f2h6k")])
+Items = Array[ExtResource("2_u7x8y")]([ExtResource("3_xoeog"), ExtResource("4_rr3rk"), ExtResource("5_ltidp"), ExtResource("6_yg41x"), ExtResource("7_f2h6k"), ExtResource("8_kac13"), ExtResource("9_geov3"), ExtResource("11_xoeog"), ExtResource("10_3pr20"), ExtResource("12_rr3rk"), ExtResource("13_ltidp"), ExtResource("14_yg41x"), ExtResource("15_f2h6k"), ExtResource("16_geov3"), ExtResource("17_3pr20"), ExtResource("18_3f1fn"), ExtResource("19_gsivd"), ExtResource("20_246jf"), ExtResource("21_b8p3x"), ExtResource("22_2mkxs"), ExtResource("23_3fndj"), ExtResource("24_gsivd"), ExtResource("25_b8p3x"), ExtResource("26_2mkxs")])
