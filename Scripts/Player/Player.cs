@@ -5,6 +5,8 @@ public partial class Player : CharacterBody3D
 	
 	[Export] public WeaponSwing SwordSwing;
 	[Export] public PackedScene SwordSlashAreaScene;
+	[Export] public Camera3D PlayerCamera;
+	
 	
 	private Inventory _inventory;
 	private WorldManager _worldManager;
@@ -38,6 +40,7 @@ public partial class Player : CharacterBody3D
 	[Export] public TextureRect _handsRightUi;
 	[Export] public TextureRect _pickaxeHandUi;
 	[Export] public TextureRect _ironSwordHandRightUi;
+	[Export] public TextureRect _crossbowUi;
 
 	[Export] public Node3D _heldItemRoot;
 	[Export] public Node3D _heldTorchRoot;
@@ -81,6 +84,7 @@ public partial class Player : CharacterBody3D
 	[Export] public PackedScene BlockOutlineScene;
 	
 	[Export] public PickaxeSwing PickaxeSwing;
+	[Export] public CrossbowController CrossbowController;
 
 	public override void _Ready()
 	{
@@ -128,6 +132,9 @@ public partial class Player : CharacterBody3D
 			
 		if (_fistPunchController != null)
 			_fistPunchController.PunchImpact += OnFistPunchImpact;
+			
+		if (CrossbowController != null)
+			CrossbowController.RequestAmmoConsume += ConsumeCrossbowAmmo;
 			
 		if (_isHeldItemHitting)
 		{
@@ -294,6 +301,15 @@ public partial class Player : CharacterBody3D
 					return;
 				}
 				
+				if (IsHoldingItem("crossbow"))
+				{
+					GD.Print("Shot Crossbow");
+					string ammoId = GetCrossbowAmmoAboveSelectedSlot();
+					
+					CrossbowController?.TryFire(this, ammoId);
+					return;
+				}
+				
 				if (IsUsing3DHeldItem())
 				{
 					_isHeldItemHeld = true;
@@ -377,6 +393,7 @@ public partial class Player : CharacterBody3D
 			(_handsLeftUi != null && _handsLeftUi.Visible) ||
 			(_handsRightUi != null && _handsRightUi.Visible) ||
 			(_ironSwordHandRightUi != null && _ironSwordHandRightUi.Visible) ||
+			(_crossbowUi != null && _crossbowUi.Visible) ||
 			(_pickaxeHandUi != null && _pickaxeHandUi.Visible);
 
 		bool any3DVisible =
@@ -873,6 +890,9 @@ public partial class Player : CharacterBody3D
 			
 		if (_ironSwordHandRightUi != null)
 			_ironSwordHandRightUi.Visible = false;
+			
+		if (_crossbowUi != null)
+			_crossbowUi.Visible = false;
 
 		if (_heldTorchRoot != null)
 			_heldTorchRoot.Visible = false;
@@ -884,6 +904,8 @@ public partial class Player : CharacterBody3D
 			_heldTorchLight.Visible = false;
 			
 		_fistPunchController?.StopPunch();
+		
+		CrossbowController?.ResetVisual();
 		
 	}
 	
@@ -923,6 +945,14 @@ public partial class Player : CharacterBody3D
 		{
 			if (_ironSwordHandRightUi != null)
 				_ironSwordHandRightUi.Visible = true;
+
+			return;
+		}
+		
+		if (itemId == "crossbow")
+		{
+			if (_crossbowUi != null)
+				_crossbowUi.Visible = true;
 
 			return;
 		}
@@ -1043,6 +1073,9 @@ public partial class Player : CharacterBody3D
 			
 		if (_ironSwordHandRightUi != null)
 			_ironSwordHandRightUi.Modulate = handTint;
+			
+		if (_crossbowUi != null)
+			_crossbowUi.Modulate = handTint;
 
 		if (_fistPunchController != null)
 		{
@@ -1236,6 +1269,57 @@ public partial class Player : CharacterBody3D
 	{
 		_inventory.AddItem(itemId, amount);
 		UpdateHeldVisual();
+	}
+	
+	public bool HasValidCrossbowAmmoAboveSelectedSlot()
+	{
+		return !string.IsNullOrEmpty(GetCrossbowAmmoAboveSelectedSlot());
+	}
+
+	public string GetCrossbowAmmoAboveSelectedSlot()
+	{
+		var ammoSlot = _inventory.GetCrossbowAmmoSlot();
+
+		if (ammoSlot == null || ammoSlot.IsEmpty || ammoSlot.Item == null)
+			return "";
+
+		string itemId = ammoSlot.Item.ItemId;
+
+		if (itemId == "stone_arrow" || itemId == "iron_arrow")
+			return itemId;
+
+		return "";
+	}
+
+
+	private void ConsumeCrossbowAmmo()
+	{
+		_inventory.ConsumeCrossbowAmmo(1);
+	}
+	
+	public Vector3 GetCrosshairAimPoint(float maxDistance = 80f)
+	{
+		if (PlayerCamera == null)
+			return GlobalPosition + (-GlobalTransform.Basis.Z * maxDistance);
+
+		Vector2 screenCenter = GetViewport().GetVisibleRect().Size * 0.5f;
+
+		Vector3 rayOrigin = PlayerCamera.ProjectRayOrigin(screenCenter);
+		Vector3 rayDirection = PlayerCamera.ProjectRayNormal(screenCenter);
+
+		var query = PhysicsRayQueryParameters3D.Create(
+			rayOrigin,
+			rayOrigin + rayDirection * maxDistance
+		);
+
+		query.Exclude = new Godot.Collections.Array<Rid> { GetRid() };
+
+		var result = GetWorld3D().DirectSpaceState.IntersectRay(query);
+
+		if (result.Count > 0)
+			return (Vector3)result["position"];
+
+		return rayOrigin + rayDirection * maxDistance;
 	}
 
 	

@@ -21,6 +21,11 @@ ItemDatabase="*uid://ccrchclhmdn63"
 ProcessingManager="*uid://rtrgmif3lrj1"
 CraftingManager="*uid://dlj7v8yc27n3r"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+
 [dotnet]
 
 project/assembly_name="New Game Project"

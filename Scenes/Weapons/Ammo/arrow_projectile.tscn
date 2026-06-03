@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://cudbidfbpxpqj"]
+
+[ext_resource type="Script" uid="uid://dy2y5aqcpn2o4" path="res://Scripts/Weapons/Ammo/ArrowProjectile.cs" id="1_7b7ig"]
+[ext_resource type="Texture2D" uid="uid://djuh8nvo34ndo" path="res://Materials/Character/Equip/Crossbow/Arrow.png" id="1_jj8a7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7b7ig"]
+size = Vector3(0.3581543, 0.063964844, 0.06390381)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gp88m"]
+transparency = 1
+albedo_texture = ExtResource("1_jj8a7")
+
+[sub_resource type="QuadMesh" id="QuadMesh_lws5b"]
+material = SubResource("StandardMaterial3D_gp88m")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7b7ig"]
+direction = Vector3(0, 0, 1)
+spread = 9.818
+gravity = Vector3(0, 0, 0)
+scale_min = 0.03
+scale_max = 0.08
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lws5b"]
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_1oxc2"]
+material = SubResource("StandardMaterial3D_lws5b")
+size = Vector2(0.5, 0.5)
+
+[node name="ArrowProjectile" type="Area3D" unique_id=1758473422 node_paths=PackedStringArray("TrailParticles")]
+transform = Transform3D(-0.03223068, 0, -0.9994805, 0, 1, 0, 0.9994805, 0, -0.03223068, 0, 0, 0)
+script = ExtResource("1_7b7ig")
+VisualRotationOffsetDegrees = Vector3(0, -90, 0)
+TrailParticles = NodePath("ArrowTrailParticles")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=884008157]
+transform = Transform3D(0.99996555, 0, 5.2526593e-07, 0, 1, 0, -5.2526593e-07, 0, 0.99996555, 0.09753254, -0.0017089844, 0.013764613)
+shape = SubResource("BoxShape3D_7b7ig")
+
+[node name="y" type="MeshInstance3D" parent="." unique_id=1784832692]
+transform = Transform3D(0.6495116, 0, 0, 0, 0.16285047, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("QuadMesh_lws5b")
+
+[node name="x" type="MeshInstance3D" parent="." unique_id=1375229549]
+transform = Transform3D(0.6495116, 0, 0, 0, 0.0030609583, 0.99982345, 0, -0.1628217, 0.018796127, 0, 0, 0)
+mesh = SubResource("QuadMesh_lws5b")
+
+[node name="ArrowTrailParticles" type="GPUParticles3D" parent="." unique_id=82419915]
+transform = Transform3D(0.08024859, 0, 0, 0, 0.021263301, 0, 2.3283064e-10, 0, 0.015255559, 0.34033525, 0, -0.00049371645)
+amount = 10
+lifetime = 0.4
+process_material = SubResource("ParticleProcessMaterial_7b7ig")
+draw_pass_1 = SubResource("QuadMesh_1oxc2")

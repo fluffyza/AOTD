@@ -51,6 +51,7 @@
 [ext_resource type="Texture2D" uid="uid://b0hkf6wxqsawv" path="res://Materials/Character/Equip/Hands/FistPunch/9.png" id="36_38apo"]
 [ext_resource type="Texture2D" uid="uid://byp0qa55p04i2" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES00.png" id="36_cxcit"]
 [ext_resource type="Texture2D" uid="uid://4d0l7yfsat4r" path="res://Materials/Character/Equip/Hands/FistPunch/10.png" id="37_khphd"]
+[ext_resource type="Texture2D" uid="uid://r7fwnhjdw1ta" path="res://Materials/Character/Equip/Crossbow/CROWWBOW_1.png" id="38_6nglk"]
 [ext_resource type="Texture2D" uid="uid://ciaunxw3x0hed" path="res://Materials/Character/Equip/Hands/FistPunch/11.png" id="38_g4yo4"]
 [ext_resource type="Texture2D" uid="uid://cc0002s33iwaq" path="res://Materials/Character/Equip/Hands/FistPunch/12.png" id="39_im7ls"]
 [ext_resource type="Texture2D" uid="uid://d4jlvojye74e" path="res://Materials/Character/Equip/Hands/FistPunch/13.png" id="40_a34eg"]
@@ -106,6 +107,10 @@
 [ext_resource type="Texture2D" uid="uid://b4idujg04rs1c" path="res://Materials/Character/Equip/Hands/Stone pickaxe/WEAPON-PICKAXE-ANIMATION-SLIDES35.png" id="98_xk7tw"]
 [ext_resource type="Script" uid="uid://1c2rcn1rhr6l" path="res://Scripts/Animation/Stone Pickaxe/PickaxeSwing.cs" id="99_b1va2"]
 [ext_resource type="Script" uid="uid://prmpaetdi4kk" path="res://Scripts/Weapons/WeaponSwing.cs" id="100_8gn08"]
+[ext_resource type="Texture2D" uid="uid://bolb8g7xaooau" path="res://Materials/Character/Equip/Crossbow/CROWWBOW_3.png" id="103_dsf7v"]
+[ext_resource type="Texture2D" uid="uid://obcfpwl7ajlu" path="res://Materials/Character/Equip/Crossbow/CROWWBOW_2.png" id="104_xbxht"]
+[ext_resource type="Script" uid="uid://bgsi4cow3gtji" path="res://Scripts/Weapons/CrossbowController.cs" id="105_dsf7v"]
+[ext_resource type="PackedScene" uid="uid://cudbidfbpxpqj" path="res://Scenes/Weapons/Ammo/arrow_projectile.tscn" id="106_xbxht"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_noarx"]
 radius = 0.4
@@ -352,6 +357,25 @@ animations = [{
 "speed": 45.0
 }]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_cptku"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("103_dsf7v")
+}],
+"loop": false,
+"name": &"crossbow_reload",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("104_xbxht")
+}],
+"loop": false,
+"name": &"crossbow_shoot",
+"speed": 5.0
+}]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_oye8v"]
 shader = ExtResource("7_oye8v")
 shader_parameter/enable_color_limitation = true
@@ -382,7 +406,7 @@ stretch_shrink = 2
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=86638585]
 handle_input_locally = false
-size = Vector2i(576, 324)
+size = Vector2i(960, 540)
 render_target_update_mode = 4
 
 [node name="WorldRoot" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=2139506528]
@@ -391,16 +415,18 @@ render_target_update_mode = 4
 visible = false
 light_energy = 0.208
 
-[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("SwordSwing", "_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_ironSwordHandRightUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController", "PickaxeSwing")]
+[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("SwordSwing", "PlayerCamera", "_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_ironSwordHandRightUi", "_crossbowUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController", "PickaxeSwing", "CrossbowController")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3724365, 0)
 script = ExtResource("1_bg4s2")
 SwordSwing = NodePath("../../../../CanvasLayer/HandRoot/StoneSwordController")
 SwordSlashAreaScene = ExtResource("2_llcqu")
+PlayerCamera = NodePath("Head/Camera3D")
 _handRoot = NodePath("../../../../CanvasLayer/HandRoot")
 _handsLeftUi = NodePath("../../../../CanvasLayer/HandRoot/LeftHand")
 _handsRightUi = NodePath("../../../../CanvasLayer/HandRoot/RightHand")
 _pickaxeHandUi = NodePath("../../../../CanvasLayer/HandRoot/PickaxeHand")
 _ironSwordHandRightUi = NodePath("../../../../CanvasLayer/HandRoot/IronSwordHandRight")
+_crossbowUi = NodePath("../../../../CanvasLayer/HandRoot/Crossbow")
 _heldItemRoot = NodePath("Head/Camera3D/HeldItemRoot")
 _heldTorchRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldTorchRoot")
 _heldBlockRoot = NodePath("Head/Camera3D/HeldItemRoot/HeldBlockRoot")
@@ -410,6 +436,7 @@ WorldCraftPreviewScene = ExtResource("18_mxvw5")
 PlacementPreviewScene = ExtResource("2_hhcpw")
 BlockOutlineScene = ExtResource("3_mxvw5")
 PickaxeSwing = NodePath("../../../../CanvasLayer/HandRoot/StonePickaxeController")
+CrossbowController = NodePath("../../../../CanvasLayer/HandRoot/CrossbowController")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=691915729]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -522,25 +549,25 @@ text = "+"
 
 [node name="HandRoot" type="Control" parent="CanvasLayer" unique_id=594024526]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 556.0
-offset_top = 608.0
-offset_right = 596.0
-offset_bottom = 648.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 mouse_filter = 2
 
 [node name="IronSwordHandRight" type="TextureRect" parent="CanvasLayer/HandRoot" unique_id=952104892]
-visible = false
 layout_mode = 1
-anchors_preset = 2
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -145.0
-offset_top = -573.0
-offset_right = 3571.0
-offset_bottom = 2003.0
+offset_left = -920.0
+offset_top = -580.0
+offset_right = 2796.0
+offset_bottom = 1996.0
+grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.25, 0.25)
 mouse_filter = 2
@@ -554,10 +581,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -355.0
-offset_top = -159.0
-offset_right = 278.0
-offset_bottom = 615.0
+offset_left = -1377.0
+offset_top = -139.0
+offset_right = -744.0
+offset_bottom = 635.0
 grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.25, 0.25)
@@ -569,10 +596,10 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 220.0
-offset_top = -161.0
-offset_right = 849.0
-offset_bottom = 617.0
+offset_left = 1177.0
+offset_top = -142.0
+offset_right = 1806.0
+offset_bottom = 636.0
 grow_vertical = 0
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("18_x3yn0")
@@ -583,24 +610,41 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = -355.0
-offset_top = -533.0
-offset_right = 4169.0
-offset_bottom = 2195.0
+offset_left = 778.0
+offset_top = -597.0
+offset_right = 5302.0
+offset_bottom = 2131.0
 grow_vertical = 0
 scale = Vector2(0.25, 0.25)
 mouse_filter = 2
 texture = ExtResource("36_cxcit")
 stretch_mode = 5
 
+[node name="Crossbow" type="TextureRect" parent="CanvasLayer/HandRoot" unique_id=209205922]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_top = 226.0
+offset_right = 574.0
+offset_bottom = 610.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("38_6nglk")
+expand_mode = 1
+
 [node name="RightPunch" type="AnimatedSprite2D" parent="CanvasLayer/HandRoot" unique_id=327013064]
-position = Vector2(229, -126)
+position = Vector2(1184.0001, 932)
 scale = Vector2(0.24934895, 0.25097653)
 sprite_frames = SubResource("SpriteFrames_ac6pf")
 animation = &"fist punch"
 
 [node name="LeftPunch" type="AnimatedSprite2D" parent="CanvasLayer/HandRoot" unique_id=2092426651]
-position = Vector2(-76, -131)
+position = Vector2(761, 959)
 scale = Vector2(0.24934895, 0.25097653)
 sprite_frames = SubResource("SpriteFrames_via5u")
 animation = &"fist punch left hand"
@@ -616,7 +660,7 @@ RightPunch = NodePath("../RightPunch")
 LeftPunch = NodePath("../LeftPunch")
 
 [node name="StonePickaxeHand" type="AnimatedSprite2D" parent="CanvasLayer/HandRoot" unique_id=305407860]
-position = Vector2(229.00002, -149.00002)
+position = Vector2(1358.9999, 813)
 scale = Vector2(0.60517573, 0.5873264)
 sprite_frames = SubResource("SpriteFrames_qyhqv")
 animation = &"stone_pickaxe_swing"
@@ -635,6 +679,18 @@ ImpactFrame = 15
 [node name="StoneSwordController" type="Node2D" parent="CanvasLayer/HandRoot" unique_id=791293569 node_paths=PackedStringArray("WeaponHand")]
 script = ExtResource("100_8gn08")
 WeaponHand = NodePath("../IronSwordHandRight")
+
+[node name="CrossbowAnimations" type="AnimatedSprite2D" parent="CanvasLayer/HandRoot" unique_id=489229749]
+position = Vector2(1320.0001, 940)
+scale = Vector2(0.73763025, 0.7372799)
+sprite_frames = SubResource("SpriteFrames_cptku")
+animation = &"crossbow_shoot"
+
+[node name="CrossbowController" type="Node2D" parent="CanvasLayer/HandRoot" unique_id=1928141745 node_paths=PackedStringArray("CrossbowIdle", "CrossbowAnimations")]
+script = ExtResource("105_dsf7v")
+CrossbowIdle = NodePath("../Crossbow")
+CrossbowAnimations = NodePath("../CrossbowAnimations")
+ArrowProjectileScene = ExtResource("106_xbxht")
 
 [node name="Hotbar" type="Control" parent="CanvasLayer" unique_id=1204465899]
 layout_mode = 3
@@ -706,3 +762,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_use_anchors_ = true

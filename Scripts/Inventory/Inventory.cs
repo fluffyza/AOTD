@@ -7,7 +7,7 @@ public partial class Inventory : Node
 	public delegate void InventoryChangedEventHandler();
 
 	public const int HotbarSize = 9;
-	public const int BackpackColumns = 8;
+	public const int BackpackColumns = 9;
 	public const int BackpackRows = 2;
 	public const int BackpackSize = BackpackColumns * BackpackRows;
 	public const int TotalSize = HotbarSize + BackpackSize;
@@ -145,6 +145,34 @@ public partial class Inventory : Node
 		return string.IsNullOrWhiteSpace(itemId)
 			? ""
 			: itemId.Trim().ToLower();
+	}
+	
+	public InventorySlot GetCrossbowAmmoSlot()
+	{
+		int ammoIndex = HotbarSize + BackpackColumns + SelectedIndex;
+		return GetSlot(ammoIndex);
+	}
+
+	public bool ConsumeCrossbowAmmo(int amount)
+	{
+		int ammoIndex = HotbarSize + BackpackColumns + SelectedIndex;
+		return ConsumeSlot(ammoIndex, amount);
+	}
+
+	public bool ConsumeSlot(int index, int amount)
+	{
+		var slot = GetSlot(index);
+
+		if (slot == null || slot.IsEmpty || amount <= 0)
+			return false;
+
+		slot.Count -= amount;
+
+		if (slot.Count <= 0)
+			slot.Clear();
+
+		EmitSignal(SignalName.InventoryChanged);
+		return true;
 	}
 	
 }
