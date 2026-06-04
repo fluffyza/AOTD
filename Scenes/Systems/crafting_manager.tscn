@@ -16,7 +16,8 @@
 [ext_resource type="Resource" uid="uid://bflx0mc0i8jn7" path="res://Data/Recipes/Crafting/crossbow_craft.tres" id="14_ygdrm"]
 [ext_resource type="Resource" uid="uid://b1vfq54kbd203" path="res://Data/Recipes/Crafting/iron_arrow_craft.tres" id="15_q8aub"]
 [ext_resource type="Resource" uid="uid://dcbardr41eeu4" path="res://Data/Recipes/Crafting/stone_arrow_craft.tres" id="16_0pq20"]
+[ext_resource type="Resource" uid="uid://b0k307xu71aif" path="res://Data/Recipes/Crafting/stone_fire_arrow_craft.tres" id="17_0pq20"]
 
 [node name="CratingManager" type="Node" unique_id=466805423]
 script = ExtResource("1_e8k6a")
-Recipes = Array[ExtResource("2_sdwn0")]([ExtResource("3_ekd8v"), ExtResource("4_jigej"), ExtResource("5_yc4aj"), ExtResource("6_ekd8v"), ExtResource("7_jigej"), ExtResource("8_yc4aj"), ExtResource("9_wdd0k"), ExtResource("10_lr47s"), ExtResource("11_kxltw"), ExtResource("12_pdmun"), ExtResource("13_pqvel"), ExtResource("14_ygdrm"), ExtResource("15_q8aub"), ExtResource("16_0pq20")])
+Recipes = Array[ExtResource("2_sdwn0")]([ExtResource("3_ekd8v"), ExtResource("4_jigej"), ExtResource("5_yc4aj"), ExtResource("6_ekd8v"), ExtResource("7_jigej"), ExtResource("8_yc4aj"), ExtResource("9_wdd0k"), ExtResource("10_lr47s"), ExtResource("11_kxltw"), ExtResource("12_pdmun"), ExtResource("13_pqvel"), ExtResource("14_ygdrm"), ExtResource("15_q8aub"), ExtResource("16_0pq20"), ExtResource("17_0pq20")])

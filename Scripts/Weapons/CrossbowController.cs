@@ -138,11 +138,26 @@ public partial class CrossbowController : Node2D
 
 		Vector3 fireDirection = (aimPoint - spawnPos).Normalized();
 
-		int damage = _loadedAmmoId == "iron_arrow" ? 5 : 3;
-		float speed = _loadedAmmoId == "iron_arrow" ? 22f : 17f;
-		float gravity = _loadedAmmoId == "iron_arrow" ? 4f : 8f;
+		int damage = 3;
+		float speed = 17f;
+		float gravity = 8f;
+		bool isFireArrow = false;
+
+		if (_loadedAmmoId == "iron_arrow")
+		{
+			damage = 5;
+			speed = 22f;
+			gravity = 4f;
+		}
+		else if (_loadedAmmoId == "fire_stone_arrow")
+		{
+			damage = 6;
+			speed = 17f;
+			gravity = 8f;
+			isFireArrow = true;
+		}
 
 		arrow.GlobalPosition = spawnPos;
-		arrow.Setup(fireDirection, damage, speed, gravity);
+		arrow.Setup(fireDirection, damage, speed, gravity, isFireArrow);
 	}
 }

@@ -1285,7 +1285,7 @@ public partial class Player : CharacterBody3D
 
 		string itemId = ammoSlot.Item.ItemId;
 
-		if (itemId == "stone_arrow" || itemId == "iron_arrow")
+		if (itemId == "stone_arrow" || itemId == "iron_arrow" || itemId == "fire_stone_arrow")
 			return itemId;
 
 		return "";

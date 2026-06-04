@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://vn5n80tm87c"]
+
+[ext_resource type="Script" uid="uid://b6tyu0mb75t1c" path="res://Scripts/Items/ItemDefinition.cs" id="1_alvgt"]
+
+[resource]
+script = ExtResource("1_alvgt")
+ItemId = "fire_stone_arrow"
+DisplayName = "Fire Stone Arrow"
+metadata/_custom_type_script = "uid://b6tyu0mb75t1c"

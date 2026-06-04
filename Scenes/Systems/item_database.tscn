@@ -26,7 +26,8 @@
 [ext_resource type="Resource" uid="uid://brs54dr7hjciu" path="res://Data/Items/crossbow.tres" id="24_gsivd"]
 [ext_resource type="Resource" uid="uid://d0moddu3o8mo5" path="res://Data/Items/iron_arrow.tres" id="25_b8p3x"]
 [ext_resource type="Resource" uid="uid://enpy8h2iym58" path="res://Data/Items/stone_arrow.tres" id="26_2mkxs"]
+[ext_resource type="Resource" uid="uid://vn5n80tm87c" path="res://Data/Items/fire_stone_arrow.tres" id="27_2mkxs"]
 
 [node name="ItemDatabase" type="Node" unique_id=410087564]
 script = ExtResource("1_08nis")
-Items = Array[ExtResource("2_u7x8y")]([ExtResource("3_xoeog"), ExtResource("4_rr3rk"), ExtResource("5_ltidp"), ExtResource("6_yg41x"), ExtResource("7_f2h6k"), ExtResource("8_kac13"), ExtResource("9_geov3"), ExtResource("11_xoeog"), ExtResource("10_3pr20"), ExtResource("12_rr3rk"), ExtResource("13_ltidp"), ExtResource("14_yg41x"), ExtResource("15_f2h6k"), ExtResource("16_geov3"), ExtResource("17_3pr20"), ExtResource("18_3f1fn"), ExtResource("19_gsivd"), ExtResource("20_246jf"), ExtResource("21_b8p3x"), ExtResource("22_2mkxs"), ExtResource("23_3fndj"), ExtResource("24_gsivd"), ExtResource("25_b8p3x"), ExtResource("26_2mkxs")])
+Items = Array[ExtResource("2_u7x8y")]([ExtResource("3_xoeog"), ExtResource("4_rr3rk"), ExtResource("5_ltidp"), ExtResource("6_yg41x"), ExtResource("7_f2h6k"), ExtResource("8_kac13"), ExtResource("9_geov3"), ExtResource("11_xoeog"), ExtResource("10_3pr20"), ExtResource("12_rr3rk"), ExtResource("13_ltidp"), ExtResource("14_yg41x"), ExtResource("15_f2h6k"), ExtResource("16_geov3"), ExtResource("17_3pr20"), ExtResource("18_3f1fn"), ExtResource("19_gsivd"), ExtResource("20_246jf"), ExtResource("21_b8p3x"), ExtResource("22_2mkxs"), ExtResource("23_3fndj"), ExtResource("24_gsivd"), ExtResource("25_b8p3x"), ExtResource("26_2mkxs"), ExtResource("27_2mkxs")])
