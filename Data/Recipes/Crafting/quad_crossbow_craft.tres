@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" format=3 uid="uid://dpuvotpji67b"]
+
+[ext_resource type="Script" uid="uid://evrsl300vuld" path="res://Scripts/Crafting/RecipeIngredient.cs" id="1_824db"]
+[ext_resource type="Script" uid="uid://b1kxam6mg5nmc" path="res://Scripts/Crafting/CraftingRecipe.cs" id="2_56t03"]
+
+[resource]
+script = ExtResource("2_56t03")
+RecipeId = "quad_crossbow_craft"
+MinimumStation = 1
+IsShapeless = false
+OutputItemId = "quad_crossbow"
+PatternRows = Array[String](["CCC", "SCS", "WTW"])
+PatternKey = Dictionary[String, String]({
+"C": "crossbow",
+"S": "string",
+"T": "trigger_system",
+"W": "wooden_handle"
+})
+metadata/_custom_type_script = "uid://b1kxam6mg5nmc"

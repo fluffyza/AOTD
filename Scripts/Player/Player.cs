@@ -41,6 +41,7 @@ public partial class Player : CharacterBody3D
 	[Export] public TextureRect _pickaxeHandUi;
 	[Export] public TextureRect _ironSwordHandRightUi;
 	[Export] public TextureRect _crossbowUi;
+	[Export] public TextureRect _quadCrossbowUi;
 
 	[Export] public Node3D _heldItemRoot;
 	[Export] public Node3D _heldTorchRoot;
@@ -85,6 +86,9 @@ public partial class Player : CharacterBody3D
 	
 	[Export] public PickaxeSwing PickaxeSwing;
 	[Export] public CrossbowController CrossbowController;
+	[Export] public QuadCrossbowController QuadCrossbowController;
+	
+	[Export] public AnimatedSprite2D QuadCrossbowAnimations;
 
 	public override void _Ready()
 	{
@@ -135,6 +139,9 @@ public partial class Player : CharacterBody3D
 			
 		if (CrossbowController != null)
 			CrossbowController.RequestAmmoConsume += ConsumeCrossbowAmmo;
+			
+		if (QuadCrossbowController != null)
+			QuadCrossbowController.RequestAmmoConsume += ConsumeCrossbowAmmo;
 			
 		if (_isHeldItemHitting)
 		{
@@ -301,6 +308,23 @@ public partial class Player : CharacterBody3D
 					return;
 				}
 				
+				if (IsHoldingItem("quad_crossbow"))
+				{
+					GD.Print("Quad crossbow clicked.");
+
+					if (QuadCrossbowController == null)
+					{
+						GD.PrintErr("QuadCrossbowController is not assigned on Player.");
+						return;
+					}
+
+					string ammoId = GetCrossbowAmmoAboveSelectedSlot();
+					GD.Print($"Quad ammo found: {ammoId}");
+
+					QuadCrossbowController.TryFire(this, ammoId);
+					return;
+				}
+				
 				if (IsHoldingItem("crossbow"))
 				{
 					GD.Print("Shot Crossbow");
@@ -394,6 +418,7 @@ public partial class Player : CharacterBody3D
 			(_handsRightUi != null && _handsRightUi.Visible) ||
 			(_ironSwordHandRightUi != null && _ironSwordHandRightUi.Visible) ||
 			(_crossbowUi != null && _crossbowUi.Visible) ||
+			(_quadCrossbowUi != null && _quadCrossbowUi.Visible) ||
 			(_pickaxeHandUi != null && _pickaxeHandUi.Visible);
 
 		bool any3DVisible =
@@ -903,6 +928,11 @@ public partial class Player : CharacterBody3D
 		if (_heldTorchLight != null)
 			_heldTorchLight.Visible = false;
 			
+		if (_quadCrossbowUi != null)
+			_quadCrossbowUi.Visible = false;
+
+		QuadCrossbowController?.ResetVisual();
+			
 		_fistPunchController?.StopPunch();
 		
 		CrossbowController?.ResetVisual();
@@ -953,6 +983,14 @@ public partial class Player : CharacterBody3D
 		{
 			if (_crossbowUi != null)
 				_crossbowUi.Visible = true;
+
+			return;
+		}
+		
+		if (itemId == "quad_crossbow")
+		{
+			if (_quadCrossbowUi != null)
+				_quadCrossbowUi.Visible = true;
 
 			return;
 		}
@@ -1076,6 +1114,9 @@ public partial class Player : CharacterBody3D
 			
 		if (_crossbowUi != null)
 			_crossbowUi.Modulate = handTint;
+			
+		if (_quadCrossbowUi != null)
+			_quadCrossbowUi.Modulate = handTint;
 
 		if (_fistPunchController != null)
 		{
@@ -1084,6 +1125,12 @@ public partial class Player : CharacterBody3D
 
 			if (_fistPunchController.LeftPunch != null)
 				_fistPunchController.LeftPunch.Modulate = handTint;
+		}
+		
+		if (QuadCrossbowController != null &&
+			QuadCrossbowController.QuadCrossbowAnimations != null)
+		{
+			QuadCrossbowController.QuadCrossbowAnimations.Modulate = handTint;
 		}
 
 	}
