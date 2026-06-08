@@ -2,21 +2,50 @@
 
 [ext_resource type="Script" uid="uid://c4jkysytccd7c" path="res://Scripts/Mobs/Mob.cs" id="1_0i4n7"]
 [ext_resource type="Texture2D" uid="uid://dy08ywf0h3ltd" path="res://Materials/Mobs/MOB_ONE.png" id="1_8irb2"]
+[ext_resource type="Shader" uid="uid://dr4lmj0gdcn87" path="res://Shaders/glitch_mob_shader.gdshader" id="2_2nvrh"]
+[ext_resource type="Texture2D" uid="uid://d2cuoe51htxig" path="res://Materials/Mobs/Mob One/Inactive 1.png" id="2_vciyr"]
+[ext_resource type="Texture2D" uid="uid://dp6uq2yli1tcq" path="res://Materials/Mobs/Mob One/Inactive 2.png" id="3_8t2rd"]
+[ext_resource type="Texture2D" uid="uid://b2o46m4ntwssn" path="res://Materials/Mobs/Mob One/Active 1.png" id="4_pyewi"]
+[ext_resource type="Texture2D" uid="uid://by0aytdnxlmee" path="res://Materials/Mobs/Mob One/Active 2.png" id="5_2x11x"]
+[ext_resource type="Texture2D" uid="uid://dbb8et1rhx41n" path="res://Materials/Mobs/Mob One/Bite 1.png" id="6_s03l2"]
+[ext_resource type="Texture2D" uid="uid://jtvd14owdaby" path="res://Materials/Mobs/Mob One/Bite 2.png" id="7_cgn7j"]
+[ext_resource type="Texture2D" uid="uid://d4h07srnod7sk" path="res://Materials/Mobs/Mob One/Bite 3.png" id="8_mpnr1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0i4n7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2nvrh"]
+render_priority = 0
+shader = ExtResource("2_2nvrh")
+shader_parameter/texture_albedo = ExtResource("1_8irb2")
+shader_parameter/base_wobble = 0.006
+shader_parameter/base_diverge = 0.01
+shader_parameter/burst_strength = 2.18
+shader_parameter/burst_speed = 6.96
+shader_parameter/band_frequency = 500.0
+shader_parameter/static_amount = 0.0
+shader_parameter/billboard_scale = 0.01
+shader_parameter/pixel_size = 1.0
 
 [node name="MobOne" type="CharacterBody3D" unique_id=1405245442 node_paths=PackedStringArray("Sprite")]
 script = ExtResource("1_0i4n7")
 Sprite = NodePath("Sprite3D")
+InactiveIdleFrames = Array[Texture2D]([ExtResource("2_vciyr")])
+InactiveMoveFrames = Array[Texture2D]([ExtResource("2_vciyr"), ExtResource("3_8t2rd")])
+ActiveIdleFrames = Array[Texture2D]([ExtResource("4_pyewi")])
+ActiveMoveFrames = Array[Texture2D]([ExtResource("4_pyewi"), ExtResource("5_2x11x")])
+AttackFrames = Array[Texture2D]([ExtResource("6_s03l2"), ExtResource("7_cgn7j"), ExtResource("8_mpnr1")])
+ActivateRange = 2.0
+AttackRange = 2.0
+ShaderPixelSize = 0.1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=350207441]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9019114, 0)
 shape = SubResource("BoxShape3D_0i4n7")
 
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1082705987]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0.7323433, 0)
-billboard = 2
-texture = ExtResource("1_8irb2")
-
 [node name="GroundRay" type="RayCast3D" parent="." unique_id=375741157]
 target_position = Vector3(0, -2, 0)
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1082705987]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0.7323433, 0)
+material_override = SubResource("ShaderMaterial_2nvrh")
+texture = ExtResource("1_8irb2")

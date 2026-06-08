@@ -447,7 +447,7 @@ render_target_update_mode = 4
 visible = false
 light_energy = 0.208
 
-[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("SwordSwing", "PlayerCamera", "_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_ironSwordHandRightUi", "_crossbowUi", "_quadCrossbowUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController", "PickaxeSwing", "CrossbowController", "QuadCrossbowController", "QuadCrossbowAnimations")]
+[node name="Player (CharacterBody3D)" type="CharacterBody3D" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=931686024 node_paths=PackedStringArray("SwordSwing", "PlayerCamera", "_handRoot", "_handsLeftUi", "_handsRightUi", "_pickaxeHandUi", "_ironSwordHandRightUi", "_crossbowUi", "_quadCrossbowUi", "_heldItemRoot", "_heldTorchRoot", "_heldBlockRoot", "_heldTorchLight", "_fistPunchController", "PickaxeSwing", "CrossbowController", "QuadCrossbowController", "QuadCrossbowAnimations") groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3724365, 0)
 script = ExtResource("1_bg4s2")
 SwordSwing = NodePath("../../../../CanvasLayer/HandRoot/StoneSwordController")
