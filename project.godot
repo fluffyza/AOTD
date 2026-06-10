@@ -34,6 +34,7 @@ project/assembly_name="New Game Project"
 
 world_light=""
 player=""
+sunfall_crystal=""
 
 [input]
 

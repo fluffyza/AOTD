@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cj5w5bsm6637i"]
+
+[ext_resource type="PackedScene" uid="uid://cqwpk4r3nufed" path="res://Models/World/sunfallcrystal/enchanted_crystal.glb" id="1_0b5sf"]
+[ext_resource type="Script" uid="uid://bmt4i33fqk8x6" path="res://Scripts/Graphics/SunfallCrystal.cs" id="2_8rfc7"]
+
+[node name="Sketchfab_Scene" unique_id=1200316473 groups=["sunfall_crystal"] instance=ExtResource("1_0b5sf")]
+transform = Transform3D(6.888128, 0, 0, 0, -7.716199, -2.1523662, 0, 2.3898904, -6.9493084, 0, 0.17614973, 0)
+
+[node name="Crystal_low_002_Crystal_0" parent="Sketchfab_model/f7a6c4e380104043b1315d17fc4d6704_fbx/RootNode/Crystal_low_002" parent_id_path=PackedInt32Array(1117416598) index="0" unique_id=1198056474 node_paths=PackedStringArray("CrystalLight")]
+script = ExtResource("2_8rfc7")
+CrystalLight = NodePath("../../../../../OmniLight3D")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="1" unique_id=1505736028]
+light_color = Color(0.22091639, 1, 1, 1)

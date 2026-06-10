@@ -12,6 +12,8 @@ public partial class WorldManager : Node
 	[Export] public PackedScene RockTwoScene;
 	[Export] public PackedScene RockThreeScene;
 	
+	[Export] public PackedScene SunfallCrystalScene;
+	
 	[Export] public float ForestNoiseFrequency = 0.08f;
 	[Export] public float ForestThreshold = 0.45f;
 	[Export] public int MineTreeClearRadius = 6;
@@ -179,6 +181,46 @@ public partial class WorldManager : Node
 				TrySpawnGrass(decorPos, x, z);
 				TrySpawnRock(decorPos, x, z);
 			}
+		}
+		SpawnSunfallCrystal(halfSize, yLevel);
+	}
+	
+	private void SpawnSunfallCrystal(int halfSize, int yLevel)
+	{
+		if (SunfallCrystalScene == null)
+			return;
+
+		var rng = new RandomNumberGenerator();
+		rng.Randomize();
+
+		// Near centre but not directly centre
+		for (int attempt = 0; attempt < 100; attempt++)
+		{
+			int x = rng.RandiRange(-6, 6);
+			int z = rng.RandiRange(-6, 6);
+
+			// Don't spawn on mine entrance
+			if (IsNearMineEntrance(x, z, 4))
+				continue;
+
+			Vector3I cell = new Vector3I(x, yLevel, z);
+
+			if (!_placedItems.TryGetValue(cell, out Node3D tile))
+				continue;
+
+			var crystal = SunfallCrystalScene.Instantiate<Node3D>();
+
+			AddChild(crystal);
+
+			var decorAnchor = tile.GetNodeOrNull<Marker3D>("DecorAnchor");
+			Vector3 spawnPos = decorAnchor != null
+				? decorAnchor.GlobalPosition
+				: tile.GlobalPosition;
+
+			crystal.GlobalPosition = spawnPos + new Vector3(0f, 0.5f, 0f);
+
+			GD.Print($"Sunfall Crystal spawned at {cell}");
+			return;
 		}
 	}
 

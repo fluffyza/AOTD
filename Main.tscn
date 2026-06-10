@@ -25,6 +25,7 @@
 [ext_resource type="Script" uid="uid://ml5nm258qjyx" path="res://Scripts/World/WindManager.cs" id="16_3ccbu"]
 [ext_resource type="PackedScene" uid="uid://dqrenft06sdr7" path="res://Scenes/World/wind_gust_3d.tscn" id="17_hhcpw"]
 [ext_resource type="Texture2D" uid="uid://b6bend8f1axur" path="res://Materials/Character/left-hand.png" id="17_ny7u2"]
+[ext_resource type="PackedScene" uid="uid://cj5w5bsm6637i" path="res://Scenes/World/sunfall_crystal_scene.tscn" id="18_md2r7"]
 [ext_resource type="PackedScene" uid="uid://b0dqqf4ewgaea" path="res://Scenes/World/world_craft_preview.tscn" id="18_mxvw5"]
 [ext_resource type="Texture2D" uid="uid://bh2i5l5pije4a" path="res://Materials/Character/right-hand.png" id="18_x3yn0"]
 [ext_resource type="Script" uid="uid://b4sq5p6hwiygg" path="res://Scripts/Hotbar/HotbarUI.cs" id="20_gngx1"]
@@ -528,6 +529,7 @@ GrassClumpScene = ExtResource("12_5mvff")
 RockOneScene = ExtResource("13_oye8v")
 RockTwoScene = ExtResource("14_40n85")
 RockThreeScene = ExtResource("15_gb15f")
+SunfallCrystalScene = ExtResource("18_md2r7")
 GrassTileScene = ExtResource("12_xrxkg")
 
 [node name="PlayerMovement" type="Node" parent="SubViewportContainer/SubViewport/WorldRoot/Player (CharacterBody3D)" unique_id=1539078673]
@@ -563,7 +565,7 @@ WindGustScene = ExtResource("17_hhcpw")
 [node name="GodotSky" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=270944954 instance=ExtResource("25_ek63v")]
 timeOfDay = 62.13
 skyRotation = 145.9
-cloudCoverage = 0.444
+cloudCoverage = 0.426
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=1498523069]
 environment = SubResource("Environment_a202f")

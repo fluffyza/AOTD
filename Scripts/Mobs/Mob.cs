@@ -7,8 +7,19 @@ public partial class Mob : CharacterBody3D
 	{
 		Inactive,
 		Active,
-		Attacking
+		Attacking,
+		RetreatingFromCrystal
 	}
+	
+	[Export] public float CrystalSafeRadius = 6.0f;
+	[Export] public float CrystalStareTime = 3.0f;
+	[Export] public float CrystalRetreatTime = 2.0f;
+	[Export] public float CrystalRetreatSpeed = 0.9f;
+
+	private Node3D _sunfallCrystal;
+	private float _crystalStareTimer = 0f;
+	private float _crystalRetreatTimer = 0f;
+	private Vector3 _crystalRetreatDirection = Vector3.Zero;
 	
 	private ShaderMaterial _mobMaterial;
 	[Export] public int MaxLife = 10;
@@ -87,6 +98,8 @@ public partial class Mob : CharacterBody3D
 		if (Player == null)
 			Player = GetTree().GetFirstNodeInGroup("player") as Node3D;
 			
+		_sunfallCrystal = GetTree().GetFirstNodeInGroup("sunfall_crystal") as Node3D;
+			
 		if (Sprite.MaterialOverride is ShaderMaterial originalMat)
 		{
 			_mobMaterial = originalMat.Duplicate() as ShaderMaterial;
@@ -123,6 +136,20 @@ public partial class Mob : CharacterBody3D
 
 		MoveAndSlide();
 		ClampToBounds();
+	}
+	
+	private bool IsPlayerInsideCrystalSafeZone()
+	{
+		if (_sunfallCrystal == null || Player == null)
+			return false;
+
+		Vector3 crystalPos = _sunfallCrystal.GlobalPosition;
+		Vector3 playerPos = Player.GlobalPosition;
+
+		crystalPos.Y = 0f;
+		playerPos.Y = 0f;
+
+		return crystalPos.DistanceTo(playerPos) <= CrystalSafeRadius;
 	}
 
 	private void UpdateState(float dt)
@@ -169,6 +196,12 @@ public partial class Mob : CharacterBody3D
 					return;
 				}
 			}
+			
+			if (WouldEnterCrystalSafeZone())
+			{
+				StartCrystalRetreat();
+				return;
+			}
 
 			if (distanceToPlayer <= AttackRange && !visibleToCamera)
 			{
@@ -178,6 +211,33 @@ public partial class Mob : CharacterBody3D
 
 			ChasePlayer();
 		}
+		else if (_mode == MobMode.RetreatingFromCrystal)
+		{
+			if (!IsPlayerInsideCrystalSafeZone())
+			{
+				_mode = MobMode.Active;
+				return;
+			}
+
+			if (_crystalStareTimer > 0f)
+			{
+				_crystalStareTimer -= dt;
+				Velocity = Vector3.Zero;
+				PlayAnimation("active_idle");
+				return;
+			}
+
+			if (_crystalRetreatTimer > 0f)
+			{
+				_crystalRetreatTimer -= dt;
+				Velocity = _crystalRetreatDirection * CrystalRetreatSpeed;
+				PlayAnimation("active_move");
+				return;
+			}
+
+			BecomeInactive();
+			return;
+		}
 		else if (_mode == MobMode.Attacking)
 		{
 			Velocity = Vector3.Zero;
@@ -185,6 +245,43 @@ public partial class Mob : CharacterBody3D
 
 		Velocity += _knockbackVelocity;
 		_knockbackVelocity = _knockbackVelocity.Lerp(Vector3.Zero, dt * 8f);
+	}
+	
+	private bool WouldEnterCrystalSafeZone()
+	{
+		if (_sunfallCrystal == null)
+			return false;
+
+		Vector3 crystalPos = _sunfallCrystal.GlobalPosition;
+		Vector3 mobPos = GlobalPosition;
+
+		crystalPos.Y = 0f;
+		mobPos.Y = 0f;
+
+		return crystalPos.DistanceTo(mobPos) <= CrystalSafeRadius;
+	}
+	
+	private void StartCrystalRetreat()
+	{
+		if (_sunfallCrystal == null)
+			return;
+
+		_mode = MobMode.RetreatingFromCrystal;
+		_crystalStareTimer = CrystalStareTime;
+		_crystalRetreatTimer = CrystalRetreatTime;
+
+		Vector3 away = GlobalPosition - _sunfallCrystal.GlobalPosition;
+		away.Y = 0f;
+
+		if (away.LengthSquared() < 0.001f)
+			away = -GlobalTransform.Basis.Z;
+
+		_crystalRetreatDirection = away.Normalized();
+
+		Velocity = Vector3.Zero;
+		PlayAnimation("active_idle");
+
+		GD.Print("Mob stopped at crystal boundary.");
 	}
 
 	private void UpdateInactiveWander(float dt)
@@ -231,6 +328,9 @@ public partial class Mob : CharacterBody3D
 	private void UpdateAnimationState()
 	{
 		if (_mode == MobMode.Attacking)
+			return;
+
+		if (_mode == MobMode.RetreatingFromCrystal)
 			return;
 
 		if (_mode == MobMode.Inactive)
