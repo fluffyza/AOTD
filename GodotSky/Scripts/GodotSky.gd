@@ -39,84 +39,77 @@ func simulateDay():
 
 # Update sun and moon based on current time of day 
 func updateLights():
-	sunPosition = sunRoot.global_position.y / 2.0 + 0.5
-	moonPosition = moonRoot.global_position.y / 2.0 + 0.5
-	sun.light_color = skyPreset.sunLightColor.gradient.sample(sunPosition)
-	
-	sun.shadow_enabled = sunShadow
-	moon.light_color = skyPreset.moonLightColor.gradient.sample(sunPosition)
-	
+	var moonStrength: float = clampf(moonRoot.global_position.y / 2.0 + 0.5, 0.0, 1.0)
+
+	# Sun is blocked by The Veil.
+	# Stronger red when moon is down, weaker red when moon is up.
+	sun.light_energy = lerpf(0.08, 0.01, moonStrength)
+	sun.light_color = Color(0.8, 0.12, 0.04)
+	sun.shadow_enabled = false
+
+	# Moon becomes the main world light as it rises.
+	moon.light_color = Color(0.42, 0.46, 0.58)
 	moon.shadow_enabled = moonShadow
+
 	match cloudType:
 		"Static":
-			sun.light_energy = clamp(skyPreset.sunLightIntensity.sample(sunPosition),0.0,1.0)
-			moon.light_energy = clamp(skyPreset.moonLightIntensity.sample(sunPosition),0.0,1.0)
+			moon.light_energy = lerpf(0.02, 0.18, moonStrength)
+
 		"2D Dynamic":
-			sun.light_energy = clamp(skyPreset.sunLightIntensity.sample(sunPosition) * (1.0 - (cloudCoverage + 0.2)),0.0,1.0)
-			moon.light_energy = clamp(skyPreset.moonLightIntensity.sample(sunPosition)  * (1.0 - (cloudCoverage + 0.2)),0.0,1.0)
+			moon.light_energy = lerpf(0.02, 0.18, moonStrength) * (1.0 - (cloudCoverage + 0.2))
+			moon.light_energy = clamp(moon.light_energy, 0.0, 1.0)
 
 # Update rotation of sun and moon
 func updateRotation():
-	var hourMapped = remap(timeOfDay, 0.0, 2400.0 ,0.0 ,1.0)
+	var hourMapped = remap(timeOfDay, 0.0, 2400.0, 0.0, 1.0)
+
+	# Do NOT rotate the whole SunMoon parent anymore
 	sunMoonParent.rotation_degrees.y = skyRotation
-	sunMoonParent.rotation_degrees.x = hourMapped * 360.0
+	sunMoonParent.rotation_degrees.x = 0.0
+
+	# Keep the sun fixed in the sky
+	sunRoot.rotation_degrees.x = 110.0
+	sunRoot.rotation_degrees.y = 45.0
+	sunRoot.rotation_degrees.z = 0.0
+
+	# Only the moon moves with time
+	moonRoot.rotation_degrees.x = hourMapped * 360.0
+	moonRoot.rotation_degrees.y = 0.0
+	moonRoot.rotation_degrees.z = 0.0
 	
 # Update colors based on current time of day
 func updateSky():
-	sunPosition = sunRoot.global_position.y / 2.0 + 0.5
-	
-	var skyMaterial = self.environment.sky.get_material()
-	var cloudColor = lerp(skyPreset.baseCloudColor.gradient.sample(sunPosition),skyPreset.overcastCloudColor.gradient.sample(sunPosition),cloudCoverage)
-	
-	skyMaterial.set_shader_parameter("bAnimStars",animateStarMap)
-	skyMaterial.set_shader_parameter("bAnimClouds",animateStaticClouds)
-	#skyMaterial.set_shader_parameter("bStaticClouds",staticClouds) *DEPRECATED*
-	
-	skyMaterial.set_shader_parameter("baseColor", skyPreset.baseSkyColor.gradient.sample(sunPosition))
-	skyMaterial.set_shader_parameter("baseCloudColor", cloudColor)
-	skyMaterial.set_shader_parameter("horizonSize",skyPreset.horizonSize)
-	skyMaterial.set_shader_parameter("horizonAlpha",skyPreset.horizonAlpha)
-	skyMaterial.set_shader_parameter("horizonFogColor", skyPreset.horizonFogColor.gradient.sample(sunPosition))
-	
-	match cloudType:
-		"Static":
-			skyMaterial.set_shader_parameter("cloudType",0)
-		"2D Dynamic":
-			skyMaterial.set_shader_parameter("cloudType",1)
-			self.environment.volumetric_fog_density = remap(cloudCoverage,0.5,1.0,0.0,0.024)
-	
-	skyMaterial.set_shader_parameter("cloudDensity",skyPreset.cloudDensity)
-	skyMaterial.set_shader_parameter("mgSize",skyPreset.cloudGlow)
-	skyMaterial.set_shader_parameter("cloudSpeed",skyPreset.cloudSpeed)
-	skyMaterial.set_shader_parameter("cloudDirection",skyPreset.cloudDirection)
-	skyMaterial.set_shader_parameter("cloudCoverage",cloudCoverage)
-	skyMaterial.set_shader_parameter("absorption",skyPreset.cloudLightAbsorption)
-	skyMaterial.set_shader_parameter("henyeyGreensteinLevel",skyPreset.anisotropy)
-	skyMaterial.set_shader_parameter("cloudEdge",skyPreset.cloudEdge)
-	skyMaterial.set_shader_parameter("dynamicCloudBrightness",skyPreset.cloudBrightness)
-	skyMaterial.set_shader_parameter("horizonUVCurve",skyPreset.cloudUvCurvature)
-	
-	skyMaterial.set_shader_parameter("sunRadius",skyPreset.sunRadius)
-	skyMaterial.set_shader_parameter("sunDiscColor", skyPreset.sunDiscColor.gradient.sample(sunPosition))
-	skyMaterial.set_shader_parameter("sunGlowColor",skyPreset.sunGlow)
-	skyMaterial.set_shader_parameter("sunGlowColor", skyPreset.sunGlow.gradient.sample(sunPosition))
-	skyMaterial.set_shader_parameter("sunEdgeBlur",skyPreset.sunEdgeBlur)
-	skyMaterial.set_shader_parameter("sunGlowIntensity",skyPreset.sunGlowIntensity)
-	skyMaterial.set_shader_parameter("sunlightColor", skyPreset.sunLightColor.gradient.sample(sunPosition))
-	
-	skyMaterial.set_shader_parameter("moonRadius",skyPreset.moonRadius)
-	skyMaterial.set_shader_parameter("moonGlowColor", skyPreset.moonGlowColor.gradient.sample(sunPosition))
-	skyMaterial.set_shader_parameter("moonEdgeBlur",skyPreset.moonEdgeBlur)
-	skyMaterial.set_shader_parameter("moonGlowIntensity",skyPreset.moonGlowIntensity)
-	skyMaterial.set_shader_parameter("moonLightColor", skyPreset.moonLightColor.gradient.sample(sunPosition))
-	
-	skyMaterial.set_shader_parameter("starColor",skyPreset.starColor)
-	skyMaterial.set_shader_parameter("starBrightness",skyPreset.starBrightness)
-	skyMaterial.set_shader_parameter("twinkleSpeed",skyPreset.twinkleSpeed)
-	skyMaterial.set_shader_parameter("twinkleScale",skyPreset.twinkleScale)
-	skyMaterial.set_shader_parameter("starResolution",skyPreset.starResolution)
-	skyMaterial.set_shader_parameter("starSpeed",skyPreset.starSpeed)
+	var skyPosition := 0.0
+	var eclipsePosition := 0.55
 
+	var skyMaterial = self.environment.sky.get_material()
+	var cloudColor = lerp(
+		skyPreset.baseCloudColor.gradient.sample(skyPosition),
+		skyPreset.overcastCloudColor.gradient.sample(skyPosition),
+		cloudCoverage
+	)
+	
+	skyMaterial.set_shader_parameter("cloudType", 0 if cloudType == "Static" else 1)
+	skyMaterial.set_shader_parameter("cloudCoverage", cloudCoverage)
+	skyMaterial.set_shader_parameter("cloudDensity", skyPreset.cloudDensity)
+	skyMaterial.set_shader_parameter("cloudAlpha", 1.0)
+	
+	var moonStrength: float = clampf(moonRoot.global_position.y / 2.0 + 0.5, 0.0, 1.0)
+	skyMaterial.set_shader_parameter("moonStrength", moonStrength)
+	skyMaterial.set_shader_parameter("sunlightColor", Color(0.8, 0.12, 0.04))
+	skyMaterial.set_shader_parameter("baseCloudColor", cloudColor)
+	skyMaterial.set_shader_parameter("horizonFogColor", Color(0.015, 0.018, 0.035, 1.0))
+	skyMaterial.set_shader_parameter("baseColor", Color(0.01, 0.012, 0.03, 1.0))
+
+	# Keep sun/eclipse visible even though the world is dark
+	skyMaterial.set_shader_parameter("sunDiscColor", Color(0.7, 0.08, 0.02))
+	skyMaterial.set_shader_parameter("sunGlowColor", Color(0.8, 0.12, 0.03, 0.45))
+	skyMaterial.set_shader_parameter("sunGlowIntensity", 0.8)
+
+	# Moon can still use normal preset if wanted
+	skyMaterial.set_shader_parameter("moonGlowColor", skyPreset.moonGlowColor.gradient.sample(eclipsePosition))
+	skyMaterial.set_shader_parameter("moonLightColor", skyPreset.moonLightColor.gradient.sample(eclipsePosition))
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass

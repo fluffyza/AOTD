@@ -1,6 +1,9 @@
 shader_type sky;
 render_mode use_half_res_pass, use_quarter_res_pass;
-
+uniform float moonStrength = 0.0;
+uniform float veilPulseStrength = 0.18;
+uniform float veilDistortionStrength = 0.035;
+uniform float veilFlareStrength = 6;
 uniform vec4 baseColor : source_color = vec4(0.052192,0.101373,0.192708,1.0);
 uniform sampler2D scatteringLUT;
 uniform vec3 scatterColor : source_color = vec3(1.0);
@@ -60,10 +63,44 @@ uniform float twinkleScale : hint_range(0.5, 5.0, 0.1) = 4.0;
 uniform float starResolution : hint_range(-1.0, 3.0, 1.0) = 2.0;
 uniform float starSpeed = 0.002;
 
+
+uniform float veilRadius = 0.0012;
+uniform float veilEdgeBlur = 9000.0;
+uniform vec3 veilColor : source_color = vec3(0.0, 0.0, 0.0);
+
+uniform float veilRingRadius = 0.00145;
+uniform float veilRingStrength = 0.35;
+uniform vec3 veilRingColor : source_color = vec3(1.0, 0.78, 0.35);
+
 const vec3 camPos = vec3(0.0,1.0,0.0); 
+
+float veil_noise(vec2 p) {
+	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+}
 
 float remap(float v, float minOld, float maxOld, float minNew, float maxNew) {
     return minNew + (v-minOld) * (maxNew - minNew) / (maxOld-minOld);
+}
+
+vec3 createVeilDisc(vec3 dir, vec3 sunDir) {
+	float d = dot(dir, sunDir);
+
+	float blackDiscStart = 1.0 - veilRadius;
+	float ringStart = 1.0 - veilRingRadius;
+
+	float blackDisc = smoothstep(blackDiscStart, blackDiscStart + (veilRadius / veilEdgeBlur), d);
+	float outerRing = smoothstep(ringStart, blackDiscStart, d) * (1.0 - blackDisc);
+
+	vec3 result = veilColor * blackDisc;
+	result += veilRingColor * outerRing * veilRingStrength;
+
+	return result;
+}
+
+float createVeilMask(vec3 dir, vec3 sunDir) {
+	float d = dot(dir, sunDir);
+	float blackDiscStart = 1.0 - veilRadius;
+	return smoothstep(blackDiscStart, blackDiscStart + (veilRadius / veilEdgeBlur), d);
 }
 
 // Phase function
@@ -283,8 +320,75 @@ vec3 generateSky(vec3 dir, vec3 pos, vec2 skyUV, vec3 sunDir, float sunEnergy, v
 	if (dir.y < 0.0) {
 		skyColor = horizonFogColor.rgb;
 	}
-	skyColor += createSunGlow(dir,sunDir,sunRadius);
-	skyColor += createMoonGlow(dir,moonDir,moonRadius);
+	
+	float eclipseDot = dot(dir, sunDir);
+
+	// 1. Slow breathing pulse
+	float slowPulse =
+		sin(TIME * 0.08) * 0.5 +
+		sin(TIME * 0.031) * 0.5;
+
+	slowPulse = slowPulse * veilPulseStrength;
+
+	// 2. Slight uneven distortion around the halo
+	float angleNoise = veil_noise(vec2(dir.x * 8.0 + TIME * 0.015, dir.z * 8.0));
+	float distortion = (angleNoise - 0.5) * veilDistortionStrength;
+
+	float distortedDot = eclipseDot + distortion;
+
+	// Main eclipse glow
+	float eclipseGlow = smoothstep(0.88, 1.0, distortedDot);
+	eclipseGlow = pow(eclipseGlow, 2.5);
+	eclipseGlow *= 1.0 + slowPulse;
+
+	// Thin rim
+	float eclipseRim = smoothstep(0.992, 1.0, distortedDot);
+	eclipseRim = pow(eclipseRim, 6.0);
+	eclipseRim *= 1.0 + slowPulse;
+
+	// 3. Rare solar flare flickers
+	// 3. Rare solar flare tendrils
+	vec3 sideA = normalize(cross(sunDir, vec3(0.0, 1.0, 0.0)));
+	vec3 sideB = normalize(cross(sunDir, sideA));
+
+	vec2 localSun = vec2(dot(dir, sideA), dot(dir, sideB));
+
+	float distFromSun = length(localSun);
+	float angleFromSun = atan(localSun.y, localSun.x);
+
+	// Controls how often the flare appears
+	float flareTimer = sin(TIME * 0.035) * sin(TIME * 0.011);
+	float flareGate = smoothstep(0.72, 0.95, flareTimer);
+
+	// Pick a moving direction around the eclipse
+	float flareAngle = TIME * 0.08;
+	float angleDiff = abs(atan(sin(angleFromSun - flareAngle), cos(angleFromSun - flareAngle)));
+
+	// Thin angular streak
+	float tendrilWidth = smoothstep(0.45, 0.0, angleDiff);
+
+	// Only outside the black disc, stretching outward
+	float tendrilLength = smoothstep(0.04, 0.006, distFromSun)
+                    * smoothstep(0.0015, 0.012, distFromSun);
+	// Uneven flicker
+	float tendrilNoise = veil_noise(localSun * 80.0 + TIME * 0.2);
+	float tendrilBreakup = smoothstep(0.25, 1.0, tendrilNoise);
+
+	float solarFlare = flareGate * tendrilWidth * tendrilLength * tendrilBreakup * veilFlareStrength;
+
+	// Moon suppresses the red glow
+	float redStrength = mix(1.0, 0.12, moonStrength);
+
+	float cloudBlock = clamp(cloudMask.z * cloudAlpha, 0.0, 1.0);
+
+	skyColor += vec3(0.65, 0.08, 0.025) * eclipseGlow * 0.45 * redStrength * (1.0 - cloudBlock);
+	skyColor += vec3(1.0, 0.32, 0.08) * eclipseRim * 0.8 * redStrength * (1.0 - cloudBlock);
+	skyColor += vec3(1.0, 0.18, 0.04) * solarFlare * redStrength * (1.0 - cloudBlock);
+	skyColor += createMoonGlow(dir,moonDir,moonRadius) * (1.0 - cloudBlock);
+
+	float veilMask = createVeilMask(dir, sunDir) * (1.0 - cloudBlock);
+	skyColor = mix(skyColor, vec3(0.0), veilMask);
+	skyColor += createVeilDisc(dir, sunDir) * (1.0 - cloudBlock);
 	
 	return skyColor;
 }

@@ -4,6 +4,8 @@ uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_n
 
 uniform bool enable_color_limitation = true;
 uniform int color_levels : hint_range(2, 256, 1) = 20;
+uniform float dither_pixel_size : hint_range(1.0, 8.0, 1.0) = 2.0;
+uniform float noise_scale : hint_range(50.0, 800.0, 1.0) = 200.0;
 
 uniform bool enable_dithering = true;
 uniform float dither_strength : hint_range(0.0, 1.0) = 0.65;
@@ -75,7 +77,7 @@ void fragment() {
 	//}
 
 	if (enable_noise) {
-		float n = hash_old_12(uv * 200.0);
+		float n = hash_old_12(uv * noise_scale);
 		vec3 noise_mix = mix(final_color, noise_color, n * noise_strength);
 		final_color = mix(final_color, noise_mix, noise_strength);
 	}
@@ -91,7 +93,7 @@ void fragment() {
 		float base_band = floor(scaled);
 		float remainder = fract(scaled);
 
-		float threshold = bayer4x4(FRAGCOORD.xy);
+		float threshold = bayer4x4(floor(FRAGCOORD.xy / dither_pixel_size));
 		float mix_up = step(threshold, remainder);
 
 		float dithered_brightness = (base_band + mix_up) / band_steps;

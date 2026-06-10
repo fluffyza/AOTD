@@ -126,8 +126,6 @@ height = 1.9
 shader = ExtResource("7_oye8v")
 shader_parameter/enable_color_limitation = true
 shader_parameter/color_levels = 32
-shader_parameter/dither_pixel_size = 2.0
-shader_parameter/noise_scale = 200.0
 shader_parameter/enable_dithering = true
 shader_parameter/dither_strength = 0.3
 shader_parameter/band_steps = 6.0
@@ -415,20 +413,18 @@ animations = [{
 shader = ExtResource("7_oye8v")
 shader_parameter/enable_color_limitation = true
 shader_parameter/color_levels = 20
-shader_parameter/dither_pixel_size = 1.0
-shader_parameter/noise_scale = 129.0
 shader_parameter/enable_dithering = true
-shader_parameter/dither_strength = 0.55200002622
-shader_parameter/band_steps = 6.2290002008775
+shader_parameter/dither_strength = 0.65
+shader_parameter/band_steps = 6.0
 shader_parameter/enable_screen_wobble = false
 shader_parameter/wobble_strength = 0.0025
 shader_parameter/wobble_speed = 4.0
 shader_parameter/enable_screen_jitter = false
 shader_parameter/jitter_strength = 1.0
 shader_parameter/enable_noise = true
-shader_parameter/noise_color = Color(0.12941177, 0.003921569, 0.007843138, 1)
-shader_parameter/noise_strength = 0.310000014725
-shader_parameter/noise_time_fac = 0.63500002690262
+shader_parameter/noise_color = Color(0.18, 0.2, 0.24, 1)
+shader_parameter/noise_strength = 0.12
+shader_parameter/noise_time_fac = 4.0
 
 [node name="Main" type="Node3D" unique_id=1253849847]
 
@@ -567,10 +563,8 @@ WindGustScene = ExtResource("17_hhcpw")
 [node name="WorldCraftPreview" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=731278336 instance=ExtResource("18_mxvw5")]
 
 [node name="GodotSky" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=270944954 instance=ExtResource("25_ek63v")]
-timeOfDay = 0.0
-rateOfTime = 2.08
-skyRotation = 58.9
-cloudCoverage = 0.439
+timeOfDay = 1611.23
+skyRotation = 145.9
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/WorldRoot" unique_id=1498523069]
 environment = SubResource("Environment_a202f")
